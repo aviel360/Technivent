@@ -4,7 +4,7 @@ class Api {
   baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://localhost:8080/';
+    this.baseUrl = 'http://localhost:8080/api';
   }
 
   fetchData(): Promise<any> {
