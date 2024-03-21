@@ -1,13 +1,12 @@
 import './App.css'
-import { DEFAULT_THEME, MantineProvider } from '@mantine/core'
-import Signup from './components/layouts/Signup/Signup.tsx'
-
+import { MantineProvider } from '@mantine/core'
+import Main from './components/layouts/main/Main.tsx'
 
 function App() {
 
   return (
-    <MantineProvider theme={DEFAULT_THEME} defaultColorScheme="dark">
-      <Signup></Signup>
+    <MantineProvider >
+      <Main></Main>
     </MantineProvider>
   )
 }
