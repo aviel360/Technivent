@@ -5,7 +5,7 @@ import Main from './components/layouts/main/Main.tsx'
 function App() {
 
   return (
-    <MantineProvider >
+    <MantineProvider defaultColorScheme="auto">
       <Main></Main>
     </MantineProvider>
   )
