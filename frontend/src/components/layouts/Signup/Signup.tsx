@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, Button } from '@mantine/core';
+import { TextInput, Button, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Api from '../../../utils/Api.tsx';
 import { Link, useNavigate } from 'react-router-dom';
@@ -43,18 +43,21 @@ const Signup: React.FC<SignupProps> = () => {
 
   return (
     <>
-    <h2>Signup</h2>
-        <form onSubmit={form.onSubmit((values) => RequestSignup(values))}>
-            <TextInput error="Username already exists" label="Userame" withAsterisk placeholder="Userame" {...form.getInputProps('username')} />
-            <br/>
-            <TextInput type='password' label="Password" withAsterisk placeholder="Password" {...form.getInputProps('password')}/>
-            <br/>
-            <TextInput type='password' label="Confirm Password" withAsterisk placeholder="Confirm Password" {...form.getInputProps('confirmPassword')}/>
-            <br/>
-            <Button type="submit">Submit</Button>
-          </form>
-        <p> <Link to="forgot-password">Forgot password?</Link> </p>
-        <p> Already have an account? <Link to="login">Login</Link> </p>
+      <h1>Signup</h1>
+      <br/>
+      <br/>
+      <form onSubmit={form.onSubmit((values) => RequestSignup(values))}>
+        <TextInput size='lg' error="Username already exists" label="Userame" withAsterisk placeholder="Userame" {...form.getInputProps('username')} />
+        <br/>
+        <PasswordInput size='lg' label="Password" withAsterisk placeholder="Password" {...form.getInputProps('password')}/>
+        <br/>
+        <PasswordInput size='lg' label="Confirm Password" withAsterisk placeholder="Confirm Password" {...form.getInputProps('confirmPassword')}/>
+        <br/>
+        <Button size='lg' type="submit">Submit</Button>
+      </form>
+      <br/>
+      <p> <Link to="forgot-password">Forgot password?</Link> </p>
+      <p> Already have an account? <Link to="login">Login</Link> </p>
     </>
   );
 };
