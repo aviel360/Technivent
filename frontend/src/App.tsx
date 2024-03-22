@@ -1,12 +1,12 @@
 import './App.css'
 import { MantineProvider } from '@mantine/core'
-import Main from './components/layouts/main/Main.tsx'
+import Home from './components/layouts/home/Home.tsx'
 
 function App() {
 
   return (
     <MantineProvider defaultColorScheme="auto">
-      <Main></Main>
+      <Home></Home>
     </MantineProvider>
   )
 }
