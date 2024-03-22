@@ -53,7 +53,6 @@ const Signup: React.FC<SignupProps> = () => {
     <>
       <h1>Signup</h1>
       <br />
-      <br />
       <form onSubmit={form.onSubmit((values) => RequestSignup(values))}>
         <TextInput
           size="lg"
@@ -89,7 +88,7 @@ const Signup: React.FC<SignupProps> = () => {
         <Link to="/forgot-password">Forgot password?</Link>
       </p>
       <p>
-        Already have an account? <Link to="/login">Login</Link>
+        Already have an account? <Link to="login">Login</Link>
       </p>
     </>
   );

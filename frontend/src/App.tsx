@@ -5,7 +5,7 @@ import Home from './components/layouts/home/Home.tsx'
 function App() {
 
   return (
-    <MantineProvider defaultColorScheme="auto">
+    <MantineProvider defaultColorScheme="dark">
       <Home></Home>
     </MantineProvider>
   )
