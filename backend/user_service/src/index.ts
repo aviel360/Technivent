@@ -16,7 +16,7 @@ import {
     LOGIN_PATH,
     LOGOUT_PATH,
     SIGNUP_PATH,
-    USERNAME_PATH,
+    _PATH
 } from './const.js';
 
 dotenv.config();
@@ -41,7 +41,7 @@ app.post(LOGIN_PATH, loginRoute);
 app.post(LOGOUT_PATH, logoutRoute);
 app.post(SIGNUP_PATH, signupRoute);
 
-app.get(USERNAME_PATH, usernameRoute);
+app.get(_PATH, usernameRoute);
 
 app.listen(port, () => {
     console.log(`Server running! port ${port}`);
