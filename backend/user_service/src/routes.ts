@@ -3,14 +3,14 @@ import { Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-import User from './models/user.js';
+import {User, LoginUser} from './models/user.js';
 
 export async function loginRoute(req: Request, res: Response) {
   const credentials = req.body;
-  try {
-    await User.validate(credentials);
-  }
-  catch (e) {
+  
+  const loginUser = new LoginUser(credentials);
+  const validationError = loginUser.validateSync();
+  if (validationError) {
     res.status(400).send('Invalid credentials');
     return;
   }
@@ -30,30 +30,43 @@ export async function loginRoute(req: Request, res: Response) {
     return;
   }
 
-  /* TODO: set JWT_SECRET using .env file */
+  /*JWT_SECRET  is set in .env file */
   const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '2d' })
 
   const secure = process.env.NODE_ENV === 'production';
-  /* TODO: set the cookie in the response */
+  
+  res.cookie('token', token, 
+  {
+    httpOnly: true,
+    secure,
+    sameSite: 'none',
 
-  /* ========== */
+  });
   res.status(200).send('Logged in');
 }
 
 export async function logoutRoute(req: Request, res: Response) {
   const secure = process.env.NODE_ENV === 'production';
-  /* TODO: clear the token cookie */
+  /* clear the token cookie - should specify the same attributes of the setting */
+  res.clearCookie('token', 
+  {
+    httpOnly: true,
+    secure,
+    sameSite: 'none',
+  });
 
-  /* ========== */
+  res.status(200).send('Logged out successfully');
 }
 
 export async function signupRoute(req: Request, res: Response) {
   const user = new User(req.body);
   try {
     const error = await user.validate();
+    
   }
   catch (e) {
-    res.status(400).send('Invalid credentials');
+    const errorPath = e.message.split(':')[1].trim();
+    res.status(400).send('Invalid credentials: ' + errorPath);
     return;
   }
   if (await User.exists({ username: user.username })) {
