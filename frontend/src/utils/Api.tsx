@@ -14,10 +14,20 @@ class Api {
 
   async signUp(payload: { username: string, password: string }): Promise<any> {
     try {
-      const response: AxiosResponse = await axios.post(`${this.baseUrl}/signup`, payload);
+      const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/signup`, payload);
       return response.data;
     } catch (error: any) {
       throw new Error('Error signing up: ' + error.message);
+    }
+  }
+
+  async getEvents(query: string = '')
+  {
+    try{
+      const response: AxiosResponse = await axios.get(`${this.baseUrl}/event${query}`)
+      return response.data;
+    } catch (error: any) {
+      throw new Error('Error fetching event ' + error.message);
     }
   }
 }

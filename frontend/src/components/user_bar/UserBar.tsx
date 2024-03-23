@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { ChevronCompactRight } from "react-bootstrap-icons";
-import { Group, Text, Menu, UnstyledButton, Container } from "@mantine/core";
+import { Group, Text, Menu, UnstyledButton, Button, Flex } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
@@ -33,7 +33,15 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
 
 function UserBar() {
   return (
-    <Container>
+    <Flex
+      mih={50}
+      bg="rgba(0, 0, 0, .3)"
+      align="center"
+      direction="row"
+      justify={"space-between"}
+      wrap="wrap"
+      columnGap={'sm'}
+    >
       <Menu withArrow>
         <Menu.Target>
           <UserButton name="User" />
@@ -44,7 +52,8 @@ function UserBar() {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-    </Container>
+      <Button right={5}>Go back</Button>
+    </Flex>
   );
 }
 
