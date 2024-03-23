@@ -22,9 +22,8 @@ import {
 dotenv.config();
 
 let dbUri;
-/* TODO: set the dbUri variable to your atlas connection string */
+dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/Technivent?retryWrites=true&w=majority&appName=Cluster0`;
 
-/* ========== */
 await mongoose.connect(dbUri);
 
 const port = process.env.PORT || 3000;
@@ -34,8 +33,11 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 /* TODO: set CORS headers appropriately using the cors middleware */
-
-/* ========== */
+app.use(cors({
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+}));
 
 app.post(LOGIN_PATH, loginRoute);
 app.post(LOGOUT_PATH, logoutRoute);
