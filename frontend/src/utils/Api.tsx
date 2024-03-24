@@ -24,7 +24,7 @@ class Api {
   async Login(payload: { username: string, password: string }): Promise<any> {
     try {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);
-      return response.data;
+      return response;
     } catch (error: any) {
       throw error;
     }

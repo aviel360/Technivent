@@ -1,4 +1,4 @@
-import { Button, PasswordInput, TextInput } from "@mantine/core";
+import { Button, Loader, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
     let navigate = useNavigate();
     const [error, setError] = useState<string | null>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const form = useForm({
         initialValues: {
@@ -17,10 +18,22 @@ const Login: React.FC<LoginProps> = () => {
           password: ""
         },
         validate: {
-            username: (value) => (value.length < 1 ? "Username must have at least 1 character" : null),
-            password: (value) => (value.length < 1 ? "Password must have at least 1 character" : null)
-          },
-        });
+            username: (value) => {
+                if (value.length < 1) {
+                    setError(null);
+                    return "Please enter username";
+                }
+                return null;
+            },
+            password: (value) => {
+                if (value.length < 1) {
+                    setError(null);
+                    return "Please enter password";
+                }
+                return null;
+            }
+        }
+    });
 
 
     async function RequestLogin(values: { username: string; password: string; }): Promise<void> 
@@ -29,16 +42,19 @@ const Login: React.FC<LoginProps> = () => {
         const { username, password } = values;
         const apiService = new Api();
         try {
+            setIsLoading(true);
             const response = await apiService.Login({ username, password });
-            navigate("/");
+            setIsLoading(false);
+            response?.status === 200 ? navigate('/') : setError('Invalid username or password');
         }
         catch (error: any) 
         {
+            setIsLoading(false);
             if (error?.response?.status === 401) 
             {
                 setError("Invalid username or password");
             } else if (error.request) {
-                setError('Errpr: No response received from server.');
+                setError('Server error: Please try again');
             } else {
                 setError('Error in sending request to server');
             }
@@ -67,15 +83,21 @@ const Login: React.FC<LoginProps> = () => {
                     {...form.getInputProps("password")}
                 />
                 <br />
-                <Button size="md" type="submit">
-                    Submit
-                </Button>
+                {isLoading ? 
+                    <Loader /> :
+                    <Button size="md" type="submit">
+                        Submit
+                    </Button>
+                }           
             </form>
             
             <br />
 
             {error && <p className="err-msg">{error}</p>}
-            <br/>
+
+            <p>
+                <Link to="/forgot-password">Forgot password?</Link>
+            </p>
             <p>
                 Don't have an account? <Link to="/signup">Signup</Link>
             </p>
