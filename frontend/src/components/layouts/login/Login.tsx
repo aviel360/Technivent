@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Api from "../../../utils/Api";
-
+import "./Login.css";
 
 interface LoginProps {}
 
@@ -36,13 +36,11 @@ const Login: React.FC<LoginProps> = () => {
         {
             if (error?.response?.status === 401) 
             {
-                setError("Invalid Username or Password");
+                setError("Invalid username or password");
             } else if (error.request) {
-                // The request was made but no response was received
-                setError('No response received from server.');
+                setError('Errpr: No response received from server.');
             } else {
-                // Something happened in setting up the request that triggered an Error
-                setError('Error in setting up the request.');
+                setError('Error in sending request to server');
             }
         }
     }
@@ -55,7 +53,6 @@ const Login: React.FC<LoginProps> = () => {
             <form onSubmit={form.onSubmit((values) => RequestLogin(values))}>
                 <TextInput
                     size="sm"
-                    //error="Username already exists"
                     label="Userame"
                     withAsterisk
                     placeholder="Userame"
@@ -77,7 +74,8 @@ const Login: React.FC<LoginProps> = () => {
             
             <br />
 
-            {error && <p>{error}</p>}
+            {error && <p className="err-msg">{error}</p>}
+            <br/>
             <p>
                 Don't have an account? <Link to="/signup">Signup</Link>
             </p>
