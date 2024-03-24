@@ -19,7 +19,7 @@ const Signup: React.FC<SignupProps> = () => {
     },
 
     validate: {
-      username: (value) => (value.length < 1 ? "Userame must have at least 1 character" : null),
+      username: (value) => (value.length < 1 ? "Username must have at least 1 character" : null),
       password: (value) => (value.length < 1 ? "Password must have at least 1 character" : null),
       confirmPassword: (value, values) => (value !== values.password ? "Passwords did not match" : null),
       secretQuestion: (value) => (value.length < 1 ? "Secret question must have at least 1 character" : null),
@@ -101,7 +101,7 @@ const Signup: React.FC<SignupProps> = () => {
         <Link to="/forgot-password">Forgot password?</Link>
       </p>
       <p>
-        Already have an account? <Link to="login">Login</Link>
+        Already have an account? <Link to="/login">Login</Link>
       </p>
     </>
   );
