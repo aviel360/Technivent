@@ -24,7 +24,7 @@ const Catalog: React.FC<CatalogProps> = () => {
   return (
     <>
       <h1>Catalog</h1>
-      <UserBar></UserBar>
+      <UserBar name="User"></UserBar>
       <Events fetchData={fetchData}/>
     </>
   );
