@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Image, Text, Badge, Button, Group, Flex, Container } from "@mantine/core";
+import { EventData } from "../../utils/Types";
 
 interface EventsProps {
   fetchData: () => Promise<EventData[]>;

@@ -2,6 +2,7 @@ import React from "react";
 import UserBar from "../../user_bar/UserBar";
 import Events from "../../events/Events";
 import Api from "../../../utils/Api";
+import { EventData } from "../../../utils/Types";
 
 interface CatalogProps {}
 

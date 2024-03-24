@@ -12,7 +12,7 @@ class Api {
       .then((response: AxiosResponse) => response.data);
   }
 
-  async signUp(payload: { username: string, password: string }): Promise<any> {
+  async signUp(payload: { username: string, password: string, secretQuestion: string, secretAnswer: string }): Promise<any> {
     try {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/signup`, payload);
       return response.data;
