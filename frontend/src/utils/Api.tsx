@@ -4,7 +4,7 @@ class Api {
   baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://localhost:8080/api';
+    this.baseUrl = 'http://localhost:3000/api';
   }
 
   fetchData(): Promise<any> {
@@ -18,6 +18,15 @@ class Api {
       return response.data;
     } catch (error: any) {
       throw new Error('Error signing up: ' + error.message);
+    }
+  }
+
+  async Login(payload: { username: string, password: string }): Promise<any> {
+    try {
+      const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);
+      return response.data;
+    } catch (error: any) {
+      throw error;
     }
   }
 
