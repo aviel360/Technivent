@@ -45,7 +45,7 @@ function Events({ fetchData }: EventsProps) {
 
             <Group justify="space-between" mt="md" mb="xs">
               <Text fw={500}>{event.category}</Text>
-              <Badge color="pink">On Sale</Badge>
+              <Badge color="pink">{event.start_date.getDay()}</Badge>
             </Group>
 
             <Text size="sm" c="dimmed">
@@ -53,7 +53,7 @@ function Events({ fetchData }: EventsProps) {
             </Text>
 
             <Button color="blue" fullWidth mt="md" radius="md">
-              Book classic tour now
+              Purchase now
             </Button>
           </Card>
         ))}
