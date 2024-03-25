@@ -43,7 +43,7 @@ const Login: React.FC<LoginProps> = () => {
     const response = await apiService.Login({ username, password });
     setIsLoading(false);
     if (response) {
-      window.alert(JSON.parse(response.data));
+      window.alert(response.data);
       if (response.status == 200) {
         navigate("/");
       }
