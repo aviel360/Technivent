@@ -42,9 +42,11 @@ const Login: React.FC<LoginProps> = () => {
     setIsLoading(true);
     const response = await apiService.Login({ username, password });
     setIsLoading(false);
-
     if (response) {
-      response?.status === 200 ? navigate("/") : setError(JSON.parse(response.data));
+      window.alert(JSON.parse(response.data));
+      if (response.status == 200) {
+        navigate("/");
+      }
     }
   }
 
