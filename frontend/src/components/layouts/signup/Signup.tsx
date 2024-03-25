@@ -1,5 +1,5 @@
-import React from "react";
-import { TextInput, Button, PasswordInput } from "@mantine/core";
+import React, { useState } from "react";
+import { TextInput, Button, PasswordInput, Loader } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Api from "../../../utils/Api.tsx";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ interface SignupProps {}
 
 const Signup: React.FC<SignupProps> = () => {
   let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -19,31 +20,32 @@ const Signup: React.FC<SignupProps> = () => {
     },
 
     validate: {
-      username: (value) => (value.length < 1 ? "Username must have at least 1 character" : null),
-      password: (value) => (value.length < 1 ? "Password must have at least 1 character" : null),
+      username: (value) => (value.length < 1 ? "Please enter username" : null),
+      password: (value) => (value.length < 1 ? "Please enter password" : null),
       confirmPassword: (value, values) => (value !== values.password ? "Passwords did not match" : null),
-      secretQuestion: (value) => (value.length < 1 ? "Secret question must have at least 1 character" : null),
-      secretAnswer: (value) => (value.length < 1 ? "Secret answer must have at least 1 character" : null),
+      secretQuestion: (value) => (value.length < 1 ? "Please enter secret question" : null),
+      secretAnswer: (value) => (value.length < 1 ? "Please enter username secret answer" : null),
     },
   });
 
-  async function RequestSignup(values: { username: string; password: string; confirmPassword: string, secretQuestion: string, secretAnswer: string }): Promise<void> {
-    const { username, password, confirmPassword, secretQuestion, secretAnswer } = values;
-    if(password === confirmPassword)
-    {
-      const apiService = new Api();
-      try {
-        const response = await apiService.signUp({ username, password, secretQuestion, secretAnswer });
-        switch (response.status) {
-          case 201:
-            navigate("/login");
-            break;
-          default:
-            window.alert(JSON.parse(response));
-            break;
-        }
-      } catch (error) {
-        window.alert(error);
+  async function RequestSignup(values: {
+    username: string;
+    password: string;
+    confirmPassword: string;
+    secretQuestion: string;
+    secretAnswer: string;
+  }): Promise<void> {
+    const { username, password, secretQuestion, secretAnswer } = values;
+    window.alert(secretQuestion);
+    const apiService = new Api();
+    setIsLoading(true);
+    const response = await apiService.signUp({ username, password, secretQuestion, secretAnswer });
+    setIsLoading(false);
+
+    if (response) {
+      window.alert(JSON.parse(response.data));
+      if (response.status == 201) {
+        navigate("/login");
       }
     }
   }
@@ -92,14 +94,15 @@ const Signup: React.FC<SignupProps> = () => {
           {...form.getInputProps("secretAnswer")}
         />
         <br />
-        <Button size="md" type="submit">
-          Submit
-        </Button>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Button size="md" type="submit">
+            Submit
+          </Button>
+        )}
       </form>
       <br />
-      <p>
-        <Link to="/forgot-password">Forgot password?</Link>
-      </p>
       <p>
         Already have an account? <Link to="/login">Login</Link>
       </p>
