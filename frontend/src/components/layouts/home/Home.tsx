@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
@@ -6,17 +6,29 @@ import Login from "../login/Login";
 
 interface HomeProps {}
 
+interface userContextProps {
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const usernameContext = createContext<userContextProps>({
+  username: "",
+  setUsername: () => {},
+});
+
 const Home: React.FC<HomeProps> = () => {
+  const [username, setUsername] = useState<string>("");
+
   return (
-    <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Catalog />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-    </>
+    <usernameContext.Provider value={{ username, setUsername }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Catalog />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </usernameContext.Provider>
   );
 };
 

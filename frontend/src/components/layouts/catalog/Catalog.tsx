@@ -1,31 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import UserBar from "../../user_bar/UserBar";
 import Events from "../../events/Events";
 import Api from "../../../utils/Api";
 import { EventData } from "../../../utils/Types";
+import { usernameContext } from "../home/Home";
 
 interface CatalogProps {}
 
 const Catalog: React.FC<CatalogProps> = () => {
+  const { username } = useContext(usernameContext);
 
-  const apiService = new Api();
-  
   const fetchData = async () => {
+    const apiService = new Api();
     let data: EventData[] = [];
-    try {
-      const response = await apiService.getEvents();
-      data = await response.json();
-    } catch(error: any)
-    {
-      window.alert(error);
-    }
+    const response = await apiService.getEvents();
+    if (response) data = await response.data.json();
     return data;
   };
+
   return (
     <>
       <h1>Catalog</h1>
-      <UserBar name="User"></UserBar>
-      <Events fetchData={fetchData}/>
+      <UserBar username={username} goBack={false}></UserBar>
+      <Events fetchData={fetchData} />
     </>
   );
 };

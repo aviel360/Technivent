@@ -43,7 +43,7 @@ const Signup: React.FC<SignupProps> = () => {
     setIsLoading(false);
 
     if (response) {
-      window.alert(JSON.parse(response.data));
+      window.alert(response.data);
       if (response.status == 201) {
         navigate("/login");
       }

@@ -1,13 +1,16 @@
 import { Button, Loader, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Api from "../../../utils/Api";
 import "./Login.css";
+import { usernameContext } from "../home/Home";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
+  const { setUsername } = useContext(usernameContext);
+
   let navigate = useNavigate();
   const [error, setError] = useState<string | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -46,6 +49,7 @@ const Login: React.FC<LoginProps> = () => {
       window.alert(response.data);
       if (response.status == 200) {
         navigate("/");
+        setUsername(username);
       }
     }
   }
