@@ -15,9 +15,10 @@ class Api {
   async signUp(payload: { username: string, password: string, secretQuestion: string, secretAnswer: string }): Promise<any> {
     try {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/signup`, payload);
-      return response.data;
+      return response;
     } catch (error: any) {
-      throw new Error('Error signing up: ' + error.message);
+      window.alert(error)
+      return null;
     }
   }
 
@@ -26,7 +27,8 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);
       return response;
     } catch (error: any) {
-      throw error;
+      window.alert(error)
+      return null;
     }
   }
 
@@ -34,9 +36,10 @@ class Api {
   {
     try{
       const response: AxiosResponse = await axios.get(`${this.baseUrl}/event${query}`)
-      return response.data;
+      return response;
     } catch (error: any) {
-      throw new Error('Error fetching event ' + error.message);
+      window.alert(error)
+      return null;
     }
   }
 }
