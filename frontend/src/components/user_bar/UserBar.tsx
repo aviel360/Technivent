@@ -1,5 +1,5 @@
 import { ChevronCompactDown, ChevronCompactLeft } from "react-bootstrap-icons";
-import { Group, Menu, Button, Flex, Container } from "@mantine/core";
+import { Group, Menu, Button, Flex } from "@mantine/core";
 import { Link } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
 

@@ -39,7 +39,7 @@ export async function loginRoute(req: Request, res: Response) {
     secure,
     sameSite: "none",
   });
-  res.status(200).send("Logged in");
+  res.status(200).send("Logged in successfully");
 }
 
 export async function logoutRoute(req: Request, res: Response) {
@@ -77,7 +77,7 @@ export async function signupRoute(req: Request, res: Response) {
     return;
   }
 
-  res.status(201).send("User created");
+  res.status(201).send("User created successfully");
 }
 
 export async function usernameRoute(req: Request, res: Response) {

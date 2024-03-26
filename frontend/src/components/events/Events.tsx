@@ -20,9 +20,9 @@ function Events({ fetchData }: EventsProps) {
   }, [fetchData]);
 
   return (
-      <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" justify="center" columnGap={'1rem'} align="center" direction="row" wrap="wrap">
+      <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" justify="center" rowGap={'1rem'} columnGap={'1rem'} align="center" direction="row" wrap="wrap" p={'1rem'} >
         {eventsData.map((event) => (
-          <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={'30%'}>
+          <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={'350px'}>
             <Card.Section>
               <Image src={event.image} height={160} alt={event.organizer} />
             </Card.Section>
