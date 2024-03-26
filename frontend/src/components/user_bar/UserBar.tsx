@@ -10,7 +10,6 @@ interface UserBarProps {
 
 const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
   return (
-    <Container h={50} w="100vw" mt="md">
       <Flex mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
         <Group>
           {goBack && (
@@ -43,7 +42,6 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
           <ColorScheme />
         </Group>
       </Flex>
-    </Container>
   );
 };
 
