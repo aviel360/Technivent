@@ -35,7 +35,7 @@ class Api {
   async getEvents(query: string = '')
   {
     try{
-      const response: AxiosResponse = await axios.get(`${this.baseUrl}/event${query}`)
+      const response: AxiosResponse = await axios.get(`${this.baseUrl}/event/${query}`)
       return response;
     } catch (error: any) {
       window.alert(error)

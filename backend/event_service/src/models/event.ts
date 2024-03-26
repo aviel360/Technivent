@@ -56,18 +56,6 @@ const eventSchema = new mongoose.Schema(
     }
 );
 
-export const eventSchemaJoi = Joi.object({
-    title: Joi.string().required(),
-    category: Joi.string().valid(Object.values(EventCategory)).required(),
-    description: Joi.number().min(0).required(),
-    organizer: Joi.string().required(),
-    start_date: Joi.date().required(),
-    end_date: Joi.date().required(),
-    location: Joi.string().required(),
-    tickets: Joi.array().items(ticketSchemaJoi).required(),
-    image: Joi.string().required()
-  }).strict().unknown();
-
 eventSchema.pre('save', function(next) {
     if (this.isModified('start_date')) {
         const startDate = new Date(this.start_date);
