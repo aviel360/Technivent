@@ -10,7 +10,7 @@ interface UserBarProps {
 
 const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
   return (
-      <Flex mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
+      <Flex miw={'50rem'} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
         <Group>
           {goBack && (
             <Button variant="light" leftSection={<ChevronCompactLeft />}>
