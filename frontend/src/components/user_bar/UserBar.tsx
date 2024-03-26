@@ -21,7 +21,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
 
         <Group>
           {!username ? (
-              <Link to="login">Login</Link>
+              <Link to="/login">Login</Link>
           ) : (
             <Menu withArrow>
               <Menu.Target>
@@ -34,7 +34,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
                   <Link to={username}>Personal Space</Link>
                 </Menu.Item>
                 <Menu.Item>
-                  <Link to="login">Logout</Link>
+                  <Link to="/login">Logout</Link>
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>

@@ -4,7 +4,7 @@ import { EventCategory } from '../../../utils/Types';
 import { usernameContext } from '../home/Home';
 import { useForm } from '@mantine/form';
 import { Button, Center, Select, TextInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import AddTickets from '../../add_tickets/AddTickets';
 import './NewEvent.css';
 
@@ -115,21 +115,10 @@ const NewEvent: React.FC<NewEventProps> = () => {
                         />
                         <br />
                     
-                        <DateInput 
-                            valueFormat="DD/MM/YYYY" 
-                            label="Start Date" 
-                            placeholder="01/01/2024" 
-                            withAsterisk 
-                            {...eventForm.getInputProps("start_date")}
-                        />
+                        <DateTimePicker label="Pick date and time" withAsterisk placeholder="Pick date and time" {...eventForm.getInputProps("start_date")}/>
                         <br />
-                        <DateInput 
-                            valueFormat="DD/MM/YYYY" 
-                            label="End Date" 
-                            placeholder="02/01/2024" 
-                            withAsterisk 
-                            {...eventForm.getInputProps("end_date")}
-                        />
+                        <DateTimePicker label="Pick date and time" withAsterisk placeholder="Pick date and time" {...eventForm.getInputProps("end_date")}/>
+
                     </div>
 
                 </form>
