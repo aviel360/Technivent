@@ -50,7 +50,7 @@ const NewEvent: React.FC<NewEventProps> = () => {
     },
 
     validate: {
-      category: (value) => (value.length < 1 ? "Please select category" : null),
+      category: (value) => (value.length < 1 ? "Please enter category" : null),
       price: (value) => (value <= 0 ? "Please enter valid price" : null),
       totalTickets: (value) => (value <= 0 ? "Please enter valid amount" : null),
     },
@@ -110,30 +110,12 @@ const NewEvent: React.FC<NewEventProps> = () => {
                 withAsterisk
                 {...eventForm.getInputProps("description")}
               />
-            </Flex>
-            <Flex direction={"column"}>
-              <TextInput
+            <TextInput
                 size="md"
+                mt={"0.5rem"}
                 label="Image URL"
                 placeholder="Image URL (optional)"
                 {...eventForm.getInputProps("image")}
-              />
-
-              <TextInput
-                size="md"
-                label="Organizer"
-                placeholder="Organizer"
-                mt={"0.5rem"}
-                withAsterisk
-                {...eventForm.getInputProps("organizer")}
-              />
-              <TextInput
-                size="md"
-                label="Location"
-                placeholder="Location"
-                mt={"0.5rem"}
-                withAsterisk
-                {...eventForm.getInputProps("location")}
               />
             </Flex>
 
@@ -152,6 +134,22 @@ const NewEvent: React.FC<NewEventProps> = () => {
                 withAsterisk
                 placeholder="Pick end date and time"
                 {...eventForm.getInputProps("end_date")}
+              />
+                            <TextInput
+                size="md"
+                label="Organizer"
+                placeholder="Organizer"
+                mt={"0.5rem"}
+                withAsterisk
+                {...eventForm.getInputProps("organizer")}
+              />
+              <TextInput
+                size="md"
+                label="Location"
+                placeholder="Location"
+                mt={"0.5rem"}
+                withAsterisk
+                {...eventForm.getInputProps("location")}
               />
             </Flex>
           </Flex>
