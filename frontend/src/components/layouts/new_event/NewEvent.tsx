@@ -1,138 +1,215 @@
-import React, { useContext } from 'react';
-import UserBar from '../../user_bar/UserBar';
-import { EventCategory } from '../../../utils/Types';
-import { usernameContext } from '../home/Home';
-import { useForm } from '@mantine/form';
-import { Button, Center, Select, TextInput } from '@mantine/core';
-import { DateTimePicker } from '@mantine/dates';
-import AddTickets from '../../add_tickets/AddTickets';
-import './NewEvent.css';
+import React, { useState } from "react";
+import { TextInput, Button, Select, Text, Flex, NumberInput, Card, Center, Group } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { EventCategory, TicketData } from "../../../utils/Types.ts";
+import { DateTimePicker } from "@mantine/dates";
 
-interface NewEventProps {
-}
+interface NewEventProps {}
 
 const NewEvent: React.FC<NewEventProps> = () => {
-    const { username } = useContext(usernameContext);
+  const [tickets, setTickets] = useState<TicketData[]>([]);
 
+  const eventForm = useForm({
+    initialValues: {
+      title: "",
+      category: "",
+      description: "",
+      organizer: "",
+      location: "",
+      start_date: "",
+      end_date: "",
+      image: "",
+    },
 
-    const eventForm:any = useForm({
-        initialValues: {
-            title: '',
-            category: '',
-            description: '',
-            organizer: '',
-            location: '',
-            start_date: '',
-            end_date: '',
-            image: '',
-        },
-        validate: {
-            title: (value) => (!value && eventForm?.touched?.title ? "Please enter event title" : null),
-            description: (value) => (!value &&  eventForm?.touched?.description ? "Please enter event description" : null),
-            organizer: (value) => (!value &&  eventForm?.touched?.organizer ? "Please enter event organizer" : null),
-            location: (value) => (!value &&  eventForm?.touched?.location ? "Please enter event location" : null),
-            start_date: (value) => {
-                if (!value && eventForm?.touched?.start_date) {
-                    return "Please enter event start date";
-                }
-                if (new Date(value) <= new Date()) {
-                    return "Start date must be a future date";
-                }
-                return null;
-            },
-            end_date: (value, values) => {
-                if (!value && eventForm?.touched?.end_date) {
-                    return "Please enter event end date";
-                }
-                if (values.start_date && new Date(value) < new Date(values.start_date)) {
-                    return "End date must be later than start date";
-                }
-                return null;
-            },
-        },
-    });
-  
+    validate: {
+      title: (value) => (value.length < 1 ? "Please enter event title" : null),
+      category: (value) => (value.length < 1 ? "Please select category" : null),
+      description: (value) => (value.length < 1 ? "Please enter event description" : null),
+      organizer: (value) => (value.length < 1 ? "Please enter event organizer" : null),
+      location: (value) => (value.length < 1 ? "Please enter event location" : null),
+      start_date: (value) =>
+        value.length < 1
+          ? "Please enter event start date"
+          : new Date() > new Date(value)
+          ? "Start date must be future date"
+          : null,
+      end_date: (value, values) =>
+        value.length < 1
+          ? "Please enter event start date"
+          : new Date(values.start_date) > new Date(value)
+          ? "End date must be later than start date"
+          : null,
+      image: () => null,
+    },
+  });
+  const ticketForm = useForm({
+    initialValues: {
+      category: "",
+      price: 0,
+      totalTickets: 0,
+    },
 
-    return (
-        <>
-            <UserBar username={username} goBack={false}></UserBar>
-            <h1> Create New Event</h1>
-            <div className='new-event-container'>
-                <form className='form-container'>
-                    <div className='text-input-container'>
-                        <TextInput
-                            size="sm"
-                            label="Title"
-                            placeholder="Event title"
-                            withAsterisk
-                            {...eventForm.getInputProps("title")}
-                        />
-                        <br />
-                        <Select
-                            label="Category" 
-                            placeholder="Select category"
-                            withAsterisk
-                            data={Object.values(EventCategory).map((category) => ({ value: category, label: category }))}
-                            {...eventForm.getInputProps("category")}
-                        />
-                        <br />
+    validate: {
+      category: (value) => (value.length < 1 ? "Please select category" : null),
+      price: (value) => (value <= 0 ? "Please enter valid price" : null),
+      totalTickets: (value) => (value <= 0 ? "Please enter valid amount" : null),
+    },
+  });
 
-                        <TextInput
-                            size="sm"
-                            label="Description"
-                            placeholder="Description"
-                            withAsterisk
-                            {...eventForm.getInputProps("description")}
-                        />
-                        <br />
+  async function NewEvent(values: {
+    title: string;
+    category: string;
+    description: string;
+    organizer: string;
+    location: string;
+    start_date: string;
+    end_date: string;
+    image: string;
+  }): Promise<void> {
+    console.log(values);
+  }
 
-                        <TextInput
-                            size="sm"
-                            label="Organizer"
-                            placeholder="Organizer"
-                            withAsterisk
-                            {...eventForm.getInputProps("oeorganizer")}
-                        />
-                        <br />
-                    </div>
-            
-                    <div className='dates-container'>
-                        <TextInput
-                                size="sm"
-                                label="Location"
-                                placeholder="Location"
-                                withAsterisk
-                                {...eventForm.getInputProps("location")}
-                            />
-                        <br />
+  function NewTicket(values: { category: string; price: number; totalTickets: number }): void {
+    const newTicket: TicketData = {
+      name: values.category,
+      price: values.price,
+      totalTickets: values.totalTickets,
+      available: values.totalTickets,
+    };
+    const newTicketArray: TicketData[] = [...tickets, newTicket];
+    setTickets(newTicketArray);
+  }
+  return (
+    <>
+      <h1>New Event</h1>
+      <Flex bg="rgba(0, 0, 0, .3)" miw={"80rem"} mih={"49rem"} direction="column" p={"1rem"}>
+        <form onSubmit={eventForm.onSubmit((values) => NewEvent(values))}>
+          <Flex justify="space-around" align="center" direction="row" mb={"2rem"}>
+            <Flex direction={"column"}>
+              <TextInput
+                label="Title"
+                placeholder="Event title"
+                size="md"
+                withAsterisk
+                {...eventForm.getInputProps("title")}
+              />
+              <Select
+                label="Category"
+                placeholder="Select category"
+                size="md"
+                mt={"0.5rem"}
+                withAsterisk
+                data={Object.values(EventCategory).map((category) => ({ value: category, label: category }))}
+                {...eventForm.getInputProps("category")}
+              />
+              <TextInput
+                label="Description"
+                placeholder="Description"
+                size="md"
+                mt={"0.5rem"}
+                withAsterisk
+                {...eventForm.getInputProps("description")}
+              />
+            </Flex>
+            <Flex direction={"column"}>
+              <TextInput
+                size="md"
+                label="Image URL"
+                placeholder="Image URL (optional)"
+                {...eventForm.getInputProps("image")}
+              />
 
-                        <TextInput
-                            size="sm"
-                            label="Image URL"
-                            placeholder="Image URL (optional)"
-                            
-                            {...eventForm.getInputProps("image")}
-                        />
-                        <br />
-                    
-                        <DateTimePicker label="Pick date and time" withAsterisk placeholder="Pick date and time" {...eventForm.getInputProps("start_date")}/>
-                        <br />
-                        <DateTimePicker label="Pick date and time" withAsterisk placeholder="Pick date and time" {...eventForm.getInputProps("end_date")}/>
+              <TextInput
+                size="md"
+                label="Organizer"
+                placeholder="Organizer"
+                mt={"0.5rem"}
+                withAsterisk
+                {...eventForm.getInputProps("organizer")}
+              />
+              <TextInput
+                size="md"
+                label="Location"
+                placeholder="Location"
+                mt={"0.5rem"}
+                withAsterisk
+                {...eventForm.getInputProps("location")}
+              />
+            </Flex>
 
-                    </div>
+            <Flex direction={"column"}>
+              <DateTimePicker
+                label="Pick start date and time"
+                size="md"
+                withAsterisk
+                placeholder="Pick start date and time"
+                {...eventForm.getInputProps("start_date")}
+              />
+              <br/>
+              <DateTimePicker
+                label="Pick end date and time"
+                size="md"
+                withAsterisk
+                placeholder="Pick end date and time"
+                {...eventForm.getInputProps("end_date")}
+              />
+            </Flex>
+          </Flex>
+          <Center>
+            <Button color="green" size="lg" type="submit" pos={"absolute"} bottom={"-1rem"}>
+              Add New Event
+            </Button>
+          </Center>
+        </form>
 
-                </form>
-                <br />
-                <Center className='add-tickets-container'>
-                    <AddTickets></AddTickets>
-                </Center>
-                <br />
-                <Button color='green' size='lg'> Add New Event </Button>
-
-            </div>
-            
-        </>
-    );
+        <form onSubmit={ticketForm.onSubmit((values) => NewTicket(values))}>
+          <Flex>
+            {tickets.map((ticket, index) => (
+              <Card key={index} padding="sm" m={"1rem"} radius="sm" withBorder mah={"6rem"}>
+                <Text size="md"  fw={500}>
+                  Category: {ticket.name}
+                </Text>
+                <Text size="md" fw={500}>
+                  Price: {ticket.price}
+                </Text>
+                <Text size="md" fw={500}>
+                  Total Tickets: {ticket.totalTickets}
+                </Text>
+              </Card>
+            ))}
+            <Flex direction={"column"} maw={"20%"} p={"1rem"}>
+              <TextInput
+                size="md"
+                label="Tickets Category:"
+                placeholder="Category Name"
+                withAsterisk
+                {...ticketForm.getInputProps("category")}
+              />
+              <NumberInput
+                size="md"
+                className="input-field"
+                label="Price:"
+                placeholder="0"
+                withAsterisk
+                {...ticketForm.getInputProps("price")}
+              />
+              <NumberInput
+                size="md"
+                className="input-field"
+                label="Total Tickets:"
+                placeholder="0"
+                withAsterisk
+                {...ticketForm.getInputProps("totalTickets")}
+              />
+              <Button size="md" mt={"1.5rem"} type="submit">
+                Add Ticket
+              </Button>
+            </Flex>
+          </Flex>
+        </form>
+      </Flex>
+    </>
+  );
 };
 
 export default NewEvent;
