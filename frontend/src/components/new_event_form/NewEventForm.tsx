@@ -1,41 +1,80 @@
 import { Select, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { DatePicker } from '@mantine/dates'
-import React, { useState } from 'react';
+import { DateInput, DatePicker, DatePickerInput } from '@mantine/dates'
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EventCategory } from '../../utils/Types';
 import './NewEventForm.css';
 
-interface NewEventFormProps {}
+interface NewEventFormProps {
+    onSubmit: (data: any) => void;
+}
 
-const NewEventForm: React.FC<NewEventFormProps> = () => {
+const NewEventForm: React.FC<NewEventFormProps> = ({onSubmit}) => {
     const navigate = useNavigate();
-    const [dateValue, setDateValue] = useState<Date | null>(null);
+    const [formValues, setFormValues] = useState({});
 
-    const eventForm = useForm({
+    const eventForm:any = useForm({
         initialValues: {
             title: '',
             category: '',
             description: '',
             organizer: '',
             location: '',
-            start_date: null,
-            end_date: null,
+            start_date: '',
+            end_date: '',
             image: '',
         },
         validate: {
-            title: (value) => (value.length < 1 ? "Please enter event title" : null),
-            description: (value) => (value.length < 1 ? "Please enter event description" : null),
-            organizer: (value) => (value.length < 1 ? "Please enter event organizer" : null),
-            location: (value) => (value.length < 1 ? "Please enter event location" : null),
-            start_date: (value) => (!value ? "Please enter event start date" : null),
-            end_date: (value) => (!value ? "Please enter event end date" : null),
+            title: (value) => (!value && eventForm?.touched?.title ? "Please enter event title" : null),
+            description: (value) => (!value &&  eventForm?.touched?.description ? "Please enter event description" : null),
+            organizer: (value) => (!value &&  eventForm?.touched?.organizer ? "Please enter event organizer" : null),
+            location: (value) => (!value &&  eventForm?.touched?.location ? "Please enter event location" : null),
+            start_date: (value) => {
+                if (!value && eventForm?.touched?.start_date) {
+                    return "Please enter event start date";
+                }
+                if (new Date(value) <= new Date()) {
+                    return "Start date must be a future date";
+                }
+                return null;
+            },
+            end_date: (value, values) => {
+                if (!value && eventForm?.touched?.end_date) {
+                    return "Please enter event end date";
+                }
+                if (values.start_date && new Date(value) < new Date(values.start_date)) {
+                    return "End date must be later than start date";
+                }
+                return null;
+            },
         },
     });
 
+    // const [startDate, setStartDate] = useState<Date | null>(null);
+    // const [endDate, setEndDate] = useState<Date | null>(null);
 
+    // const handleStartDateChange = (date: Date | null) => {
+    //     setStartDate(date);
+    //     eventForm.setFieldValue('start_date', date ? date.toISOString() : '');
+    // };
+
+    // const handleEndDateChange = (date: Date | null) => {
+    //     setEndDate(date);
+    //     eventForm.setFieldValue('end_date', date ? date.toISOString() : '');
+    // };
+
+
+    useEffect(() => {
+        if (eventForm.validate()) {
+            setFormValues(eventForm.values);
+            onSubmit(eventForm.values);
+        }
+    }, [eventForm.values]);
+
+    
     return (
-         <form className='form-container'>{/*onSubmit={eventForm.onSubmit((values) => RequestSignup(values))>*/}
+         <form className='form-container'>
             <div className='text-input-container'>
                 <TextInput
                     size="sm"
@@ -72,7 +111,12 @@ const NewEventForm: React.FC<NewEventFormProps> = () => {
                 />
                 <br />
 
-                <TextInput
+                
+
+            </div>
+            
+            <div className='dates-container'>
+            <TextInput
                     size="sm"
                     label="Location"
                     placeholder="Location"
@@ -89,27 +133,40 @@ const NewEventForm: React.FC<NewEventFormProps> = () => {
                     {...eventForm.getInputProps("image")}
                 />
                 <br />
-
-            </div>
+            {/* <TextInput
+                    size="sm"
+                    label="Start Date"
+                    placeholder="01/01/2024"
+                    withAsterisk
+                    
+                    {...eventForm.getInputProps("start_date")}
+                />
+            <br /> */}
+            {/* <TextInput
+                size="sm"
+                label="End Date"
+                placeholder="02/01/2024"
+                withAsterisk
+                
+                {...eventForm.getInputProps("end_date")}
+            /> */}
             
-            <div className='dates-container'>
-                <div className="datepicker-container">
-                    <label htmlFor="datePicker">Start Date:</label>
-                    <DatePicker
-                        value={dateValue}
-                        onChange={setDateValue}
-                        allowDeselect
-                    />
-                </div>
-                <br />
-                <div className="datepicker-container">
-                    <label htmlFor="datePicker">End Date:</label>
-                    <DatePicker
-                        value={dateValue}
-                        onChange={setDateValue}
-                        allowDeselect
-                    />
-                </div>
+            <DateInput 
+                valueFormat="DD/MM/YYYY" 
+                label="Start Date" 
+                placeholder="01/01/2024" 
+                withAsterisk 
+                {...eventForm.getInputProps("start_date")}
+            />
+            <DateInput 
+                valueFormat="DD/MM/YYYY" 
+                label="End Date" 
+                placeholder="02/01/2024" 
+                withAsterisk 
+                {...eventForm.getInputProps("end_date")}
+            />
+
+        
             </div>
 
          </form>
