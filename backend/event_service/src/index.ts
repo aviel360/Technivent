@@ -1,15 +1,12 @@
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import Event from "./models/event.js";
 
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import { getEvents } from "./routes.js";
 
-import {
-    getEvent,
-} from './routes.js';
-
-import {
-    EVENT_PATH
-} from './const.js';
+import { EVENT_PATH } from "./const.js";
+import { EventCategory } from "./models/event.js";
 
 dotenv.config();
 
@@ -22,8 +19,14 @@ const port = process.env.PORT || 8081;
 
 const app = express();
 
-app.get(EVENT_PATH, getEvent);
+app.get(EVENT_PATH, getEvents);
+
+const ticket1 = {
+  name: "Bronze",
+  quantity: 1000,
+  price: 50,
+};
 
 app.listen(port, () => {
-    console.log(`Server running! port ${port}`);
+  console.log(`Server running! port ${port}`);
 });

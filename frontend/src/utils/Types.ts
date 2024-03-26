@@ -22,7 +22,7 @@ export interface TicketData {
 }
 
 export interface EventData {
-  id: string,
+  _id: string,
   title: string,
   category: EventCategory,
   description: string,

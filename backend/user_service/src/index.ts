@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import {
+    getEventRoute,
     loginRoute,
     logoutRoute,
     signupRoute,
@@ -16,7 +17,7 @@ import {
     LOGIN_PATH,
     LOGOUT_PATH,
     SIGNUP_PATH,
-    _PATH
+    EVENT_PATH
 } from './const.js';
 
 dotenv.config();
@@ -43,7 +44,7 @@ app.post(LOGIN_PATH, loginRoute);
 app.post(LOGOUT_PATH, logoutRoute);
 app.post(SIGNUP_PATH, signupRoute);
 
-app.get(_PATH, usernameRoute);
+app.get(EVENT_PATH, getEventRoute);
 
 app.listen(port, () => {
     console.log(`Server running! port ${port}`);

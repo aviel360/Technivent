@@ -14,7 +14,7 @@ const Catalog: React.FC<CatalogProps> = () => {
     const apiService = new Api();
     let data: EventData[] = [];
     const response = await apiService.getEvents();
-    if (response) data = await response.data.json();
+    if (response) data = response.data.dbRes;
     return data;
   };
 

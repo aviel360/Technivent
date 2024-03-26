@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Image, Text, Badge, Button, Group, Flex, Container } from "@mantine/core";
+import { Card, Image, Text, Badge, Button, Group, Flex } from "@mantine/core";
 import { EventData } from "../../utils/Types";
 
 interface EventsProps {
@@ -10,12 +10,9 @@ function Events({ fetchData }: EventsProps) {
   const [eventsData, setEventsData] = useState<EventData[]>([]);
 
   const fetchEvents = async () => {
-    try {
-      const data = await fetchData();
-      setEventsData(data);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
+    const data = await fetchData();
+    console.log(data);
+    setEventsData(data);
   };
 
   useEffect(() => {
@@ -23,17 +20,16 @@ function Events({ fetchData }: EventsProps) {
   }, [fetchData]);
 
   return (
-    <Container>
-      <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" justify="center" align="center" direction="row" wrap="wrap">
+      <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" justify="center" columnGap={'1rem'} align="center" direction="row" wrap="wrap">
         {eventsData.map((event) => (
-          <Card key={event.id} shadow="sm" padding="lg" radius="md" withBorder>
+          <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={'30%'}>
             <Card.Section>
               <Image src={event.image} height={160} alt={event.organizer} />
             </Card.Section>
 
             <Group justify="space-between" mt="md" mb="xs">
               <Text fw={500}>{event.category}</Text>
-              <Badge color="pink">{event.start_date.getDay()}</Badge>
+              <Badge color="pink">{new Date(event.start_date).toDateString()}</Badge>
             </Group>
 
             <Text size="sm" c="dimmed">
@@ -41,13 +37,11 @@ function Events({ fetchData }: EventsProps) {
             </Text>
 
             <Button color="blue" fullWidth mt="md" radius="md">
-              Purchase now
+              Purchase tickets now
             </Button>
           </Card>
         ))}
       </Flex>
-      <Flex></Flex>
-    </Container>
   );
 }
 
