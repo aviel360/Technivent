@@ -22,6 +22,26 @@ class Api {
     }
   }
 
+  async getSecretQuestion(payload: { username: string }): Promise<any> {
+    try {
+      const response: AxiosResponse = await axios.get(`${this.baseUrl}/user/${payload.username}/secret-question`);
+      return response;
+    } catch (error: any) {
+      window.alert(error)
+      return null;
+    }
+  }
+
+  async getPassword(payload: { username: string, secretAnswer: string }): Promise<any> {
+    try {
+      const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/${payload.username}/secret-answer`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error)
+      return null;
+    }
+  }
+
   async Login(payload: { username: string, password: string }): Promise<any> {
     try {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);

@@ -4,6 +4,7 @@ import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
 import NewEvent from "../new_event/NewEvent";
+import ForgotPassword from "../forgot-password/ForgotPassword"
 
 interface HomeProps {}
 
@@ -27,7 +28,8 @@ const Home: React.FC<HomeProps> = () => {
           <Route path="/" element={<Catalog />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/newevent" element={<NewEvent />} />  //temp route
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/newevent" element={<NewEvent />} />
           
         </Routes>
       </BrowserRouter>
