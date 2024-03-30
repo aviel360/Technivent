@@ -31,3 +31,17 @@ export async function getEvents(req: Request, res: Response) {
     res.status(500).send(error);
   }
 }
+
+export async function addEvent(req: Request, res: Response) {
+  
+    //Authentication and permission check??
+
+    const body = req.body;
+    const newEvent = new Event(body);
+    try {
+      const dbEvent = await newEvent.save();
+      res.status(201).send({ eventID: dbEvent._id });
+    } catch (error: any) {
+      res.status(500).send(error);
+    }
+}

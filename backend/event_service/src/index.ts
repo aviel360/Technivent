@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Event from "./models/event.js";
 
-import { getEvents } from "./routes.js";
+import { getEvents, addEvent } from "./routes.js";
 
 import { EVENT_PATH } from "./const.js";
 import { EventCategory } from "./models/event.js";
@@ -20,6 +20,7 @@ const port = process.env.PORT || 8081;
 const app = express();
 
 app.get(EVENT_PATH, getEvents);
+app.post(EVENT_PATH, addEvent);
 
 const ticket1 = {
   name: "Bronze",
