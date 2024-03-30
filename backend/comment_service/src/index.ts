@@ -1,12 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Event from "./models/event.js";
-
-import { getEvents, addEvent } from "./routes.js";
-
-import { EVENT_PATH } from "./const.js";
-import { EventCategory } from "./models/event.js";
+import { COMMENT_PATH } from "./const.js";
+import { getComments, addComment } from "./routes.js";
 
 dotenv.config();
 
@@ -15,18 +11,14 @@ dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/
 
 await mongoose.connect(dbUri);
 
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 3002;
 
 const app = express();
+app.use(express.json());
 
-app.get(EVENT_PATH, getEvents);
-app.post(EVENT_PATH, addEvent);
+app.get(COMMENT_PATH, getComments);
+app.post(COMMENT_PATH, addComment);
 
-const ticket1 = {
-  name: "Bronze",
-  quantity: 1000,
-  price: 50,
-};
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);
