@@ -3,11 +3,14 @@ import { TextInput, Button, Select, Text, Flex, NumberInput, Card, Center, Group
 import { useForm } from "@mantine/form";
 import { EventCategory, TicketData } from "../../../utils/Types.ts";
 import { DateTimePicker } from "@mantine/dates";
+import "./NewEvent.css"
+
 
 interface NewEventProps {}
 
 const NewEvent: React.FC<NewEventProps> = () => {
   const [tickets, setTickets] = useState<TicketData[]>([]);
+  const [totalTicketsForEvent, setTotalTicketsForEvent] = useState(0);
 
   const eventForm = useForm({
     initialValues: {
@@ -19,6 +22,7 @@ const NewEvent: React.FC<NewEventProps> = () => {
       start_date: "",
       end_date: "",
       image: "",
+      tickets: [],
     },
 
     validate: {
@@ -40,8 +44,10 @@ const NewEvent: React.FC<NewEventProps> = () => {
           ? "End date must be later than start date"
           : null,
       image: () => null,
+      //tickets: () => (tickets?.length < 1 ? "Please add at least one ticket category" : null)
     },
   });
+
   const ticketForm = useForm({
     initialValues: {
       category: "",
@@ -65,8 +71,12 @@ const NewEvent: React.FC<NewEventProps> = () => {
     start_date: string;
     end_date: string;
     image: string;
-  }): Promise<void> {
+  }, tickets: TicketData[]): Promise<void> {
+    console.log(tickets);
     console.log(values);
+    if(tickets.length < 1) {
+      alert("Please add at least one ticket category");
+    }
   }
 
   function NewTicket(values: { category: string; price: number; totalTickets: number }): void {
@@ -77,15 +87,20 @@ const NewEvent: React.FC<NewEventProps> = () => {
       available: values.totalTickets,
     };
     const newTicketArray: TicketData[] = [...tickets, newTicket];
-    setTickets(newTicketArray);
+    setTickets(newTicketArray); 
+    setTotalTicketsForEvent(totalTicketsForEvent + values.totalTickets);  
+    ticketForm.reset();
   }
+
+
   return (
     <>
       <h1>New Event</h1>
+      <Center>
       <Flex bg="rgba(0, 0, 0, .3)" miw={"80rem"} mih={"49rem"} direction="column" p={"1rem"}>
-        <form onSubmit={eventForm.onSubmit((values) => NewEvent(values))}>
+        <form onSubmit={eventForm.onSubmit((values) => NewEvent(values, tickets))} >
           <Flex justify="space-around" align="center" direction="row" mb={"2rem"}>
-            <Flex direction={"column"}>
+            <Flex direction={"column"} pl={"12rem"}>
               <TextInput
                 label="Title"
                 placeholder="Event title"
@@ -119,7 +134,7 @@ const NewEvent: React.FC<NewEventProps> = () => {
               />
             </Flex>
 
-            <Flex direction={"column"}>
+            <Flex direction={"column"} pr={"12rem"}>
               <DateTimePicker
                 label="Pick start date and time"
                 size="md"
@@ -153,15 +168,18 @@ const NewEvent: React.FC<NewEventProps> = () => {
               />
             </Flex>
           </Flex>
+
           <Center>
-            <Button color="green" size="lg" type="submit" pos={"absolute"} bottom={"-1rem"}>
+            <Button color="green" size="lg" type="submit"  bottom={"-1rem"}>
               Add New Event
             </Button>
           </Center>
+
         </form>
 
-        <form onSubmit={ticketForm.onSubmit((values) => NewTicket(values))}>
-          <Flex>
+        
+        <form onSubmit={ticketForm.onSubmit((values) => NewTicket(values))} className="ticket-form">
+          <Flex pt={"3rem"} wrap={"wrap"}>
             {tickets.map((ticket, index) => (
               <Card key={index} padding="sm" m={"1rem"} radius="sm" withBorder mah={"6rem"}>
                 <Text size="md"  fw={500}>
@@ -175,7 +193,7 @@ const NewEvent: React.FC<NewEventProps> = () => {
                 </Text>
               </Card>
             ))}
-            <Flex direction={"column"} maw={"20%"} p={"1rem"}>
+            <Flex direction={"column"} maw={"25%"} p={"1rem"} >
               <TextInput
                 size="md"
                 label="Tickets Category:"
@@ -204,8 +222,12 @@ const NewEvent: React.FC<NewEventProps> = () => {
               </Button>
             </Flex>
           </Flex>
+          <div>
+              <h2> Total Tickets: {totalTicketsForEvent}</h2>    
+          </div>
         </form>
       </Flex>
+      </Center>
     </>
   );
 };
