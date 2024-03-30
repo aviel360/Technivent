@@ -32,13 +32,29 @@ class Api {
     }
   }
 
+  
+
   async getEvents(query: string = '')
   {
+    
     try{
       const response: AxiosResponse = await axios.get(`${this.baseUrl}/event/${query}`)
       return response;
     } catch (error: any) {
       window.alert(error)
+      return null;
+    }
+  }
+
+  async getEventById(id: string) {
+    const url = `${this.baseUrl}/event/${id}`;
+    console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
+    try {
+      const response: AxiosResponse = await axios.get(url);
+      return response;
+    } catch (error: any) {
+      console.error(error); // Log the error to the console
+      window.alert(error);
       return null;
     }
   }

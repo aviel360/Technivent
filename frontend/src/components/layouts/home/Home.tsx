@@ -4,6 +4,7 @@ import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
 import NewEvent from "../new_event/NewEvent";
+import EventPage from "../event_page/EventPage";
 
 interface HomeProps {}
 
@@ -28,6 +29,7 @@ const Home: React.FC<HomeProps> = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/newevent" element={<NewEvent />} />  //temp route
+          <Route path="/api/event/:id" element={<EventPage />} /> 
           
         </Routes>
       </BrowserRouter>
