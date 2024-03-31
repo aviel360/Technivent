@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { TextInput, Button, Text, Loader } from "@mantine/core";
+import { TextInput, Button, Text, Loader, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Api from "../../../utils/Api.tsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface SignupProps {}
 
@@ -13,8 +13,6 @@ const Signup: React.FC<SignupProps> = () => {
   const [isAnswer, setAnswer] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
   const [question, setQuestion] = useState<string>("");
-  const [isPassowrd, setIsPassword] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
 
   const userForm = useForm({
     initialValues: {
@@ -29,11 +27,12 @@ const Signup: React.FC<SignupProps> = () => {
   const answerForm = useForm({
     initialValues: {
       secretAnswer: "",
+      newPassword: "",
     },
 
     validate: {
-      secretAnswer: (value) =>
-        value.length < 1 ? "Please enter username secret answer" : null,
+      secretAnswer: (value) => (value.length < 1 ? "Please enter secret answer" : null),
+      newPassword: (value) => (value.length < 1 ? "Please enter password" : null),
     },
   });
 
@@ -46,34 +45,28 @@ const Signup: React.FC<SignupProps> = () => {
     setIsLoading(false);
 
     if (response) {
-      window.alert(response.data);
       if (response.status == 200) {
         setUserId(values.username);
-        setQuestion(response.body);
+        setQuestion(response.data);
         setUser(false);
         setAnswer(true);
-        setIsPassword(true);
-        setPassword(response.body)
       }
     }
   }
-  async function RequestPassword(values: {
-    secretAnswer: string;
-  }): Promise<void> {
+  async function RequestPassword(values: { secretAnswer: string; newPassword: string }): Promise<void> {
     const apiService = new Api();
     setIsLoading(true);
     const response = await apiService.getPassword({
       username: userId,
       secretAnswer: values.secretAnswer,
+      newPassword: values.newPassword,
     });
     setIsLoading(false);
 
     if (response) {
       window.alert(response.data);
-      if (response.status == 200) {
-        setUser(false);
-        setAnswer(false);
-        setPassword(response.body);
+      if (response.status == 201) {
+        navigate("/login");
       }
     }
   }
@@ -84,9 +77,7 @@ const Signup: React.FC<SignupProps> = () => {
       <br />
       {isUser && (
         <>
-          <form
-            onSubmit={userForm.onSubmit((values) => RequestQuestion(values))}
-          >
+          <form onSubmit={userForm.onSubmit((values) => RequestQuestion(values))}>
             <TextInput
               size="sm"
               label="What is your username?"
@@ -111,14 +102,14 @@ const Signup: React.FC<SignupProps> = () => {
           <br />
           <Text size="lg">Question: {question}</Text>
           <br />
-          <form
-            onSubmit={answerForm.onSubmit((values) => RequestPassword(values))}
-          >
-            <TextInput
+          <form onSubmit={answerForm.onSubmit((values) => RequestPassword(values))}>
+            <TextInput size="sm" withAsterisk placeholder="Secret Answer" {...answerForm.getInputProps("secretAnswer")} />
+            <br />
+            <PasswordInput
               size="sm"
               withAsterisk
-              placeholder="Secret Answer"
-              {...userForm.getInputProps("secretAnswer")}
+              placeholder="New Password"
+              {...answerForm.getInputProps("newPassword")}
             />
             <br />
             {isLoading ? (
@@ -129,12 +120,6 @@ const Signup: React.FC<SignupProps> = () => {
               </Button>
             )}
           </form>
-        </>
-      )}
-      {isPassowrd && (
-        <>
-          <Text size="lg">Your password is: {password}</Text>
-          <Link to="/login">Login</Link>
         </>
       )}
     </>
