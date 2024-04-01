@@ -36,7 +36,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefix frontend
       - name: Build
         run: npm run build --prefix frontend  # Adjust the command to build from the frontend directory
       - name: Setup Pages
