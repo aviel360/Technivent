@@ -36,7 +36,6 @@ export async function loginRoute(req: Request, res: Response) {
   res.cookie("token", token, {
     httpOnly: true,
     secure,
-    sameSite: "none",
   });
   res.status(200).send("Logged in successfully");
 }

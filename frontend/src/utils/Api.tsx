@@ -4,7 +4,7 @@ class Api {
   baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://localhost:3000/api';
+    this.baseUrl = 'https://technivent.onrender.com/api';
   }
 
   fetchData(): Promise<any> {
