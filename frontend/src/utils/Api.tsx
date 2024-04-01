@@ -77,18 +77,6 @@ class Api {
       return null;
     }
   }
-
-  async getEventById(id: string) {
-    const url = `${this.baseUrl}/event/${id}`;
-    console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
-    try {
-      const response: AxiosResponse = await axios.get(url);
-      return response;
-    } catch (error: any) {
-      console.error(error); // Log the error to the console
-      return null;
-    }
-  }
 }
 
 export default Api
