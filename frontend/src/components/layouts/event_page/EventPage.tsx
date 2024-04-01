@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { usernameContext } from '../home/Home';
-import { Badge, Button, Card, Center, Flex,Group,NumberInput,Text } from '@mantine/core';
+import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core';
 
 interface EventPageProps {
 }
