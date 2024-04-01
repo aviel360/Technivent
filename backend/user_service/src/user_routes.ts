@@ -33,10 +33,14 @@ export async function loginRoute(req: Request, res: Response) {
   const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "2d" });
   const secure = process.env.NODE_ENV === "production";
 
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 2);
+
   res.cookie("token", token, {
     httpOnly: true,
     secure,
     sameSite: "none",
+    expires: expirationDate,
   });
   res.status(200).send("Logged in successfully");
 }

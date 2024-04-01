@@ -4,7 +4,7 @@ class Api {
   baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://localhost:3000/api';
+    this.baseUrl = 'https://technivent.onrender.com/api';
   }
 
   fetchData(): Promise<any> {
@@ -17,7 +17,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/signup`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.response.data)
+      window.alert(error.message);
       return null;
     }
   }
@@ -27,7 +27,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/secret-question`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.response.data)
+      window.alert(error.message);
       return null;
     }
   }
@@ -37,7 +37,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/reset-password`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.response.data)
+      window.alert(error.message);
       return null;
     }
   }
@@ -47,7 +47,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.response.data)
+      window.alert(error.message);
       return null;
     }
   }
@@ -61,7 +61,19 @@ class Api {
       const response: AxiosResponse = await axios.get(`${this.baseUrl}/event/${query}`)
       return response;
     } catch (error: any) {
-      window.alert(error.response.data)
+      window.alert(error.message);
+      return null;
+    }
+  }
+
+  async getEventById(id: string) {
+    const url = `${this.baseUrl}/event/${id}`;
+    console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
+    try {
+      const response: AxiosResponse = await axios.get(url);
+      return response;
+    } catch (error: any) {
+      window.alert(error.message); // Log the error to the console
       return null;
     }
   }
