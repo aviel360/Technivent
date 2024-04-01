@@ -27,13 +27,13 @@ const Home: React.FC<HomeProps> = () => {
     <usernameContext.Provider value={{ username, setUsername }}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Catalog />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/newevent" element={<NewEvent />} />
-          <Route path="/newevent" element={<NewEvent />} />  //temp route
-          <Route path="/api/event/:id" element={<EventPage />} /> 
+          <Route path="/Technivent/" element={<Catalog />} />
+          <Route path="/Technivent/signup" element={<Signup />} />
+          <Route path="/Technivent/login" element={<Login />} />
+          <Route path="/Technivent/forgot-password" element={<ForgotPassword />} />
+          <Route path="/Technivent/newevent" element={<NewEvent />} />
+          <Route path="/Technivent/newevent" element={<NewEvent />} />  //temp route
+          <Route path="/Technivent/event/:id" element={<EventPage />} /> 
           
         </Routes>
       </BrowserRouter>
