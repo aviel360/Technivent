@@ -36,7 +36,6 @@ const Signup: React.FC<SignupProps> = () => {
     secretAnswer: string;
   }): Promise<void> {
     const { username, password, secretQuestion, secretAnswer } = values;
-    window.alert(secretQuestion);
     const apiService = new Api();
     setIsLoading(true);
     const response = await apiService.signUp({ username, password, secretQuestion, secretAnswer });

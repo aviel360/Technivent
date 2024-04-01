@@ -17,7 +17,6 @@ function Events({ fetchData }: EventsProps) {
 
   const fetchEvents = async () => {
     const data = await fetchData();
-    console.log(data);
     setEventsData(data);
   };
 
