@@ -17,7 +17,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/signup`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error)
+      window.alert(error.response.data)
       return null;
     }
   }
@@ -47,7 +47,7 @@ class Api {
       const response: AxiosResponse = await axios.post(`${this.baseUrl}/user/login`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error)
+      window.alert(error.response.data)
       return null;
     }
   }
@@ -58,7 +58,7 @@ class Api {
       const response: AxiosResponse = await axios.get(`${this.baseUrl}/event/${query}`)
       return response;
     } catch (error: any) {
-      window.alert(error)
+      window.alert(error.response.data)
       return null;
     }
   }

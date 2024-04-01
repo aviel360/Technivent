@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { User, LoginUser, UserType } from "./models/user.js";
+import { User, LoginUser } from "./models/user.js";
 import Joi from "joi";
 
+
+// Route for login
 export async function loginRoute(req: Request, res: Response) {
   const credentials = req.body;
 
@@ -28,9 +30,7 @@ export async function loginRoute(req: Request, res: Response) {
     return;
   }
 
-  /*JWT_SECRET  is set in .env file */
   const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "2d" });
-
   const secure = process.env.NODE_ENV === "production";
 
   res.cookie("token", token, {
@@ -41,9 +41,11 @@ export async function loginRoute(req: Request, res: Response) {
   res.status(200).send("Logged in successfully");
 }
 
+
+// Route for logout
 export async function logoutRoute(req: Request, res: Response) {
   const secure = process.env.NODE_ENV === "production";
-  /* clear the token cookie - should specify the same attributes of the setting */
+  // clear the token cookie - should specify the same attributes of the setting 
   res.clearCookie("token", {
     httpOnly: true,
     secure,
@@ -53,6 +55,8 @@ export async function logoutRoute(req: Request, res: Response) {
   res.status(200).send("Logged out successfully");
 }
 
+
+// Route for signup
 export async function signupRoute(req: Request, res: Response) {
   const user = new User(req.body);
   try {
@@ -80,6 +84,8 @@ export async function signupRoute(req: Request, res: Response) {
   res.status(201).send("User created successfully");
 }
 
+
+// Route for ???
 export async function usernameRoute(req: Request, res: Response) {
   const token = req.cookies.token;
   if (!token) {
@@ -99,6 +105,8 @@ export async function usernameRoute(req: Request, res: Response) {
   res.status(200).send({ username });
 }
 
+
+// Route for getting secret question
 export async function secretQuestionRoute(req: Request, res: Response) {
   const usernameSchema = Joi.object({
     username: Joi.string().min(1).required(),
@@ -113,13 +121,16 @@ export async function secretQuestionRoute(req: Request, res: Response) {
   let user;
   try {
     user = await User.findOne({ username: value.username });
+    if (user)
+      return res.status(200).send(user.secretQuestion);
   } catch (e) {
-    return res.status(500).send("User doesn't exist");
+    res.status(500).send("Internal Server Error");
   }
-
-  res.status(200).send(user.secretQuestion);
+  res.status(500).send("User doesn't exist");
 }
 
+
+// Route for password reset
 export async function resetPasswordRoute(req: Request, res: Response) {
   const secretAnswerSchema = Joi.object({
     username: Joi.string().min(1).required(),

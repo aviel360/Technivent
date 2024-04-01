@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, Button, Select, Text, Flex, NumberInput, Card, Center, Group } from "@mantine/core";
+import { TextInput, Button, Select, Text, Flex, NumberInput, Card, Center } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { EventCategory, TicketData } from "../../../utils/Types.ts";
 import { DateTimePicker } from "@mantine/dates";
@@ -44,7 +44,6 @@ const NewEvent: React.FC<NewEventProps> = () => {
           ? "End date must be later than start date"
           : null,
       image: () => null,
-      //tickets: () => (tickets?.length < 1 ? "Please add at least one ticket category" : null)
     },
   });
 
