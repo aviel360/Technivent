@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Image, Text, Badge, Button, Group, Flex } from "@mantine/core";
 import { EventData } from "../../utils/Types";
+import { useNavigate } from "react-router-dom";
 
 interface EventsProps {
   fetchData: () => Promise<EventData[]>;
@@ -8,6 +9,11 @@ interface EventsProps {
 
 function Events({ fetchData }: EventsProps) {
   const [eventsData, setEventsData] = useState<EventData[]>([]);
+  const navigate = useNavigate();
+
+  const handlePurchaseClick = (id: string) => {
+    navigate(`/api/event/${id}`);
+  };
 
   const fetchEvents = async () => {
     const data = await fetchData();
@@ -66,7 +72,7 @@ function Events({ fetchData }: EventsProps) {
               </Badge>
             </center>
 
-            <Button color="blue" fullWidth mt="sm" radius="md">
+            <Button color="blue" fullWidth mt="sm" radius="md" onClick={() => handlePurchaseClick(event._id)}>
               Purchase now
             </Button>
           </Card>

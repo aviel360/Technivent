@@ -45,3 +45,13 @@ export async function addEvent(req: Request, res: Response) {
       res.status(500).send(error);
     }
 }
+
+export async function getEventById(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const dbRes = await Event.find({ _id: id });
+    res.status(200).send({ dbRes });
+  } catch (error: any) {
+    res.status(500).send(error);
+  }
+}

@@ -10,3 +10,4 @@ export const PASSWORD_RESET = "/api/user/reset-password";
 // Event
 export const EVENT_SERVICE = "http://localhost:3001";
 export const EVENT_PATH = "/api/event";
+export const EVENT_BY_ID = "/api/event/:id";

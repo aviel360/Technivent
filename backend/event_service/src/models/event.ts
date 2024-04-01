@@ -51,8 +51,9 @@ const eventSchema = new mongoose.Schema(
             }
         },
         location: { type: String, required: true },
-        tickets: { type: [ticketSchema], required: true },
+        ticketArray: { type: [ticketSchema], required: true },
         image: { type: String },
+        rating: { type: Number },
     }
 );
 
