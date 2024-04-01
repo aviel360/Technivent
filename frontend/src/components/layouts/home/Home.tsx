@@ -25,15 +25,15 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <usernameContext.Provider value={{ username, setUsername }}>
-      <BrowserRouter>
+      <BrowserRouter basename="/Technivent">
         <Routes>
-          <Route path="/Technivent/" element={<Catalog />} />
-          <Route path="/Technivent/signup" element={<Signup />} />
-          <Route path="/Technivent/login" element={<Login />} />
-          <Route path="/Technivent/forgot-password" element={<ForgotPassword />} />
-          <Route path="/Technivent/newevent" element={<NewEvent />} />
-          <Route path="/Technivent/newevent" element={<NewEvent />} />  //temp route
-          <Route path="/Technivent/event/:id" element={<EventPage />} /> 
+          <Route path="/" element={<Catalog />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/newevent" element={<NewEvent />} />
+          <Route path="/newevent" element={<NewEvent />} />  //temp route
+          <Route path="/event/:id" element={<EventPage />} /> 
           
         </Routes>
       </BrowserRouter>
