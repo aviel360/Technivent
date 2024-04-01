@@ -109,11 +109,15 @@ const EventPage: React.FC<EventPageProps> = () => {
 
                             <Card key={eventData.location} shadow="sm" radius="sm" withBorder w={"300px"} h={"10rem"} >
                             {new Date(eventData.start_date).toDateString() === new Date(eventData.end_date).toDateString() ? (
-                                <Text size="lg" fw={500}> 
-                                    {"On: "}  {new Date(eventData.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric'})}
-                                    <br />{new Date(eventData.start_date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-                                    {" - "} {new Date(eventData.end_date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-                                </Text>
+                                <>
+                                    <Text size="xl" fw={600}> 
+                                        {new Date(eventData.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric'})}
+                                    </Text>
+                                    <Text size="lg" fw={400}>
+                                        {new Date(eventData.start_date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                        {" - "} {new Date(eventData.end_date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                    </Text>
+                                </>
                             ) : (
                             <>
                                 <Text size="lg" fw={500}> 
@@ -157,16 +161,13 @@ const EventPage: React.FC<EventPageProps> = () => {
                                         ) : (
                                             <Text size="md" fw={400} mt={"sm"}>{ticket.available} tickets left!</Text>
                                         )}
-                                        <Text size="md" fw={400} mt={"sm"}> {ticket.available}  tickets left!</Text>
-
                                 </Card.Section>
-                                <br />
 
                                 <Card.Section pb={"20px"}>
                                         <form>
                                             <center>
-                                            <NumberInput label={"Amount of tickets "} placeholder='0' 
-                                                w={"150px"} p={"md"} min={0}  max={ticket.available}
+                                            <NumberInput label={"Amount of tickets: "} placeholder='0' 
+                                                w={"180px"} p={"md"} min={0}  max={ticket.available}
                                                 disabled={ticket.available === 0} >
                                             </NumberInput>
                                             </center>
