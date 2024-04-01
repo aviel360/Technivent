@@ -5,8 +5,8 @@ import Event from "./models/event.js";
 
 import { getEvents, addEvent, getEventById } from "./routes.js";
 
+
 import { EVENT_BY_ID, EVENT_PATH } from "./const.js";
-import { EventCategory } from "./models/event.js";
 
 dotenv.config();
 

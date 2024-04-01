@@ -54,7 +54,6 @@ class Api {
       return response;
     } catch (error: any) {
       console.error(error); // Log the error to the console
-      window.alert(error);
       return null;
     }
   }
