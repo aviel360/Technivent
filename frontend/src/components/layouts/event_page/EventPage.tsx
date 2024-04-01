@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { usernameContext } from '../home/Home';
-import { Card, Flex,Group,Text } from '@mantine/core';
+import { Badge, Button, Card, Center, Flex,Group,NumberInput,Text } from '@mantine/core';
 
 interface EventPageProps {
 }
@@ -19,6 +19,7 @@ const EventPage: React.FC<EventPageProps> = () => {
     const [eventData, setEventData] = useState<EventData | null>(null);
     const { username } = useContext(usernameContext);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
+    const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
 
 
     const fetchEventData = async (id: string): Promise<EventData[]> => 
@@ -53,12 +54,23 @@ const EventPage: React.FC<EventPageProps> = () => {
         });
       }
 
+    function getTotalTicketsAvailable(eventData: EventData): number {
+        if (eventData?.ticketArray?.length === 0) {
+          return 0;
+        }
+      
+        return eventData.ticketArray.reduce((totalTickets, currentTicket) => {
+          return totalTickets + currentTicket.available;
+        }, 0);
+      }
+
     useEffect(() => {
         if(eventData)
         {
             const lowestPriceTickets = getCheapestTicket(eventData);
             setLowestPriceTickets(lowestPriceTickets);
-
+            const totalTicketsAvailable = getTotalTicketsAvailable(eventData);
+            setTotalTicketsAvailable(totalTicketsAvailable);
         }
     }, [eventData]);
 
@@ -87,10 +99,12 @@ const EventPage: React.FC<EventPageProps> = () => {
                         <h1>{eventData.title}</h1>
                         <Group justify="space-between" mt="xs" mb="xs">
                             <Card key={eventData.category} shadow="sm" radius="sm" withBorder w={"250px"} h={"10rem"} m={"1rem"}>
-                                <Text size="xl" fw={500}>{eventData.category}</Text>
-                                <br />
-                                <Text size="lg" fw={400}>from {lowestPriceTickets?.price}$</Text>
-                                <Text size="lg" fw={400}>{lowestPriceTickets?.available} tickets available</Text>
+                                <Text size="xl" fw={500} mb={"md"}>{eventData.category}</Text>
+                                <center>
+                                    <Badge color="violet" size="lg" p={"md"}>from {lowestPriceTickets?.price}$</Badge>
+                                    <Badge color="cyan" size="lg" p={"md"} mt={"md"}>{totalTicketsAvailable} tickets available</Badge>
+                                </center>
+                                {/* <Text size="lg" fw={400} mt={"md"}>{totalTicketsAvailable} tickets available</Text> */}
                             </Card>
 
                             <Card key={eventData.location} shadow="sm" radius="sm" withBorder w={"300px"} h={"10rem"} >
@@ -114,9 +128,9 @@ const EventPage: React.FC<EventPageProps> = () => {
                             </>
                         )}
                                 <br />
-                                <Text size="lg" fw={500} mt={"sm"}> 
-                                    {"Location: "} {eventData.location}
-                                </Text>
+                                <center>
+                                    <Badge color="grape" size="lg" p={"md"}>{"Location:  "} {eventData.location}</Badge>
+                                </center>
                             </Card>
                         </Group>
 
@@ -127,6 +141,47 @@ const EventPage: React.FC<EventPageProps> = () => {
                                 <img src={eventData.image} alt={eventData.title} /> : null}
                         </Card>
 
+                        <br />
+                        <h2 >Buy Tickets: </h2>
+                        {eventData.ticketArray.map((ticket) => 
+                        (
+                            <Flex wrap={"wrap"} direction={"row"} >
+                                <Card key={ticket._id} shadow="sm" radius="md" withBorder w={"15rem"} >
+                                <Card.Section>
+                                        <center>
+                                            <Badge color="pink" size="xl" p={"md"} mt={"sm"}>{ticket.name}</Badge>
+                                        </center>
+                                        <Text size="md" fw={400} mt={"sm"}>price: {ticket.price}$</Text>
+                                        {ticket.available === 0 ? (
+                                            <Text size="md" fw={400} mt={"sm"}>Sold out!</Text>
+                                        ) : (
+                                            <Text size="md" fw={400} mt={"sm"}>{ticket.available} tickets left!</Text>
+                                        )}
+                                        <Text size="md" fw={400} mt={"sm"}> {ticket.available}  tickets left!</Text>
+
+                                </Card.Section>
+                                <br />
+
+                                <Card.Section pb={"20px"}>
+                                        <form>
+                                            <center>
+                                            <NumberInput label={"Amount of tickets "} placeholder='0' 
+                                                w={"150px"} p={"md"} min={0}  max={ticket.available}
+                                                disabled={ticket.available === 0} >
+                                            </NumberInput>
+                                            </center>
+                                            <Button type="submit" size="md" p={"10px"} radius={"md"}
+                                                    disabled={ticket.available === 0}>
+                                                Purchase
+                                            </Button> {/*add onClick event*/}
+                                        </form>
+                                    </Card.Section>
+                                </Card>
+                            </Flex>
+                        ))}
+
+<br />
+                        <h2>Comments: </h2>
                     </div>
 
                 )}
