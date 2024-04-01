@@ -164,13 +164,3 @@ export async function resetPasswordRoute(req: Request, res: Response) {
 
   res.status(201).send("Your password was modified!");
 }
-
-export async function getEventById(req: Request, res: Response) {
-  const id = req.params.id;
-  try {
-    const response: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH + "/" + id);
-    res.status(response.status).send(response.data);
-  } catch (error: any) {
-    res.status(500).send(error);
-  }
-}
