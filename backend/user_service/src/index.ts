@@ -16,7 +16,7 @@ dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/
 await mongoose.connect(dbUri);
 
 const port = process.env.PORT || 3000;
-
+const origin = process.env.NODE_ENV === "production" ? "https://technivent.onrender.com" : 'http://localhost:5173';
 const app = express();
 
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use(cookieParser());
 /* TODO: set CORS headers appropriately using the cors middleware */
 app.use(
   cors({
-    origin: "*",
+    origin,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
