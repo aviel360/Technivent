@@ -45,7 +45,8 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
       )) : [];
 
       const PostComment = async (values: {commentText: string}): Promise<void> => {
-        const apiService = new Api();       
+        const apiService = new Api();  
+        //TODO: Add REAL username to the comment     
         const response = await apiService.PostComment({username: "test", eventId: eventID, comment: values.commentText});
         if (response) {
           window.alert(response.data);
