@@ -29,7 +29,8 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
       });
 
       const [activePage, setPage] = useState(1);
-      const paginatedComments = chunk(Comments, 2); 
+      const sortedComments = Comments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      const paginatedComments = chunk(sortedComments, 2); 
       const items = paginatedComments[activePage - 1] ? paginatedComments[activePage - 1].map((item, index) => (
         <Card key={index} m={"10px"} w={"20rem"}>
             <Card.Section>
