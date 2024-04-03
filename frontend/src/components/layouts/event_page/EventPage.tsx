@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { EventData, TicketData } from '../../../utils/Types';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { usernameContext } from '../home/Home';
@@ -9,13 +9,15 @@ import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core'
 interface EventPageProps {
 }
 
-interface EventPageParams extends Record<string, string> {
-    id: string;
-  }
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }  
 
 
 const EventPage: React.FC<EventPageProps> = () => {
-    const { id } = useParams<EventPageParams>();
+    let query = useQuery();
+    let id = query.get("id");
+    console.log(id);
     const [eventData, setEventData] = useState<EventData | null>(null);
     const { username } = useContext(usernameContext);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
@@ -104,7 +106,6 @@ const EventPage: React.FC<EventPageProps> = () => {
                                     <Badge color="violet" size="lg" p={"md"}>from {lowestPriceTickets?.price}$</Badge>
                                     <Badge color="cyan" size="lg" p={"md"} mt={"md"}>{totalTicketsAvailable} tickets available</Badge>
                                 </center>
-                                {/* <Text size="lg" fw={400} mt={"md"}>{totalTicketsAvailable} tickets available</Text> */}
                             </Card>
 
                             <Card key={eventData.location} shadow="sm" radius="sm" withBorder w={"300px"} h={"10rem"} >
@@ -147,10 +148,10 @@ const EventPage: React.FC<EventPageProps> = () => {
 
                         <br />
                         <h2 >Buy Tickets: </h2>
-                        {eventData.ticketArray.map((ticket) => 
-                        (
-                            <Flex wrap={"wrap"} direction={"row"} >
-                                <Card key={ticket._id} shadow="sm" radius="md" withBorder w={"15rem"} >
+                        <Flex wrap={"wrap"} direction={"row"} >
+                            {eventData.ticketArray.map((ticket) => 
+                            (
+                                <Card key={ticket._id} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
                                 <Card.Section>
                                         <center>
                                             <Badge color="pink" size="xl" p={"md"} mt={"sm"}>{ticket.name}</Badge>
@@ -178,10 +179,10 @@ const EventPage: React.FC<EventPageProps> = () => {
                                         </form>
                                     </Card.Section>
                                 </Card>
-                            </Flex>
                         ))}
-
-<br />
+                    </Flex>
+                    
+                    <br />
                         <h2>Comments: </h2>
                     </div>
 
