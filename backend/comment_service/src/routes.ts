@@ -36,3 +36,19 @@ export const addComment = async (req: Request, res: Response) => {
         res.status(500).send(error);
     }
 };
+
+export const addCommentFromBroker = async (message) => {
+    try {
+        const body = {
+            commentText: message.comment,
+            eventID: message.eventId,
+            username: message.username,
+            date: message.date
+          };
+        const newComment = new Comment(body);
+        const dbComment = await newComment.save();
+        console.log(`Comment added: ${dbComment._id}`);
+    } catch (error) {
+      console.error('Error in addCommentFromBroker:', error);
+    }
+  };
