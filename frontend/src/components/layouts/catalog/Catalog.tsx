@@ -3,12 +3,12 @@ import UserBar from "../../user_bar/UserBar";
 import Events from "../../events/Events";
 import Api from "../../../utils/Api";
 import { EventData } from "../../../utils/Types";
-import { usernameContext } from "../home/Home";
+import { userContext } from "../home/Home";
 
 interface CatalogProps {}
 
 const Catalog: React.FC<CatalogProps> = () => {
-  const { username } = useContext(usernameContext);
+  const { username } = useContext(userContext);
 
   const fetchData = async () => {
     const apiService = new Api();

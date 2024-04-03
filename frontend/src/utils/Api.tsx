@@ -12,9 +12,15 @@ class Api {
     });
   }
 
-  fetchData(): Promise<any> {
-    return this.axiosInstance.get(this.baseUrl)
-      .then((response: AxiosResponse) => response.data);
+  async getUserData() : Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user`)
+      return response;
+    }
+    catch (error: any)
+    {
+      return null;
+    }
   }
 
   async signUp(payload: { username: string, password: string, secretQuestion: string, secretAnswer: string }): Promise<any> {
@@ -57,7 +63,15 @@ class Api {
     }
   }
 
-  
+  async logout(): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/user/logout`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.message);
+      return null;
+    }
+  }
 
   async getEvents(query: string = '')
   {

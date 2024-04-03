@@ -36,3 +36,9 @@ export interface EventData {
   rating: Rating
 }
 
+export enum UserType {
+  User = "User",
+  Admin = "Admin",
+  Manager = "Manger",
+  Worker = "Worker"
+}

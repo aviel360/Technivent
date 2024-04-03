@@ -3,7 +3,7 @@ import { EventData, TicketData } from '../../../utils/Types';
 import { useParams } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
-import { usernameContext } from '../home/Home';
+import { userContext } from '../home/Home';
 import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core';
 
 interface EventPageProps {
@@ -17,7 +17,7 @@ interface EventPageParams extends Record<string, string> {
 const EventPage: React.FC<EventPageProps> = () => {
     const { id } = useParams<EventPageParams>();
     const [eventData, setEventData] = useState<EventData | null>(null);
-    const { username } = useContext(usernameContext);
+    const { username } = useContext(userContext);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
     const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
 
