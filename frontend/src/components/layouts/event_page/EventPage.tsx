@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EventData, TicketData, CommentData, EventResponse } from '../../../utils/Types';
-import { useLocation, useParams } from 'react-router-dom';
+import { EventData, TicketData, CommentData } from '../../../utils/Types';
+import { useLocation } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { usernameContext } from '../home/Home';
 import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core';
+import Comments from '../../comments/Comments';
 
 interface EventPageProps {
 }
@@ -148,7 +149,7 @@ const EventPage: React.FC<EventPageProps> = () => {
                         <Flex wrap={"wrap"} direction={"row"} >
                             {eventData.ticketArray.map((ticket) => 
                             (
-                                <Card key={ticket._id} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
+                                <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
                                 <Card.Section>
                                         <center>
                                             <Badge color="pink" size="xl" p={"md"} mt={"sm"}>{ticket.name}</Badge>
@@ -181,6 +182,10 @@ const EventPage: React.FC<EventPageProps> = () => {
                     
                     <br />
                         <h2>Comments: </h2>
+                        <Flex justify="center">
+                            <Comments Comments={commentsData}></Comments>
+                        </Flex>
+                        
                     </div>
 
                 )}
