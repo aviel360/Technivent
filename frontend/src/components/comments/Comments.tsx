@@ -44,12 +44,16 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
         </Card>
       )) : [];
 
+      const [isSuccess, setIsSuccess] = useState(false);
+
       const PostComment = async (values: {commentText: string}): Promise<void> => {
         const apiService = new Api();  
         //TODO: Add REAL username to the comment     
         const response = await apiService.PostComment({username: "test", eventId: eventID, comment: values.commentText});
         if (response) {
-          window.alert(response.data);
+          setIsSuccess(true);
+          form.reset();
+          setTimeout(() => setIsSuccess(false), 5000);
         }
     }
 
@@ -66,7 +70,8 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
                     error={form.errors.commentText}
                     {...form.getInputProps('commentText')}
                 />
-            <Button size="md" type="submit" m={"10px"}> Post </Button>
+            {isSuccess && <Text size={"sm"}>comment posted! Resresh the page to see it</Text>}
+            <Button size="md" type="submit" m={"15px"}> Post </Button>
             </form>
         </Flex>
         </>

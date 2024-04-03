@@ -97,8 +97,8 @@ const EventPage: React.FC<EventPageProps> = () => {
                 (
                     <div>
                         <h1>{eventData.title}</h1>
-                        <Group justify="space-between" mt="xs" mb="xs">
-                            <Card key={eventData.category} shadow="sm" radius="sm" withBorder w={"250px"} h={"10rem"} m={"1rem"}>
+                        <Group justify={"space-evenly"} mt="xs" mb="xs">
+                            <Card key={eventData.category} shadow="sm" radius="sm" withBorder w={"250px"} h={"10rem"} m={"1rem"} >
                                 <Text size="xl" fw={500} mb={"md"}>{eventData.category}</Text>
                                 <center>
                                     <Badge color="violet" size="lg" p={"md"}>from {lowestPriceTickets?.price}$</Badge>
