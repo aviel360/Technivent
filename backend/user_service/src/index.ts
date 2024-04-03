@@ -4,9 +4,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute } from "./user_routes.js";
-import { getEventRoute, getEventById_user } from "./event_routes.js";
+import { getEventRoute, getEventById_user, addComment } from "./event_routes.js";
 
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, EVENT_BY_ID, SECRET_QUESTION_PATH, PASSWORD_RESET } from "./const.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, EVENT_BY_ID, SECRET_QUESTION_PATH, PASSWORD_RESET, COMMENT_PATH } from "./const.js";
+import { PublisherChannel } from "./publisher_channel.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ await mongoose.connect(dbUri);
 const port = process.env.PORT || 3000;
 const origin = process.env.NODE_ENV === "production" ? "https://technivent.onrender.com" : 'http://localhost:5173';
 const app = express();
+const publisherChannel = new PublisherChannel();
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -37,6 +40,7 @@ app.post(LOGOUT_PATH, logoutRoute);
 app.post(SIGNUP_PATH, signupRoute);
 app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.post(PASSWORD_RESET, resetPasswordRoute);
+app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 
 app.get(EVENT_PATH, getEventRoute);
 
