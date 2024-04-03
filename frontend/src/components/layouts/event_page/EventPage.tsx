@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EventData, TicketData } from '../../../utils/Types';
+import { EventData, TicketData, CommentData, EventResponse } from '../../../utils/Types';
 import { useLocation, useParams } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
@@ -13,25 +13,21 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
   }  
 
-
 const EventPage: React.FC<EventPageProps> = () => {
     let query = useQuery();
     let id = query.get("id");
-    console.log(id);
     const [eventData, setEventData] = useState<EventData | null>(null);
+    const [commentsData, setCommentsData] = useState<CommentData[]>([]);
     const { username } = useContext(usernameContext);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
     const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
 
 
-    const fetchEventData = async (id: string): Promise<EventData[]> => 
+    const fetchEventData = async (id: string): Promise<{ event: { dbRes: EventData }, comments: CommentData[] }> => 
     {
         const apiService = new Api();
-        let data: EventData[] = {} as EventData[];
         const response = await apiService.getEventById(id);
-        console.log(response);
-        if (response) data = response.data.dbRes;
-        return data;
+        return response ? response.data : { event: { dbRes: {} as EventData }, comments: [] as CommentData[] };
     };
 
     useEffect(() => {
@@ -40,7 +36,8 @@ const EventPage: React.FC<EventPageProps> = () => {
                 return;
             }
             const data = await fetchEventData(id);
-            setEventData(data[0]);
+            setEventData(data.event.dbRes);
+            setCommentsData(data.comments);
         };
 
         fetchData();

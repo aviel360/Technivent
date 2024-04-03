@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute } from "./user_routes.js";
-import { getEventRoute, getEventById } from "./event_routes.js";
+import { getEventRoute, getEventById_user } from "./event_routes.js";
 
 import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, EVENT_BY_ID, SECRET_QUESTION_PATH, PASSWORD_RESET } from "./const.js";
 
@@ -30,6 +30,8 @@ app.use(
   })
 );
 
+app.use(express.urlencoded({ extended: true }));
+
 app.post(LOGIN_PATH, loginRoute);
 app.post(LOGOUT_PATH, logoutRoute);
 app.post(SIGNUP_PATH, signupRoute);
@@ -38,7 +40,6 @@ app.post(PASSWORD_RESET, resetPasswordRoute);
 
 app.get(EVENT_PATH, getEventRoute);
 
-app.get(EVENT_BY_ID, getEventById);
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);

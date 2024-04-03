@@ -72,8 +72,8 @@ class Api {
   }
 
   async getEventById(id: string) {
-    const url = `${this.baseUrl}/event/${id}`;
-    console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
+    const url = `${this.baseUrl}/event?id=${id}`;
+    // console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
     try {
       const response: AxiosResponse = await this.axiosInstance.get(url);
       return response;
