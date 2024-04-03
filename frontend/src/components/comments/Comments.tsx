@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import {  Button, Textarea, Card, Pagination, Flex, Center, Group, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CommentData } from '../../utils/Types';
+import Api from '../../utils/Api';
 
 interface CommentsProps {
-    Comments: CommentData[]
+    Comments: CommentData[],
+    eventID: string
 }
 
 function chunk<T>(array: T[], size: number): T[][] {
@@ -16,11 +18,14 @@ function chunk<T>(array: T[], size: number): T[][] {
     return [head, ...chunk(tail, size)];
   }
 
-const Comments: React.FC<CommentsProps> = ({Comments}) => {
+const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
     const form = useForm({
         initialValues: {
           commentText: ''
         },
+        validate: (values) => ({
+            commentText: !values.commentText ? 'Please enter your comment' : null,
+            })
       });
 
       const [activePage, setPage] = useState(1);
@@ -39,11 +44,14 @@ const Comments: React.FC<CommentsProps> = ({Comments}) => {
         </Card>
       )) : [];
 
-    const PostComment = async (values: any) => {
-
+      const PostComment = async (values: {commentText: string}): Promise<void> => {
+        const apiService = new Api();       
+        const response = await apiService.PostComment({username: "test", eventId: eventID, comment: values.commentText});
+        if (response) {
+          window.alert(response.data);
+        }
     }
-    
-    
+
     return (
         <>
         <Flex justify={Center} direction={"column"}>
@@ -54,6 +62,7 @@ const Comments: React.FC<CommentsProps> = ({Comments}) => {
                 <Textarea  w={"20rem"}  autosize minRows={1} maxRows={4}
                     label="Add a comment:"
                     placeholder="Write a comment..." 
+                    error={form.errors.commentText}
                     {...form.getInputProps('commentText')}
                 />
             <Button size="md" type="submit" m={"10px"}> Post </Button>

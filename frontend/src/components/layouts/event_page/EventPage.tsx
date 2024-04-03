@@ -183,7 +183,7 @@ const EventPage: React.FC<EventPageProps> = () => {
                     <br />
                         <h2>Comments: </h2>
                         <Flex justify="center">
-                            <Comments Comments={commentsData}></Comments>
+                            <Comments Comments={commentsData} eventID={eventData._id}></Comments>
                         </Flex>
                         
                     </div>
