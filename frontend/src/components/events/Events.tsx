@@ -12,7 +12,7 @@ function Events({ fetchData }: EventsProps) {
   const navigate = useNavigate();
 
   const handlePurchaseClick = (id: string) => {
-    navigate(`/api/event/${id}`);
+    navigate(`/event?id=${id}`);
   };
 
   const fetchEvents = async () => {

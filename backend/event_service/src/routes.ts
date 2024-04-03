@@ -49,7 +49,7 @@ export async function addEvent(req: Request, res: Response) {
 export async function getEventById(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const dbRes = await Event.find({ _id: id });
+    const dbRes = await Event.findOne({ _id: id }); 
     res.status(200).send({ dbRes });
   } catch (error: any) {
     res.status(500).send(error);

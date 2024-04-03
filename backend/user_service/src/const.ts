@@ -11,3 +11,8 @@ export const PASSWORD_RESET = "/api/user/reset-password";
 export const EVENT_SERVICE = "http://localhost:3001";
 export const EVENT_PATH = "/api/event";
 export const EVENT_BY_ID = "/api/event/:id";
+
+// Comment
+export const COMMENT_PATH =  "/api/comment";
+export const COMMENT_SERVICE = "http://localhost:3002";
+

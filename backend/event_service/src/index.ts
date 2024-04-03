@@ -19,10 +19,11 @@ const port = process.env.PORT || 8081;
 
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
+app.get(EVENT_BY_ID, getEventById);
 app.get(EVENT_PATH, getEvents);
 app.post(EVENT_PATH, addEvent);
-app.get(EVENT_BY_ID, getEventById);
 
 const ticket1 = {
   name: "Bronze",

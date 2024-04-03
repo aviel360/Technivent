@@ -47,6 +47,17 @@ class Api {
     }
   }
 
+  async PostComment(payload: { username: string, eventId: string, comment: string }): Promise<any> {
+    try {
+      const currentDate = new Date().toISOString();
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/comment`, {...payload, date: currentDate});
+      return response;
+    } catch (error: any) {
+      window.alert(error.message);
+      return null;
+    }
+  }
+
   async Login(payload: { username: string, password: string }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/login`, payload);
@@ -72,8 +83,7 @@ class Api {
   }
 
   async getEventById(id: string) {
-    const url = `${this.baseUrl}/event/${id}`;
-    console.log(`Requesting event with id ${id} from ${url}`); // Log the id and the request URL
+    const url = `${this.baseUrl}/event?id=${id}`;
     try {
       const response: AxiosResponse = await this.axiosInstance.get(url);
       return response;

@@ -32,8 +32,8 @@ const Home: React.FC<HomeProps> = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/newevent" element={<NewEvent />} />
-          <Route path="/newevent" element={<NewEvent />} />  //temp route
-          <Route path="/event/:id" element={<EventPage />} /> 
+          <Route path="/newevent" element={<NewEvent />} />  
+          <Route path="/event/*" element={<EventPage />} /> 
           
         </Routes>
       </BrowserRouter>
