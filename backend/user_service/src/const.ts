@@ -19,6 +19,6 @@ export const EVENT_SERVICE = process.env.NODE_ENV === "production" ? EVENT_SERVI
 // Comment
 export const COMMENT_PATH =  "/api/comment";
 export const COMMENT_SERVICE_LOCAL = "http://localhost:3002";
-export const COMMENT_SERVICE_PRODUCTION = "http://localhost:3002";
+export const COMMENT_SERVICE_PRODUCTION = "https://technivent-comment.onrender.com";
 export const COMMENT_SERVICE = process.env.NODE_ENV === "production" ? COMMENT_SERVICE_PRODUCTION : COMMENT_SERVICE_LOCAL;
 
