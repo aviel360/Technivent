@@ -1,13 +1,22 @@
 import { Badge, Button, Card, Center, Flex, NumberInput, Text } from '@mantine/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { TicketData } from '../../utils/Types';
+import { useNavigate } from 'react-router-dom';
 
 interface TicketCardProps {
     ticketArray: TicketData[];
     isBackOffice: boolean;
+    eventName?: string;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice }) => {
+const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName}) => {
+    const [inputValue, setInputValue] = useState(0);
+    const navigate = useNavigate();
+    
+    const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
+        navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
+    };
+
     return (
         <>
             <h2>{isBackOffice ? 'Ticket Categories' : 'Buy Tickets:'}</h2>
@@ -41,11 +50,15 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice }) =>
                                 <center>
                                 <NumberInput label={"Amount of tickets: "} placeholder='0' 
                                     w={"180px"} p={"md"} min={0}  max={ticket.available}
-                                    disabled={ticket.available === 0} >
+                                    disabled={ticket.available === 0} 
+                                    value={inputValue}
+                                    onChange={(value) => setInputValue(Number(value))}>
+
                                 </NumberInput>
                                 </center>
                                 <Button type="submit" size="md" p={"10px"} radius={"md"}
-                                        disabled={ticket.available === 0}>
+                                        disabled={ticket.available === 0 || inputValue === 0}
+                                        onClick={() => handleClick(inputValue, ticket.name, ticket.price)}>
                                     Purchase
                                 </Button> {/*add onClick event*/}
                             </form>
