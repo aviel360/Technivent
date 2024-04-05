@@ -1,5 +1,3 @@
-"homepage": "http://aviel360.github.io/Technivent"
-
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
