@@ -8,6 +8,7 @@ import EventPage from "../event_page/EventPage";
 import ForgotPassword from "../forgot-password/ForgotPassword";
 import { UserType } from "../../../utils/Types";
 import RouteAuth from "../../route_auth/RouteAuth";
+import Checkout from "../checkout/Checkout";
 
 interface HomeProps {}
 
@@ -90,6 +91,14 @@ const Home: React.FC<HomeProps> = () => {
               element={
                 <RouteAuth needAuth={true}>
                   <EventPage />
+                </RouteAuth>
+              }
+            />
+            <Route
+              path="/checkout/*"
+              element={
+                <RouteAuth needAuth={true}>
+                  <Checkout />
                 </RouteAuth>
               }
             />
