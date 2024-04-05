@@ -5,10 +5,13 @@ import Api from "../../../utils/Api";
 import { EventData } from "../../../utils/Types";
 import { userContext } from "../home/Home";
 
-interface CatalogProps {}
+interface CatalogProps {
+
+}
 
 const Catalog: React.FC<CatalogProps> = () => {
   const { username } = useContext(userContext);
+  const [isBackOffice, setIsBackOffice] = React.useState<boolean>(false);
 
   const fetchData = async () => {
     const apiService = new Api();
@@ -22,7 +25,7 @@ const Catalog: React.FC<CatalogProps> = () => {
     <>
       <h1>Catalog</h1>
       <UserBar username={username} goBack={false}></UserBar>
-      <Events fetchData={fetchData} />
+      <Events fetchData={fetchData} isBackOffice={isBackOffice}/>
     </>
   );
 };

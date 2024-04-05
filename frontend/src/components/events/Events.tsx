@@ -5,14 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 interface EventsProps {
   fetchData: () => Promise<EventData[]>;
+  isBackOffice: boolean;
 }
 
-function Events({ fetchData }: EventsProps) {
+function Events({ fetchData, isBackOffice }: EventsProps) {
   const [eventsData, setEventsData] = useState<EventData[]>([]);
   const navigate = useNavigate();
 
-  const handlePurchaseClick = (id: string) => {
-    navigate(`/event?id=${id}`);
+  
+  const handlePurchaseClick = (id: string, isBackOffice: boolean) => {
+    navigate(`/event?id=${id}&isBackOffice=${isBackOffice}`);
   };
 
   const fetchEvents = async () => {
@@ -72,7 +74,7 @@ function Events({ fetchData }: EventsProps) {
               </Badge>
             </center>
 
-            <Button color="blue" fullWidth mt="sm" radius="md" onClick={() => handlePurchaseClick(event._id)}>
+            <Button color="blue" fullWidth mt="sm" radius="md" onClick={() => handlePurchaseClick(event._id, isBackOffice)}>
               Purchase now
             </Button>
           </Card>
