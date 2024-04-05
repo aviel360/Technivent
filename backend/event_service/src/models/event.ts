@@ -4,8 +4,9 @@ import * as mongoose from "mongoose";
 export const ticketSchema = new mongoose.Schema(
     {
         name: {type: String, required: true},
-        quantity: {type: Number, required: true, min: 0},
-        price: {type: Number, required: true, min: 0}
+        available: {type: Number, required: true, min: 0},
+        price: {type: Number, required: true, min: 0},
+        totalTickets: {type: Number, required: true, min: 0}
     },
     {
         _id: false,
@@ -15,8 +16,9 @@ export const ticketSchema = new mongoose.Schema(
 
 export const ticketSchemaJoi = Joi.object({
     name: Joi.string().required(),
-    quantity: Joi.number().min(0).required(),
+    available: Joi.number().min(0).required(),
     price: Joi.number().min(0).required(),
+    totalTickets: Joi.number().min(0).required()
   }).strict().unknown();
 
 
@@ -30,6 +32,11 @@ export enum EventCategory {
     ProductLaunch = "Product Launch",
     Sports = "Sports Event"
 }
+const RatingSchema = new mongoose.Schema({
+    average: { type: Number, default: 0 },
+    total: { type: Number, default: 0 }
+  }, { _id: false });
+  
 
 const dateFormatRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 
@@ -53,7 +60,7 @@ const eventSchema = new mongoose.Schema(
         location: { type: String, required: true },
         ticketArray: { type: [ticketSchema], required: true },
         image: { type: String },
-        rating: { type: Number },
+        rating: { type: RatingSchema, default: { average: 0, total: 0 } },
     }
 );
 

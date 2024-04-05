@@ -19,6 +19,7 @@ const port = process.env.PORT || 8081;
 
 
 const app = express();
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get(EVENT_BY_ID, getEventById);
