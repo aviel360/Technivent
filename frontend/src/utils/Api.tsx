@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { production } from './Env';
+import { TicketData } from './Types';
 
 class Api {
   baseUrl: string;
@@ -64,6 +65,27 @@ class Api {
     }
   }
 
+  async addEvent(payload: { 
+    title: string, 
+    category: string, 
+    description: string, 
+    organizer: string, 
+    location: string, 
+    start_date: Date, 
+    end_date: Date, 
+    image: string, 
+    ticketArray: TicketData[], 
+    rating: { average: number, total: number } 
+  }): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/event`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error.message);
+      return null;
+    }
+  }
+
   async Login(payload: { username: string, password: string }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/login`, payload);
@@ -107,5 +129,6 @@ class Api {
     }
   }
 }
+
 
 export default Api
