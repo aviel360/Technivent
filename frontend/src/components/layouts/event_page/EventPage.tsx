@@ -80,7 +80,7 @@ const EventPage: React.FC<EventPageProps> = () => {
 
     return (
         <div>
-            <UserBar username={username} goBack={false}></UserBar>
+            <UserBar username={username} goBack={false} ></UserBar>
             <Flex
                 mih={50}
                 bg="rgba(0, 0, 0, .3)"
@@ -96,7 +96,7 @@ const EventPage: React.FC<EventPageProps> = () => {
             >
 
             {!eventData ? (
-                    <h2>Lo  ading Event...</h2>
+                    <h2>Loading Event...</h2>
                 ) : 
                 (
                     <div>

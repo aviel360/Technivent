@@ -24,7 +24,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
 
   useEffect(() => {
     fetchEvents();
-  }, [fetchData]);
+  }, [fetchData, isBackOffice]);
 
   // Preprocess events data to filter and sort tickets
   const processedEvents = eventsData.map((event) => {

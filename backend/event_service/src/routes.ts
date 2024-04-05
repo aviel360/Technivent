@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import Event from "./models/event.js";
 
 export async function getEvents(req: Request, res: Response) {
+  if(req.query.all) {
+    return getAllEvents(req, res);
+  }
+  
   let dbRes;
   const now = new Date();
   try {
@@ -28,6 +32,16 @@ export async function getEvents(req: Request, res: Response) {
     ]);
     res.status(200).send({ dbRes });
   } catch (error: any) {
+    res.status(500).send(error);
+  }
+}
+
+export async function getAllEvents(req: Request, res: Response) {
+  let dbRes;
+  try {  
+    dbRes = await Event.find({});
+    res.status(200).send({ dbRes });
+  } catch (error: any) {  
     res.status(500).send(error);
   }
 }
