@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {  Button, Textarea, Card, Pagination, Flex, Center, Group, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CommentData } from '../../utils/Types';
 import Api from '../../utils/Api';
+import { userContext } from '../layouts/home/Home';
 
 interface CommentsProps {
     Comments: CommentData[],
-    eventID: string
+    eventID: string,
+    isBackOffice?: boolean
 }
 
 function chunk<T>(array: T[], size: number): T[][] {
@@ -18,7 +20,17 @@ function chunk<T>(array: T[], size: number): T[][] {
     return [head, ...chunk(tail, size)];
   }
 
-const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
+const Comments: React.FC<CommentsProps> = ({Comments, eventID, isBackOffice}) => {
+    const { username } = useContext(userContext);
+    if(isBackOffice)
+    {
+        const numberOfComments = Comments.length;
+        return (
+            <Flex justify={Center} direction={"column"}>
+                 <h2>Comments: {numberOfComments}</h2>
+            </Flex>
+        );
+    }
     const form = useForm({
         initialValues: {
           commentText: ''
@@ -30,7 +42,7 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
 
       const [activePage, setPage] = useState(1);
       const sortedComments = Comments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      const paginatedComments = chunk(sortedComments, 2); 
+      const paginatedComments = chunk(sortedComments, 3); 
       const items = paginatedComments[activePage - 1] ? paginatedComments[activePage - 1].map((item, index) => (
         <Card key={index} m={"10px"} w={"20rem"}>
             <Card.Section>
@@ -50,7 +62,7 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
       const PostComment = async (values: {commentText: string}): Promise<void> => {
         const apiService = new Api();  
         //TODO: Add REAL username to the comment     
-        const response = await apiService.PostComment({username: "test", eventId: eventID, comment: values.commentText});
+        const response = await apiService.PostComment({username: username, eventId: eventID, comment: values.commentText});
         if (response) {
           setIsSuccess(true);
           form.reset();
@@ -61,6 +73,7 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID}) => {
     return (
         <>
         <Flex justify={Center} direction={"column"}>
+        <h2>Comments: </h2>
         {items}
         <Pagination total={paginatedComments.length} value={activePage} onChange={setPage} m="sm" />
         <br />
