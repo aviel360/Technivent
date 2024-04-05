@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, response } from "express";
 import { EVENT_PATH, EVENT_SERVICE, COMMENT_SERVICE, COMMENT_PATH} from "./const.js";
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./publisher_channel.js";
@@ -9,7 +9,7 @@ export async function getEventRoute(req: Request, res: Response) {
     if (id) {
       return getEventById_user(req, res, id.toString());
     }
-    const response: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH);
+    const response: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
     res.status(response.status).send(response.data);
   } catch (error: any) {
     res.status(500).send(error.message);

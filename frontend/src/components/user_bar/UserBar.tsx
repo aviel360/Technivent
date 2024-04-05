@@ -3,14 +3,20 @@ import { Group, Menu, Button, Flex } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
 import Api from "../../utils/Api";
+import { useContext } from "react";
+import { userContext } from "../layouts/home/Home";
 
 interface UserBarProps {
   username: string;
   goBack: boolean;
+  isBackOffice?: boolean ;
+  setIsBackOffice?: React.Dispatch<React.SetStateAction<boolean>> | null;
 }
 
-const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
+const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice }) => {
   let navigate = useNavigate();
+  const { userType } = useContext(userContext);
+
 
   const logoutClick = async (): Promise<void> => {
     const apiService = new Api();
@@ -30,6 +36,17 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
           {goBack && (
             <Button variant="light" leftSection={<ChevronCompactLeft />}>
               Go back
+            </Button>
+          )}
+
+          { userType != "User" && setIsBackOffice &&(
+             <Button variant="light" onClick={() => { 
+              setIsBackOffice(prevState => {
+                const newValue = !prevState;
+                return newValue;
+              });             
+            }}>
+              {isBackOffice ? "Store Catalog" : "Manage Events"}
             </Button>
           )}
         </Group>

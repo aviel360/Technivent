@@ -86,15 +86,15 @@ class Api {
 
   async getEvents(query: string = '')
   {
-    
     try{
-      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event/${query}`)
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`, { params: { all: query } });
       return response;
     } catch (error: any) {
       window.alert(error.message);
       return null;
     }
   }
+
 
   async getEventById(id: string) {
     const url = `${this.baseUrl}/event?id=${id}`;

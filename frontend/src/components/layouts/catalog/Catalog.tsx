@@ -13,10 +13,11 @@ const Catalog: React.FC<CatalogProps> = () => {
   const { username } = useContext(userContext);
   const [isBackOffice, setIsBackOffice] = React.useState<boolean>(false);
 
+
   const fetchData = async () => {
     const apiService = new Api();
     let data: EventData[] = [];
-    const response = await apiService.getEvents();
+    const response = isBackOffice ? await apiService.getEvents('all') : await apiService.getEvents();
     if (response) data = response.data.dbRes;
     return data;
   };
@@ -24,7 +25,7 @@ const Catalog: React.FC<CatalogProps> = () => {
   return (
     <>
       <h1>Catalog</h1>
-      <UserBar username={username} goBack={false}></UserBar>
+      <UserBar username={username} goBack={true} isBackOffice={isBackOffice} setIsBackOffice={setIsBackOffice}></UserBar>
       <Events fetchData={fetchData} isBackOffice={isBackOffice}/>
     </>
   );
