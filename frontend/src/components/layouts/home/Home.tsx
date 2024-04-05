@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
@@ -43,10 +43,10 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <userContext.Provider value={{ username, setUsername, userType, setUserType }}>
       <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <HashRouter basename="/Technivent">
+        <BrowserRouter basename="/${process.env.PUBLIC_URL}">
           <Routes>
             <Route
-              path="/"
+              path=""
               element={
                 <RouteAuth needAuth={true}>
                   <Catalog />
@@ -94,7 +94,7 @@ const Home: React.FC<HomeProps> = () => {
               }
             />
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </authContext.Provider>
     </userContext.Provider>
   );
