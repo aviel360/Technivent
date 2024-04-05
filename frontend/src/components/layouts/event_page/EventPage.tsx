@@ -150,7 +150,7 @@ const EventPage: React.FC<EventPageProps> = () => {
 
                         <br />
                         
-                        <TicketCard ticketArray={eventData.ticketArray} isBackOffice={isBackOffice}></TicketCard>
+                        <TicketCard ticketArray={eventData.ticketArray} isBackOffice={isBackOffice} eventName={eventData.title}></TicketCard>
                     
                     <br />
                         <Flex justify="center">
