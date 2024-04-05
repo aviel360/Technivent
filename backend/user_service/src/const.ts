@@ -1,5 +1,5 @@
-
 // User
+export const USER_PATH = "/api/user";
 export const LOGIN_PATH = "/api/user/login";
 export const LOGOUT_PATH = "/api/user/logout";
 export const SIGNUP_PATH = "/api/user/signup";

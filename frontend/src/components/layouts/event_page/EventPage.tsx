@@ -3,7 +3,7 @@ import { EventData, TicketData, CommentData } from '../../../utils/Types';
 import { useLocation } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
-import { usernameContext } from '../home/Home';
+import { userContext } from '../home/Home';
 import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core';
 import Comments from '../../comments/Comments';
 
@@ -18,8 +18,8 @@ const EventPage: React.FC<EventPageProps> = () => {
     let query = useQuery();
     let id = query.get("id");
     const [eventData, setEventData] = useState<EventData | null>(null);
+    const { username } = useContext(userContext);
     const [commentsData, setCommentsData] = useState<CommentData[]>([]);
-    const { username } = useContext(usernameContext);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
     const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
 

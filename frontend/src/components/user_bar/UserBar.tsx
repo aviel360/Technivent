@@ -1,7 +1,8 @@
 import { ChevronCompactDown, ChevronCompactLeft } from "react-bootstrap-icons";
 import { Group, Menu, Button, Flex } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
+import Api from "../../utils/Api";
 
 interface UserBarProps {
   username: string;
@@ -9,6 +10,20 @@ interface UserBarProps {
 }
 
 const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
+  let navigate = useNavigate();
+
+  const logoutClick = async (): Promise<void> => {
+    const apiService = new Api();
+    const response = await apiService.logout();
+
+    if (response) {
+      window.alert(response.data);
+      if (response.status == 200) {
+        navigate("/login");
+      }
+    }
+  };
+
   return (
       <Flex miw={'50rem'} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
         <Group>
@@ -33,9 +48,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack }) => {
                 <Menu.Item>
                   <Link to={username}>Personal Space</Link>
                 </Menu.Item>
-                <Menu.Item>
-                  <Link to="/login">Logout</Link>
-                </Menu.Item>
+                <Menu.Item onClick={logoutClick}>Logout</Menu.Item>
               </Menu.Dropdown>
             </Menu>
           )}

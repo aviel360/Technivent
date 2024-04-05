@@ -29,7 +29,7 @@ export async function loginRoute(req: Request, res: Response) {
     return;
   }
 
-  const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "2d" });
+  const token = jwt.sign({ username: user.username, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: "2d" });
   const secure = process.env.NODE_ENV === "production";
   const sameSite = process.env.NODE_ENV === "production" ? "none" : false;
 
@@ -87,24 +87,23 @@ export async function signupRoute(req: Request, res: Response) {
   res.status(201).send("User created successfully");
 }
 
-// Route for ???
-export async function usernameRoute(req: Request, res: Response) {
+// Route for getting user data
+export async function userRoute(req: Request, res: Response) {
   const token = req.cookies.token;
   if (!token) {
     res.status(401).send("Not logged in");
     return;
   }
 
-  let username;
+  let username, userType;
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     username = (payload as JwtPayload).username;
+    userType = (payload as JwtPayload).userType;
   } catch (e) {
-    res.status(401).send("Invalid token");
-    return;
+    return res.status(401).send("Invalid token");
   }
-
-  res.status(200).send({ username });
+  res.status(200).send({ username, userType });
 }
 
 // Route for getting secret question

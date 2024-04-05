@@ -3,11 +3,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute } from "./user_routes.js";
+import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, getEventById_user, addComment } from "./event_routes.js";
-
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, EVENT_BY_ID, SECRET_QUESTION_PATH, PASSWORD_RESET, COMMENT_PATH } from "./const.js";
 import { PublisherChannel } from "./publisher_channel.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, EVENT_BY_ID, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH } from "./const.js";
 
 dotenv.config();
 
@@ -33,15 +32,16 @@ app.use(
   })
 );
 
+app.put(LOGOUT_PATH, logoutRoute);
 app.use(express.urlencoded({ extended: true }));
 
 app.post(LOGIN_PATH, loginRoute);
-app.post(LOGOUT_PATH, logoutRoute);
 app.post(SIGNUP_PATH, signupRoute);
 app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.post(PASSWORD_RESET, resetPasswordRoute);
 app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 
+app.get(USER_PATH, userRoute);
 app.get(EVENT_PATH, getEventRoute);
 
 
