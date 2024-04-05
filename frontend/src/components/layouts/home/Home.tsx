@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <userContext.Provider value={{ username, setUsername, userType, setUserType }}>
       <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <HashRouter basename="/Technivent">
+        <HashRouter>
           <Routes>
             <Route
               path="/"
