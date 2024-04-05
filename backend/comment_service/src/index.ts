@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { COMMENT_PATH } from "./const.js";
 import { getComments, addComment } from "./routes.js";
+import { consumeMessages } from "./consume_messeges.js";
+
 
 dotenv.config();
 
@@ -19,6 +21,7 @@ app.use(express.json());
 app.get(COMMENT_PATH, getComments);
 app.post(COMMENT_PATH, addComment);
 
+consumeMessages();
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);

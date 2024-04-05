@@ -162,3 +162,4 @@ export async function resetPasswordRoute(req: Request, res: Response) {
 
   res.status(201).send("Your password was modified!");
 }
+

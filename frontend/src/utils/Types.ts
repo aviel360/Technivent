@@ -42,3 +42,16 @@ export enum UserType {
   Manager = "Manger",
   Worker = "Worker"
 }
+export interface EventResponse {
+  dbRes: EventData;
+}
+
+
+export interface CommentData {
+  _id: string,
+  eventID: string,
+  username: string,
+  date: Date,
+  commentText: string
+}
+

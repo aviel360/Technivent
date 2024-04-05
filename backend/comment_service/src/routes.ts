@@ -7,11 +7,16 @@ export const getComments = async (req: Request, res: Response) => {
 
     let skipParam = Number(req.query.skip);
     let limitParam = Number(req.query.limit);
+    let eventId = req?.query?.eventID?.toString();
 
     let skip = (!isNaN(skipParam) && skipParam >= 0) ? skipParam : SkipDefault;
     let limit = (!isNaN(limitParam) && limitParam > 0) ? Math.min(limitParam, LimitDefault) : LimitDefault;
     try{
-        dbRes = await Comment.find().skip(skip).limit(limit);
+        if (!eventId) {
+            res.status(400).send({ error: 'Event ID wasnt passed' });
+            return;
+        }
+        dbRes = await Comment.find({ eventID: eventId }).skip(skip).limit(limit);
         res.status(200).send(dbRes);
     }
     catch (error: any) {
@@ -21,7 +26,6 @@ export const getComments = async (req: Request, res: Response) => {
 };
 
 export const addComment = async (req: Request, res: Response) => {
-    //Authentication and permission check??
 
     const body = req.body;
     const newComment = new Comment(body);
@@ -32,3 +36,19 @@ export const addComment = async (req: Request, res: Response) => {
         res.status(500).send(error);
     }
 };
+
+export const addCommentFromBroker = async (message) => {
+    try {
+        const body = {
+            commentText: message.comment,
+            eventID: message.eventId,
+            username: message.username,
+            date: message.date
+          };
+        const newComment = new Comment(body);
+        const dbComment = await newComment.save();
+        console.log(`Comment added: ${dbComment._id}`);
+    } catch (error) {
+      console.error('Error in addCommentFromBroker:', error);
+    }
+  };

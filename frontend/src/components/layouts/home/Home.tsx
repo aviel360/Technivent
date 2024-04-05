@@ -86,7 +86,7 @@ const Home: React.FC<HomeProps> = () => {
               }
             />
             <Route
-              path="/event/:id"
+              path="/event/*"
               element={
                 <RouteAuth needAuth={true}>
                   <EventPage />
