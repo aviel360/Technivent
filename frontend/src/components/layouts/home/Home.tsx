@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
@@ -93,6 +93,7 @@ const Home: React.FC<HomeProps> = () => {
                 </RouteAuth>
               }
             />
+            <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
         </BrowserRouter>
       </authContext.Provider>
