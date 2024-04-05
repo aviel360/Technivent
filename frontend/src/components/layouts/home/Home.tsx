@@ -43,10 +43,10 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <userContext.Provider value={{ username, setUsername, userType, setUserType }}>
       <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <BrowserRouter basename="/Technivent">
+        <BrowserRouter basename="/${process.env.PUBLIC_URL}">
           <Routes>
             <Route
-              path="/"
+              path=""
               element={
                 <RouteAuth needAuth={true}>
                   <Catalog />

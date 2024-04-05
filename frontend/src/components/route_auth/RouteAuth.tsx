@@ -12,6 +12,7 @@ const RouteAuth: React.FC<RouteAuthProps> = ({ children, needAuth }) => {
   const { isAuthenticated, setIsAuthenticated } = useContext(authContext);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  
   const fetchUserData = async () => {
     let isAuth = false;
     const apiService = new Api();
