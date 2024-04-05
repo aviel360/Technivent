@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Image, Text, Badge, Button, Group, Flex } from "@mantine/core";
+import { Card, Image, Text, Badge, Button, Group, Flex, Loader } from "@mantine/core";
 import { EventData } from "../../utils/Types";
 import { useNavigate } from "react-router-dom";
 
@@ -10,15 +10,16 @@ interface EventsProps {
 
 function Events({ fetchData, isBackOffice }: EventsProps) {
   const [eventsData, setEventsData] = useState<EventData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  
   const handlePurchaseClick = (id: string, isBackOffice: boolean) => {
     navigate(`/event?id=${id}&isBackOffice=${isBackOffice}`);
   };
 
   const fetchEvents = async () => {
     const data = await fetchData();
+    setIsLoading(false);
     setEventsData(data);
   };
 
@@ -36,7 +37,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
     return { ...event, firstTicket, totalTickets };
   });
 
-  return (
+  return ( isLoading ? <Loader></Loader> :
     <Flex
       mih={50}
       bg="rgba(0, 0, 0, .3)"
