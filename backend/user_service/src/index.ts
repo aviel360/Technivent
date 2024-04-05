@@ -16,7 +16,7 @@ dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/
 await mongoose.connect(dbUri);
 
 const port = process.env.PORT || 3000;
-const origin = process.env.NODE_ENV === "production" ? "https://aviel360.github.io" : 'http://localhost:5173';
+const origin = process.env.NODE_ENV === "production" ? "https://aviel360.github.io/Technivent" : 'http://localhost:5173';
 const app = express();
 const publisherChannel = new PublisherChannel();
 
