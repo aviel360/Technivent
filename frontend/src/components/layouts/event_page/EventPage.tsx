@@ -4,10 +4,12 @@ import { useLocation } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { userContext } from '../home/Home';
-import { Badge, Button, Card, Flex,Group,NumberInput,Text } from '@mantine/core';
+import { Badge, Card, Flex,Group,Text } from '@mantine/core';
 import Comments from '../../comments/Comments';
+import TicketCard from '../../ticket_card/TicketCard';
 
 interface EventPageProps {
+
 }
 
 function useQuery() {
@@ -17,6 +19,8 @@ function useQuery() {
 const EventPage: React.FC<EventPageProps> = () => {
     let query = useQuery();
     let id = query.get("id");
+    let isBackOffice = query.get("isBackOffice") === 'true';
+    
     const [eventData, setEventData] = useState<EventData | null>(null);
     const { username } = useContext(userContext);
     const [commentsData, setCommentsData] = useState<CommentData[]>([]);
@@ -92,7 +96,7 @@ const EventPage: React.FC<EventPageProps> = () => {
             >
 
             {!eventData ? (
-                    <h2>Loading Event...</h2>
+                    <h2>Lo  ading Event...</h2>
                 ) : 
                 (
                     <div>
@@ -145,45 +149,12 @@ const EventPage: React.FC<EventPageProps> = () => {
                         </Card>
 
                         <br />
-                        <h2 >Buy Tickets: </h2>
-                        <Flex wrap={"wrap"} direction={"row"} >
-                            {eventData.ticketArray.map((ticket) => 
-                            (
-                                <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
-                                <Card.Section>
-                                        <center>
-                                            <Badge color="pink" size="xl" p={"md"} mt={"sm"}>{ticket.name}</Badge>
-                                        </center>
-                                        <Text size="md" fw={400} mt={"sm"}>price: {ticket.price}$</Text>
-                                        {ticket.available === 0 ? (
-                                            <Text size="md" fw={400} mt={"sm"}>Sold out!</Text>
-                                        ) : (
-                                            <Text size="md" fw={400} mt={"sm"}>{ticket.available} tickets left!</Text>
-                                        )}
-                                </Card.Section>
-
-                                <Card.Section pb={"20px"}>
-                                        <form>
-                                            <center>
-                                            <NumberInput label={"Amount of tickets: "} placeholder='0' 
-                                                w={"180px"} p={"md"} min={0}  max={ticket.available}
-                                                disabled={ticket.available === 0} >
-                                            </NumberInput>
-                                            </center>
-                                            <Button type="submit" size="md" p={"10px"} radius={"md"}
-                                                    disabled={ticket.available === 0}>
-                                                Purchase
-                                            </Button> {/*add onClick event*/}
-                                        </form>
-                                    </Card.Section>
-                                </Card>
-                        ))}
-                    </Flex>
+                        
+                        <TicketCard ticketArray={eventData.ticketArray} isBackOffice={isBackOffice}></TicketCard>
                     
                     <br />
-                        <h2>Comments: </h2>
                         <Flex justify="center">
-                            <Comments Comments={commentsData} eventID={eventData._id}></Comments>
+                            <Comments Comments={commentsData} eventID={eventData._id} isBackOffice={isBackOffice}></Comments>
                         </Flex>
                         
                     </div>
