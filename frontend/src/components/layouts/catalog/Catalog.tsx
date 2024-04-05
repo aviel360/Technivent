@@ -11,7 +11,7 @@ interface CatalogProps {
 
 const Catalog: React.FC<CatalogProps> = () => {
   const { username } = useContext(userContext);
-  const [isBackOffice] = React.useState<boolean>(false);
+  const [isBackOffice, setIsBackOffice] = React.useState<boolean>(false);
 
 
   const fetchData = async () => {
