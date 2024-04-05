@@ -4,6 +4,8 @@ import { useForm } from "@mantine/form";
 import { EventCategory, TicketData } from "../../../utils/Types.ts";
 import { DateTimePicker } from "@mantine/dates";
 import "./NewEvent.css"
+import Api from "../../../utils/Api.tsx";
+import { useNavigate } from "react-router-dom";
 
 
 interface NewEventProps {}
@@ -11,6 +13,7 @@ interface NewEventProps {}
 const NewEvent: React.FC<NewEventProps> = () => {
   const [tickets, setTickets] = useState<TicketData[]>([]);
   const [totalTicketsForEvent, setTotalTicketsForEvent] = useState(0);
+  let navigate = useNavigate();
 
   const eventForm = useForm({
     initialValues: {
@@ -71,10 +74,30 @@ const NewEvent: React.FC<NewEventProps> = () => {
     end_date: string;
     image: string;
   }, tickets: TicketData[]): Promise<void> {
-    console.log(tickets);
-    console.log(values);
     if(tickets.length < 1) {
       alert("Please add at least one ticket category");
+    }
+
+    const payload = {
+      title: values.title,
+      category: values.category,
+      description: values.description,
+      organizer: values.organizer,
+      location: values.location,
+      start_date: new Date(values.start_date),
+      end_date: new Date(values.end_date),
+      image: values.image,
+      ticketArray: tickets, 
+      rating: { average: 0, total: 0 } // Default rating
+    };
+    console.log(payload);
+    const apiService = new Api();
+    const response = await apiService.addEvent(payload);
+    if (response) {
+      alert('Event added successfully');
+      navigate('/')
+    } else {
+      alert('Failed to add event. Please try again');
     }
   }
 

@@ -44,3 +44,16 @@ export async function addComment(req: Request, res: Response, publisherChannel: 
     res.status(500).send(error.message);
   }
 }
+
+export async function addEventRoute(req: Request, res: Response) {
+  try {
+    const response: AxiosResponse = await axios.post(EVENT_SERVICE + EVENT_PATH, req.body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    res.status(response.status).send(response.data);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+}

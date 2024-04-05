@@ -52,6 +52,11 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
         </Group>
 
         <Group>
+        { userType != "User" && isBackOffice &&(
+             <Button variant="light" onClick={() => navigate('/newevent')}>
+              Add New Event
+            </Button>
+          )}
           {!username ? (
               <Link to="/login">Login</Link>
           ) : (
