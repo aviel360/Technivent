@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import Catalog from "../catalog/Catalog";
 import Signup from "../signup/Signup";
 import Login from "../login/Login";
@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <userContext.Provider value={{ username, setUsername, userType, setUserType }}>
       <authContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <BrowserRouter basename="/Technivent">
+        <HashRouter basename="/Technivent">
           <Routes>
             <Route
               path="/"
@@ -95,7 +95,7 @@ const Home: React.FC<HomeProps> = () => {
             />
             <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </authContext.Provider>
     </userContext.Provider>
   );
