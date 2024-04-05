@@ -23,7 +23,6 @@ const publisherChannel = new PublisherChannel();
 
 app.use(express.json());
 app.use(cookieParser());
-/* TODO: set CORS headers appropriately using the cors middleware */
 app.use(
   cors({
     origin,

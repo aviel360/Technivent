@@ -1,7 +1,8 @@
 import { Request, Response, response } from "express";
-import { EVENT_PATH, EVENT_SERVICE, COMMENT_SERVICE, COMMENT_PATH} from "./const.js";
+import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from "./const.js";
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./publisher_channel.js";
+
 
 export async function getEventRoute(req: Request, res: Response) {
   try {

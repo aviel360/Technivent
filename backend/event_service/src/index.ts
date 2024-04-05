@@ -25,12 +25,6 @@ app.get(EVENT_BY_ID, getEventById);
 app.get(EVENT_PATH, getEvents);
 app.post(EVENT_PATH, addEvent);
 
-const ticket1 = {
-  name: "Bronze",
-  quantity: 1000,
-  price: 50,
-};
-
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);
 });
