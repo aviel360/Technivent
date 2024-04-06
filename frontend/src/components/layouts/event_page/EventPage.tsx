@@ -80,7 +80,7 @@ const EventPage: React.FC<EventPageProps> = () => {
 
     return (
         <div>
-            <UserBar username={username} goBack={false} ></UserBar>
+            <UserBar username={username} goBack={true} ></UserBar>
             <Flex
                 mih={50}
                 bg="rgba(0, 0, 0, .3)"

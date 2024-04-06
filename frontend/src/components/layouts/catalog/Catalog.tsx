@@ -24,8 +24,8 @@ const Catalog: React.FC<CatalogProps> = () => {
 
   return (
     <>
-      <h1>Catalog</h1>
-      <UserBar username={username} goBack={true} isBackOffice={isBackOffice} setIsBackOffice={setIsBackOffice}></UserBar>
+      <h1>{isBackOffice ? "Back Office Catalog" : "Catalog"}</h1>
+      <UserBar username={username} goBack={false} isBackOffice={isBackOffice} setIsBackOffice={setIsBackOffice}></UserBar>
       <Events fetchData={fetchData} isBackOffice={isBackOffice}/>
     </>
   );

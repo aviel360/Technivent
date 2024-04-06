@@ -54,7 +54,8 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
         <h2>No events available, try again later</h2>
       ) : (
         processedEvents.map((event) => (
-          <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}>
+          <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}
+          style={{ opacity: new Date(event.start_date) < new Date() ? 0.5 : 1 }}>
             <Card.Section>
               <Image src={event.image} height={160} alt={event.organizer} />
             </Card.Section>
@@ -75,7 +76,8 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
               </Badge>
             </center>
 
-            <Button color="blue" fullWidth mt="sm" radius="md" onClick={() => handlePurchaseClick(event._id, isBackOffice)}>
+            <Button color="blue" fullWidth mt="sm" radius="md" 
+            onClick={() => handlePurchaseClick(event._id, isBackOffice)}>
               Purchase now
             </Button>
           </Card>
