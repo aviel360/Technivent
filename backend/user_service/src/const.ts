@@ -22,3 +22,8 @@ export const COMMENT_SERVICE_LOCAL = "http://localhost:3002";
 export const COMMENT_SERVICE_PRODUCTION = "https://technivent-comment.onrender.com";
 export const COMMENT_SERVICE = process.env.NODE_ENV === "production" ? COMMENT_SERVICE_PRODUCTION : COMMENT_SERVICE_LOCAL;
 
+// PAYMENT
+export const PAYMENT_PATH = "/api/payment";
+export const PAYMENT_SERVICE_LOCAL = "http://localhost:3003";
+export const PAYMENT_SERVICE_PRODUCTION = "https://technivent-payment.onrender.com";
+export const PAYMENT_SERVICE = process.env.NODE_ENV === "production" ? PAYMENT_SERVICE_PRODUCTION : PAYMENT_SERVICE_LOCAL;

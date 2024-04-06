@@ -69,3 +69,13 @@ export async function getEventById(req: Request, res: Response) {
     res.status(500).send(error);
   }
 }
+
+export async function getEventArrayById(req: Request, res: Response) {
+  try {
+    const ids = req.params.ids.split(',');
+    const dbRes = await Event.find({ _id: {$in: ids} }); 
+    res.status(200).send({ dbRes });
+  } catch (error: any) {
+    res.status(500).send(error);
+  }
+}

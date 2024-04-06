@@ -9,6 +9,7 @@ import ForgotPassword from "../forgot-password/ForgotPassword";
 import { UserType } from "../../../utils/Types";
 import RouteAuth from "../../route_auth/RouteAuth";
 import Checkout from "../checkout/Checkout";
+import UserPage from "../user-page/UserPage";
 
 interface HomeProps {}
 
@@ -99,6 +100,14 @@ const Home: React.FC<HomeProps> = () => {
               element={
                 <RouteAuth needAuth={true}>
                   <Checkout />
+                </RouteAuth>
+              }
+            />
+            <Route
+              path="/personal-space"
+              element={
+                <RouteAuth needAuth={true}>
+                  <UserPage />
                 </RouteAuth>
               }
             />

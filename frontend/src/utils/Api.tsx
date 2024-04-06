@@ -29,7 +29,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/signup`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -39,7 +39,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/secret-question`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -49,7 +49,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/reset-password`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -60,7 +60,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/comment`, {...payload, date: currentDate});
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -81,7 +81,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/event`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -91,7 +91,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/login`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -101,7 +101,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/user/logout`);
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -112,7 +112,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`, { params: { all: query } });
       return response;
     } catch (error: any) {
-      window.alert(error.message);
+      window.alert(error.response.data);
       return null;
     }
   }
@@ -124,7 +124,17 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.get(url);
       return response;
     } catch (error: any) {
-      window.alert(error.message); // Log the error to the console
+      window.alert(error.response.data); // Log the error to the console
+      return null;
+    }
+  }
+
+  async getPayments() {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/payment`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
       return null;
     }
   }

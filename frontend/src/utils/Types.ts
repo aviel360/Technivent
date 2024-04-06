@@ -36,6 +36,11 @@ export interface EventData {
   rating: Rating
 }
 
+export interface OrderHistoryData {
+  event: EventData,
+  transactions: PaymentData[]
+}
+
 export enum UserType {
   User = "User",
   Admin = "Admin",
@@ -46,6 +51,14 @@ export interface EventResponse {
   dbRes: EventData;
 }
 
+export interface PaymentData {
+  _id: string,
+  eventID: string,
+  username: string,
+  date: Date,
+  ticketName: string,
+  quantity: number
+}
 
 export interface CommentData {
   _id: string,
@@ -70,3 +83,4 @@ export enum Months {
   November = "11",
   December = "12"
 }
+
