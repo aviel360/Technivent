@@ -73,7 +73,6 @@ export async function getEventById(req: Request, res: Response) {
 export async function getEventArrayById(req: Request, res: Response) {
   try {
     const ids = req.params.ids.split(',');
-    console.log(ids);
     const dbRes = await Event.find({ _id: {$in: ids} }); 
     res.status(200).send({ dbRes });
   } catch (error: any) {

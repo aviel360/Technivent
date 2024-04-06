@@ -16,7 +16,7 @@ const UserPage: React.FC<UserPageProps> = () => {
     const apiService = new Api();
     let data: OrderHistoryData[] = [];
     const response = await apiService.getPayments();
-    if (response) data = response.data.dbRes;
+    if (response) data = response.data;
     return data;
   };
   return (

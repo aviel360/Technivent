@@ -21,21 +21,20 @@ export async function getPayments(req: Request, res: Response) {
     const paymentResponse: AxiosResponse = await axios.get(`${PAYMENT_SERVICE}${PAYMENT_PATH}/${username}`);
     const payments = paymentResponse.data.dbRes;
     const ids = payments.map((payment) => payment._id);
-    console.log(`${EVENT_SERVICE}${EVENT_PATH}/${ids}`)
     const eventResponse: AxiosResponse = await axios.get(`${EVENT_SERVICE}${EVENT_PATH}?ids=${ids}`);
     const events = eventResponse.data.dbRes;
 
-    const mergedData = payments.flatMap((paymentEvent) => {
-      const eventID = paymentEvent._id;
-      const payments = paymentEvent.payments;
-      return payments.map((payment) => {
-        const event = events.find((event) => event._id === eventID);
-        return {
-          ...payment,
-          event: event,
-        };
-      });
+    const mergedData = payments.map(paymentEvent => {
+      // Find the corresponding event for this paymentEvent
+      const event = events.find(event => event._id === paymentEvent._id);
+      
+      // Return the merged data with event information and payments array
+      return {
+        event: event,
+        transactions: paymentEvent.payments
+      };
     });
+    
 
     res.status(paymentResponse.status).send(mergedData);
   } catch (error: any) {

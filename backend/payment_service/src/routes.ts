@@ -20,7 +20,6 @@ export async function getPayments(req: Request, res: Response) {
         },
       },
     ]);
-    console.log(dbRes);
     // Send the result with status 200
     res.status(200).send({ dbRes });
   } catch (error: any) {

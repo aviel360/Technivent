@@ -38,7 +38,7 @@ export interface EventData {
 
 export interface OrderHistoryData {
   event: EventData,
-  paymentArray: PaymentData[]
+  transactions: PaymentData[]
 }
 
 export enum UserType {
