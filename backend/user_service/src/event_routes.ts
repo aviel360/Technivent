@@ -1,4 +1,4 @@
-import { Request, Response, response } from "express";
+import { Request, Response } from "express";
 import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from "./const.js";
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./publisher_channel.js";

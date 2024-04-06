@@ -69,7 +69,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item>
-                  <Link to={username}>Personal Space</Link>
+                  <Link to="/personal-space">Personal Space</Link>
                 </Menu.Item>
                 <Menu.Item onClick={logoutClick}>Logout</Menu.Item>
               </Menu.Dropdown>

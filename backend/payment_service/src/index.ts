@@ -2,10 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { getEvents, addEvent, getEventById, getEventArrayById } from "./routes.js";
+import { getPayments } from "./routes.js";
 
 
-import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH } from "./const.js";
+import { PAYMENT_BY_USER } from "./const.js";
 
 dotenv.config();
 
@@ -14,17 +14,13 @@ dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/
 
 await mongoose.connect(dbUri);
 
-const port = process.env.PORT || 8081;
-
+const port = process.env.PORT || 8083;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(EVENT_BY_ID, getEventById);
-app.get(EVENT_BY_ID_ARRAY, getEventArrayById);
-app.get(EVENT_PATH, getEvents);
-app.post(EVENT_PATH, addEvent);
+app.get(PAYMENT_BY_USER, getPayments);
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);

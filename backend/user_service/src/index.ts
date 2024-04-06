@@ -6,7 +6,8 @@ import cors from "cors";
 import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./publisher_channel.js";
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH } from "./const.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH } from "./const.js";
+import { getPayments } from "./payment_routes.js";
 
 dotenv.config();
 
@@ -36,13 +37,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post(LOGIN_PATH, loginRoute);
 app.post(SIGNUP_PATH, signupRoute);
-app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.post(PASSWORD_RESET, resetPasswordRoute);
 app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 app.post(EVENT_PATH, addEventRoute);
 
+app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.get(USER_PATH, userRoute);
 app.get(EVENT_PATH, getEventRoute);
+app.get(PAYMENT_PATH, getPayments);
 
 
 
