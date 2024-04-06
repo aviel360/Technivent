@@ -4,6 +4,9 @@ import { useForm } from '@mantine/form';
 
 import { useLocation } from 'react-router-dom';
 import { Months } from '../../../utils/Types';
+import UserBar from '../../user_bar/UserBar';
+import { useContext } from 'react';
+import { userContext } from '../home/Home';
 
 interface CheckoutProps {
 }
@@ -12,6 +15,8 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
   }  
 const Checkout: React.FC<CheckoutProps> = () => {
+    const { username } = useContext(userContext);
+    
     let query = useQuery();
     let numOfTickets = query.get("amount");
     let ticketName = query.get("ticketName");
@@ -42,6 +47,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
     return (
         <div>
             <h1>Checkout</h1>
+            <UserBar username={username} goBack={true} ></UserBar>
             <Flex
                 mih={50}
                 bg="rgba(0, 0, 0, .3)"

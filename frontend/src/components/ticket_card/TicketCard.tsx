@@ -42,9 +42,9 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, even
                     ) : (
                     <Card.Section pb={"20px"}>
                             {ticket.available === 0 ? (
-                                <Text size="md" fw={400} mt={"sm"}>Sold out!</Text>
+                                <Text size="lg" fw={700} mt={"sm"}>Sold out!</Text>
                             ) : (
-                                <Text size="md" fw={400} mt={"sm"}>{ticket.available} tickets left!</Text>
+                                <Text size="lg" fw={700} mt={"sm"}>{ticket.available} tickets left!</Text>
                             )}
                             <form>
                                 <center>
