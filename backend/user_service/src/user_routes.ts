@@ -103,7 +103,38 @@ export async function userRoute(req: Request, res: Response) {
   } catch (e) {
     return res.status(401).send("Invalid token");
   }
-  res.status(200).send({ username, userType });
+
+  let user;
+
+  try {
+    user = await User.findOne({ username });
+  } catch (e) {
+    res.status(500).send("Internal server error");
+    return;
+  }
+
+  if (!user) {
+    res.status(401).send("Invalid credentials");
+    return;
+  }
+
+  if(user.userType !== userType)
+  {
+    const new_token = jwt.sign({ username: user.username, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: "2d" });
+    const secure = process.env.NODE_ENV === "production";
+    const sameSite = process.env.NODE_ENV === "production" ? "none" : false; // TODO ????
+  
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 2);
+  
+    res.cookie("token", new_token, {
+      httpOnly: true,
+      secure,
+      sameSite,
+      expires: expirationDate,
+    });
+  }
+  res.status(200).send({ username, userType:user.userType });
 }
 
 // Route for getting secret question

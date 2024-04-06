@@ -10,13 +10,16 @@ interface TicketCardProps {
 }
 
 const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName}) => {
-    const [inputValue, setInputValue] = useState(0);
+    const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
     const navigate = useNavigate();
     
     const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
         navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
     };
-
+    const handleInputChange = (ticketName: string, value: number) => {
+        setInputValues({ ...inputValues, [ticketName]: value });
+    };
+    
     return (
         <>
             <h2>{isBackOffice ? 'Ticket Categories' : 'Buy Tickets:'}</h2>
@@ -51,14 +54,13 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, even
                                 <NumberInput label={"Amount of tickets: "} placeholder='0' 
                                     w={"180px"} p={"md"} min={0}  max={ticket.available}
                                     disabled={ticket.available === 0} 
-                                    value={inputValue}
-                                    onChange={(value) => setInputValue(Number(value))}>
-
+                                    value={inputValues[ticket.name] || 0}
+                                    onChange={(value) => handleInputChange(ticket.name, Number(value))}>
                                 </NumberInput>
                                 </center>
                                 <Button type="submit" size="md" p={"10px"} radius={"md"}
-                                        disabled={ticket.available === 0 || inputValue === 0}
-                                        onClick={() => handleClick(inputValue, ticket.name, ticket.price)}>
+                                        disabled={ticket.available === 0 || inputValues[ticket.name] === 0}
+                                        onClick={() => handleClick(inputValues[ticket.name], ticket.name, ticket.price)}>
                                     Purchase
                                 </Button> {/*add onClick event*/}
                             </form>

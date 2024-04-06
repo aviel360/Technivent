@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextInput, Button, Select, Text, Flex, NumberInput, Card, Center } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { EventCategory, TicketData } from "../../../utils/Types.ts";
@@ -6,13 +6,15 @@ import { DateTimePicker } from "@mantine/dates";
 import "./NewEvent.css"
 import Api from "../../../utils/Api.tsx";
 import { useNavigate } from "react-router-dom";
-
+import UserBar from "../../user_bar/UserBar.tsx";
+import { userContext } from "../home/Home.tsx";
 
 interface NewEventProps {}
 
 const NewEvent: React.FC<NewEventProps> = () => {
   const [tickets, setTickets] = useState<TicketData[]>([]);
   const [totalTicketsForEvent, setTotalTicketsForEvent] = useState(0);
+  const { username } = useContext(userContext);
   let navigate = useNavigate();
 
   const eventForm = useForm({
@@ -118,6 +120,7 @@ const NewEvent: React.FC<NewEventProps> = () => {
   return (
     <>
       <h1>New Event</h1>
+      <UserBar username={username} goBack={true} ></UserBar>
       <Center>
       <Flex bg="rgba(0, 0, 0, .3)" miw={"80rem"} mih={"49rem"} direction="column" p={"1rem"}>
         <form onSubmit={eventForm.onSubmit((values) => NewEvent(values, tickets))} >

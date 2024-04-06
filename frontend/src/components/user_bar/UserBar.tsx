@@ -47,7 +47,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
                 return newValue;
               });             
             }}>
-              {isBackOffice ? "Store Catalog" : "Manage Events"}
+              {isBackOffice ? "Catalog" : "Back Office"}
             </Button>
           )}
         </Group>
