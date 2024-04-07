@@ -39,16 +39,6 @@ export async function getEventById_user(req: Request, res: Response, id: string)
   }
 }
 
-
-export async function addComment(req: Request, res: Response, publisherChannel: PublisherChannel) {
-  try {
-    await publisherChannel.sendEvent(JSON.stringify(req.body));
-    res.status(201).send({ message: 'Comment published' });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-}
-
 export async function addEventRoute(req: Request, res: Response) {
   const token = req.cookies.token;
   if (!token) {
@@ -93,7 +83,6 @@ export async function updateEventRoute(req: Request, res: Response) {
 
   if (userType === UserType.User || userType === UserType.Worker) //only Manager and Admin can update event
   {
-    console.log(userType);
     return res.status(403).send("Forbidden: Only Manager and Admin can update event");
   }
 
@@ -105,6 +94,16 @@ export async function updateEventRoute(req: Request, res: Response) {
     });
     res.status(response.status).send(response.data);
   } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+}
+
+//Comment routes
+export async function addComment(req: Request, res: Response, publisherChannel: PublisherChannel) {
+  try {
+    await publisherChannel.sendEvent(JSON.stringify(req.body));
+    res.status(201).send({ message: 'Comment published' });
+  } catch (error) {
     res.status(500).send(error.message);
   }
 }
