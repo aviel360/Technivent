@@ -1,7 +1,7 @@
-import { Badge, Button, Card, Center, Flex, NumberInput, Text } from "@mantine/core";
-import React, { useState } from "react";
-import { TicketData } from "../../utils/Types";
-import { useNavigate } from "react-router-dom";
+import { Badge, Button, Card, Center, Flex, NumberInput, Text } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { TicketData } from '../../utils/Types';
+import { useNavigate } from 'react-router-dom';
 
 interface TicketCardProps {
   ticketArray: TicketData[];
@@ -9,33 +9,41 @@ interface TicketCardProps {
   eventName?: string;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName }) => {
-  const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
-  const navigate = useNavigate();
+const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName}) => {
+    const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        const initialInputValues = ticketArray.reduce((values: { [key: string]: number }, ticket) => {
+            values[ticket.name] = 0;
+            return values;
+          }, {});
+        setInputValues(initialInputValues);
+    }, [ticketArray]);
 
-  const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
-    navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
-  };
-  const handleInputChange = (ticketName: string, value: number) => {
-    setInputValues({ ...inputValues, [ticketName]: value });
-  };
+    
+    const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
+        navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
+    };
+    const handleInputChange = (ticketName: string, value: number) => {
+        setInputValues({ ...inputValues, [ticketName]: value });
+    };
+    
+    return (
+        <>
+            <h2>{isBackOffice ? 'Ticket Categories' : 'Buy Tickets:'}</h2>
+            <Flex wrap={"wrap"} direction={"row"} justify={Center} align={Center}>
+                {ticketArray.map((ticket: TicketData) => 
+                (
+                    <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
+                    <Card.Section>
+                            <center>
+                                <Badge color="pink" size="xl" p={"md"} mt={"sm"}>{ticket.name}</Badge>
+                            </center>
+                            <Text size="md" fw={400} mt={"sm"}>price: {ticket.price}$</Text>
+                          
+                    </Card.Section>
 
-  return (
-    <>
-      <h2>{isBackOffice ? "Ticket Categories" : "Buy Tickets:"}</h2>
-      <Flex wrap={"wrap"} direction={"row"} justify={Center} align={Center}>
-        {ticketArray.map((ticket: TicketData) => (
-          <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
-            <Card.Section>
-              <center>
-                <Badge color="pink" size="xl" p={"md"} mt={"sm"}>
-                  {ticket.name}
-                </Badge>
-              </center>
-              <Text size="md" fw={400} mt={"sm"}>
-                price: {ticket.price}$
-              </Text>
-            </Card.Section>
 
             {isBackOffice ? (
               //If backOffice than only show available tickets (not able to buy tickets)

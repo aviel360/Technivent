@@ -24,8 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  display:flexbox;
   place-items: center;
+  place-content: center;
+  place-self: center;
   min-width: 320px;
   min-height: 100vh;
 }
