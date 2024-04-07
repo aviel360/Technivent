@@ -4,9 +4,11 @@ import { useLocation } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { userContext } from '../home/Home';
-import { Badge, Button, Card, Flex,Group,Text } from '@mantine/core';
+import { Badge, Button, Card, Flex,Group,Text, Modal} from '@mantine/core';
 import Comments from '../../comments/Comments';
 import TicketCard from '../../ticket_card/TicketCard';
+import { useDisclosure } from '@mantine/hooks';
+import { DateTimePicker } from '@mantine/dates';
 
 
 interface EventPageProps {
@@ -27,8 +29,36 @@ const EventPage: React.FC<EventPageProps> = () => {
     const [commentsData, setCommentsData] = useState<CommentData[]>([]);
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
     const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
-
     
+    const [opened, { open, close }] = useDisclosure(false);
+    const [newDates, setNewDates] = useState({ startDate: null, endDate: null });
+    const [startDateError, setStartDateError] = useState<string | null>(null);
+    const [endDateError, setEndDateError] = useState<string | null>(null);
+
+
+    const handleDateChange = (type: 'startDate' | 'endDate', date: Date | null) => {
+        if (type === 'startDate' && date) {
+            if (date < new Date()) {
+                setStartDateError("Start date cannot be in the past");
+            } else {
+                setStartDateError(null); 
+            }
+        }
+        setNewDates((prevDates) => ({ ...prevDates, [type]: date }));
+    };
+
+    const handleSubmitNewDates = async () => {
+        if (newDates.startDate && newDates.endDate) {
+            if (newDates.endDate > newDates.startDate) {
+                console.log(newDates);
+                open();
+                setEndDateError(null); 
+            } else {
+                setEndDateError("End date must be after start date");
+            }
+        }
+    };
+
     const fetchEventData = async (id: string): Promise<{ event: { dbRes: EventData }, comments: CommentData[] }> => 
     {
         const apiService = new Api();
@@ -93,7 +123,6 @@ const EventPage: React.FC<EventPageProps> = () => {
                 direction="row"
                 wrap="wrap"
                 p={"1rem"}
-                w={"55rem"}
             >
 
             {!eventData ? (
@@ -145,11 +174,30 @@ const EventPage: React.FC<EventPageProps> = () => {
                         <Flex justify={"Center"} mb={"md"} >
                         {isBackOffice && new Date(new Date(eventData.start_date).setHours(0, 0, 0, 0)) > new Date(new Date().setHours(0, 0, 0, 0)) && (
                             <Button size={"md"} color={"indigo"}
-                            >
+                            onClick={open}>
                                 Edit Dates
                             </Button>
                         )}
                         </Flex>
+
+                        <Modal title="Edit Dates" size="sm" opened={opened} onClose={close}
+                        xOffset={0} centered >
+                            <div>
+                                <DateTimePicker 
+                                label="Start Date" 
+                                value={newDates.startDate} 
+                                onChange={(date) => handleDateChange('startDate', date)} 
+                                error={startDateError}/>
+
+                                <DateTimePicker 
+                                label="End Date" 
+                                value={newDates.endDate} 
+                                onChange={(date) => handleDateChange('endDate', date)} 
+                                error={endDateError}/> 
+                                <br />
+                                <Button onClick={handleSubmitNewDates} >Submit</Button>
+                            </div>
+                        </Modal>
                          
                         
                         <Card key={eventData._id} shadow="sm" radius="sm" withBorder w={"600px"}  >
