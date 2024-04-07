@@ -94,7 +94,7 @@ export async function updateEventRoute(req: Request, res: Response) {
     });
     res.status(response.status).send(response.data);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send(error.response.data);
   }
 }
 

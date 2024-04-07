@@ -87,8 +87,16 @@ export async function updateEvent(req: Request, res: Response) {
   const id = req.params.id;
   const body = req.body;
   try {
-    const dbRes = await Event.findOneAndUpdate({ _id: id}, body, { new: true });
-    res.status(200).send({ dbRes });
+    const dbRes = await Event.findOne({ _id: id });
+    if (!dbRes) {
+      return res.status(404).send("Event not found");
+    }
+
+    if (new Date(body.start_date) < dbRes.start_date ) {
+      return res.status(400).send("Event cannot be rescheduled to an earlier date");
+    }
+    const updatedEvent = await Event.findOneAndUpdate({ _id: id}, body, { new: true });
+    res.status(200).send({ updatedEvent });
   }
   catch (error: any) {
     res.status(500).send(error);
