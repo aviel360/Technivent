@@ -48,10 +48,18 @@ const EventPage: React.FC<EventPageProps> = () => {
     };
 
     const handleSubmitNewDates = async () => {
-        if (newDates.startDate && newDates.endDate) {
+        if (newDates.startDate && newDates.endDate && id !== null) {
             if (newDates.endDate > newDates.startDate) {
                 console.log(newDates);
-                open();
+                const payload = { id: id, start_date: newDates.startDate, end_date: newDates.endDate };
+                const apiService = new Api();
+                const response = await apiService.updateEventDates(payload);
+                if(response)
+                {
+                    window.alert("Event dates updated successfully");
+                    window.location.reload();
+                }
+                close();
                 setEndDateError(null); 
             } else {
                 setEndDateError("End date must be after start date");
