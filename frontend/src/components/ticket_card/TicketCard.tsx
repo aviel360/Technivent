@@ -1,7 +1,7 @@
-import { Badge, Button, Card, Center, Flex, NumberInput, Text } from "@mantine/core";
-import React, { useState } from "react";
-import { TicketData } from "../../utils/Types";
-import { useNavigate } from "react-router-dom";
+import { Badge, Button, Card, Center, Flex, NumberInput, Text } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { TicketData } from '../../utils/Types';
+import { useNavigate } from 'react-router-dom';
 
 interface TicketCardProps {
   ticketArray: TicketData[];
