@@ -48,7 +48,7 @@ export async function getAllEvents(req: Request, res: Response) {
 
 export async function addEvent(req: Request, res: Response) {
   
-    //Authentication and permission check??
+    //Authentication and permission check - done in user service
 
     const body = req.body;
     const newEvent = new Event(body);
@@ -79,3 +79,19 @@ export async function getEventArrayById(req: Request, res: Response) {
     res.status(500).send(error);
   }
 }
+
+
+export async function updateEvent(req: Request, res: Response) {
+   //Authentication and permission check - done in user service
+
+  const id = req.params.id;
+  const body = req.body;
+  try {
+    const dbRes = await Event.findOneAndUpdate({ _id: id}, body, { new: true });
+    res.status(200).send({ dbRes });
+  }
+  catch (error: any) {
+    res.status(500).send(error);
+  }
+}
+
