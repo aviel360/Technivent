@@ -23,7 +23,10 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, even
 
     
     const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
-        navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
+      if(ticketName && ticketPrice && eventName  && inputValue != 0 )
+        {
+          navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
+        }
     };
     const handleInputChange = (ticketName: string, value: number) => {
         setInputValues({ ...inputValues, [ticketName]: value });
