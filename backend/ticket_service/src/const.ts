@@ -1,3 +1,2 @@
-
-// Event
-export const PAYMENT_BY_USER = "/api/payment/:username";
+// Ticket
+export const TICKET_LOCK = "/api/ticket/lock";

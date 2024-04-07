@@ -2,10 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { getPayments } from "./routes.js";
+import { lockTicket } from "./routes.js";
 
 
-import { PAYMENT_BY_USER } from "./const.js";
+import { TICKET_LOCK } from "./const.js";
+import { TicketManager } from "./models/ticketManager.js";
 
 dotenv.config();
 
@@ -20,7 +21,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get(PAYMENT_BY_USER, getPayments);
+const ticketManager = new TicketManager();
+
+app.post(TICKET_LOCK, lockTicket(ticketManager));
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);
