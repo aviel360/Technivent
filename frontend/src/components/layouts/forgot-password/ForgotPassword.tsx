@@ -78,13 +78,16 @@ const Signup: React.FC<SignupProps> = () => {
       {isUser && (
         <>
           <form onSubmit={userForm.onSubmit((values) => RequestQuestion(values))}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <TextInput
               size="sm"
               label="What is your username?"
               withAsterisk
               placeholder="Userame"
               {...userForm.getInputProps("username")}
+              w={"18rem"}
             />
+            </div>
             <br />
             {isUser && isLoading ? (
               <Loader />
@@ -103,14 +106,18 @@ const Signup: React.FC<SignupProps> = () => {
           <Text size="lg">Question: {question}</Text>
           <br />
           <form onSubmit={answerForm.onSubmit((values) => RequestPassword(values))}>
-            <TextInput size="sm" withAsterisk placeholder="Secret Answer" {...answerForm.getInputProps("secretAnswer")} />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <TextInput size="sm" withAsterisk placeholder="Secret Answer" 
+            {...answerForm.getInputProps("secretAnswer")} w={"20rem"} />
             <br />
             <PasswordInput
               size="sm"
               withAsterisk
               placeholder="New Password"
               {...answerForm.getInputProps("newPassword")}
+              w={"20rem"}
             />
+            </div>
             <br />
             {isLoading ? (
               <Loader />
