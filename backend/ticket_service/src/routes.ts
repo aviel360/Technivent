@@ -1,29 +1,22 @@
 import { Request, Response } from "express";
-import Payment from "./models/payment.js";
+import { TicketManager } from "./models/ticketManager.js";
 
-export async function getPayments(req: Request, res: Response) {
-  let dbRes;
-  const username = req.params.username;
-  try {
-    dbRes = await Payment.aggregate([
-      // Match payments based on the specified username
-      {
-        $match: {
-          username: username,
-        },
-      },
-      // Group payments by eventID
-      {
-        $group: {
-          _id: "$eventID", // Group by eventID
-          payments: { $push: "$$ROOT" }, // Store all documents in an array for each eventID
-        },
-      },
-    ]);
-    // Send the result with status 200
-    res.status(200).send({ dbRes });
-  } catch (error: any) {
-    // If there's an error, send an error response with status 500
-    res.status(500).send(error);
+export function lockTicket(ticketManager: TicketManager) {
+  return async function(req: Request, res: Response)
+  {
+    try {
+      // Extract necessary data from the request
+      const {username, ticketId, lockedTickets } = req.body;
+  
+      // Call the lockTickets method of TicketManager to lock the tickets
+      await ticketManager.lockTickets(username, ticketId, lockedTickets, false);
+  
+      // Respond with a success message
+      res.status(200).send('Tickets locked successfully');
+    } catch (error) {
+      // Handle errors
+      res.status(500).send(error.message);
+    }
   }
 }
+

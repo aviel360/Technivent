@@ -117,7 +117,6 @@ class Api {
     }
   }
 
-
   async getEventById(id: string) {
     const url = `${this.baseUrl}/event?id=${id}`;
     try {
