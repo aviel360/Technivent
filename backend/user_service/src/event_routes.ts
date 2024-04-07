@@ -4,6 +4,8 @@ import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./publisher_channel.js";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
+import { UserType } from "./models/user.js";
+import { userRoute } from "./user_routes.js";
 
 
 export async function getEventRoute(req: Request, res: Response) {
@@ -60,12 +62,43 @@ export async function addEventRoute(req: Request, res: Response) {
     return res.status(401).send("Invalid token");
   }
 
-  if (userType === 'User') {
+  if (userType === userType.User) {
     return res.status(403).send("Forbidden");
   }
 
   try {
     const response: AxiosResponse = await axios.post(EVENT_SERVICE + EVENT_PATH, req.body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    res.status(response.status).send(response.data);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+}
+
+export async function updateEventRoute(req: Request, res: Response) {
+  const token = req.cookies.token;
+  if (!token) {
+  }
+
+  let userType;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    userType = (payload as JwtPayload).userType;
+  } catch (e) {
+    return res.status(401).send("Invalid token");
+  }
+
+  if (userType === UserType.User || userType === UserType.Worker) //only Manager and Admin can update event
+  {
+    console.log(userType);
+    return res.status(403).send("Forbidden");
+  }
+
+  try {
+    const response: AxiosResponse = await axios.put(EVENT_SERVICE + EVENT_PATH + '/' + req.params.id, req.body, {
       headers: {
         'Content-Type': 'application/json'
       }
