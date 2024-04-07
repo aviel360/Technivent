@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from "./const.js";
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./publisher_channel.js";
+import { JwtPayload } from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 
 export async function getEventRoute(req: Request, res: Response) {
@@ -46,6 +48,22 @@ export async function addComment(req: Request, res: Response, publisherChannel: 
 }
 
 export async function addEventRoute(req: Request, res: Response) {
+  const token = req.cookies.token;
+  if (!token) {
+  }
+
+  let userType;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    userType = (payload as JwtPayload).userType;
+  } catch (e) {
+    return res.status(401).send("Invalid token");
+  }
+
+  if (userType === 'User') {
+    return res.status(403).send("Forbidden");
+  }
+
   try {
     const response: AxiosResponse = await axios.post(EVENT_SERVICE + EVENT_PATH, req.body, {
       headers: {
