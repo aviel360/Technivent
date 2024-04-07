@@ -4,9 +4,10 @@ import { useLocation } from 'react-router-dom';
 import Api from '../../../utils/Api';
 import UserBar from '../../user_bar/UserBar';
 import { userContext } from '../home/Home';
-import { Badge, Card, Flex,Group,Text } from '@mantine/core';
+import { Badge, Button, Card, Flex,Group,Text } from '@mantine/core';
 import Comments from '../../comments/Comments';
 import TicketCard from '../../ticket_card/TicketCard';
+
 
 interface EventPageProps {
 
@@ -27,7 +28,7 @@ const EventPage: React.FC<EventPageProps> = () => {
     const [lowestPriceTickets, setLowestPriceTickets] = useState<TicketData | null>(null);
     const [totalTicketsAvailable, setTotalTicketsAvailable] = useState<number>(0);
 
-
+    
     const fetchEventData = async (id: string): Promise<{ event: { dbRes: EventData }, comments: CommentData[] }> => 
     {
         const apiService = new Api();
@@ -141,6 +142,16 @@ const EventPage: React.FC<EventPageProps> = () => {
                             </Card>
                         </Group>
 
+                        <Flex justify={"Center"} mb={"md"} >
+                        {isBackOffice && new Date(new Date(eventData.start_date).setHours(0, 0, 0, 0)) > new Date(new Date().setHours(0, 0, 0, 0)) && (
+                            <Button size={"md"} color={"indigo"}
+                            >
+                                Edit Dates
+                            </Button>
+                        )}
+                        </Flex>
+                         
+                        
                         <Card key={eventData._id} shadow="sm" radius="sm" withBorder w={"600px"}  >
                             <Text size="md" fw={400}>{eventData.description}</Text>
                             <br />
