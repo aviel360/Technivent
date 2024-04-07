@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
-import { PublisherChannel } from "./publisher_channel.js";
+import { PublisherChannel } from "./comment_publisher.js";
 import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID } from "./const.js";
 import { getPayments } from "./payment_routes.js";
 

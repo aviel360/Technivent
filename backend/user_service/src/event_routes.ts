@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from "./const.js";
 import axios, { AxiosResponse } from "axios";
-import { PublisherChannel } from "./publisher_channel.js";
+import { PublisherChannel } from "./comment_publisher.js";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
 import { UserType } from "./models/user.js";
