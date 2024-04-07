@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Payment from "./models/payment.js";
 import axios from "axios";
+import { PaymentPublisherChannel } from "./payment_publisher.js";
 
 export async function getPayments(req: Request, res: Response) {
   let dbRes;
@@ -38,6 +39,8 @@ export async function CreatePayment(req: Request, res: Response) {
 
   //send CC details to payment hammerhead api
   const totalPrice = quantity * ticketPrice;
+  const publisherChannel = new PaymentPublisherChannel();
+
   const paymentResponse = await axios.post('http://localhost:3000/payment', { creditCardNum, holder, cvv, expDate, totalPrice });
   if(paymentResponse.status == 200){
     const transactionId = paymentResponse.data; //should we store it in db or just return it to show in suceess page?
@@ -51,7 +54,8 @@ export async function CreatePayment(req: Request, res: Response) {
     const payment = new Payment(paymentData);
     try {
       await payment.save();
-      //send success msg to ticket service to unlock the tickets (msgBroker)
+      //send success msg to ticket_service and user_service to unlock the tickets (msgBroker)
+      await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId}));
 
       res.status(200).send({ transactionId });
     } catch (error: any) {
@@ -59,7 +63,10 @@ export async function CreatePayment(req: Request, res: Response) {
     }
   }
   else{
-    //send fail msg to ticket service to unlock the tickets (msgBroker)
+    //send fail msg to ticket_service and user_service to unlock the tickets (msgBroker)
+    await publisherChannel.sendEvent(JSON.stringify({ status: false, username, ticketId, quantity}));
     res.status(500).send("Payment failed");
   }
 }
+
+

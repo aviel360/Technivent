@@ -2,10 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { getPayments } from "./routes.js";
+import { CreatePayment, getPayments } from "./routes.js";
 
 
-import { PAYMENT_BY_USER } from "./const.js";
+import { PAYMENT_BY_USER, PAYMENT_ROUTE } from "./const.js";
 
 dotenv.config();
 
@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get(PAYMENT_BY_USER, getPayments);
+app.post(PAYMENT_ROUTE, CreatePayment);
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);
