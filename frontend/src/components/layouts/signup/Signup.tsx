@@ -54,6 +54,7 @@ const Signup: React.FC<SignupProps> = () => {
       <h1>Signup</h1>
       <br />
       <form onSubmit={form.onSubmit((values) => RequestSignup(values))}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <TextInput
           size="sm"
           error="Username already exists"
@@ -61,6 +62,7 @@ const Signup: React.FC<SignupProps> = () => {
           withAsterisk
           placeholder="Userame"
           {...form.getInputProps("username")}
+          w={"18rem"}
         />
         <br />
         <PasswordInput
@@ -69,6 +71,7 @@ const Signup: React.FC<SignupProps> = () => {
           withAsterisk
           placeholder="Password"
           {...form.getInputProps("password")}
+          w={"18rem"}
         />
         <PasswordInput
           size="sm"
@@ -76,6 +79,7 @@ const Signup: React.FC<SignupProps> = () => {
           withAsterisk
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
+          w={"18rem"}
         />
         <br />
         <TextInput
@@ -84,6 +88,7 @@ const Signup: React.FC<SignupProps> = () => {
           withAsterisk
           placeholder="Secret Question"
           {...form.getInputProps("secretQuestion")}
+          w={"18rem"}
         />
         <TextInput
           size="sm"
@@ -91,7 +96,9 @@ const Signup: React.FC<SignupProps> = () => {
           withAsterisk
           placeholder="Secret Answer"
           {...form.getInputProps("secretAnswer")}
+          w={"18rem"}
         />
+        </div>
         <br />
         {isLoading ? (
           <Loader />

@@ -56,8 +56,10 @@ const Login: React.FC<LoginProps> = () => {
       <h1>Login</h1>
       <br />
 
-      <form onSubmit={form.onSubmit((values) => RequestLogin(values))}>
-        <TextInput size="sm" label="Userame" withAsterisk placeholder="Userame" {...form.getInputProps("username")} />
+      <form onSubmit={form.onSubmit((values) => RequestLogin(values))}> 
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <TextInput size="sm" label="Userame" withAsterisk placeholder="Userame" {...form.getInputProps("username")} 
+        w={"18rem"}/>
         <br />
         <PasswordInput
           size="sm"
@@ -65,7 +67,9 @@ const Login: React.FC<LoginProps> = () => {
           withAsterisk
           placeholder="Password"
           {...form.getInputProps("password")}
+          w={"18rem"}
         />
+        </div>
         <br />
         {isLoading ? (
           <Loader />
