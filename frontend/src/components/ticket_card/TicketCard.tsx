@@ -1,5 +1,5 @@
 import { Badge, Button, Card, Center, Flex, NumberInput, Text } from '@mantine/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TicketData } from '../../utils/Types';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,15 @@ interface TicketCardProps {
 const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName}) => {
     const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        const initialInputValues = ticketArray.reduce((values: { [key: string]: number }, ticket) => {
+            values[ticket.name] = 0;
+            return values;
+          }, {});
+        setInputValues(initialInputValues);
+    }, [ticketArray]);
+
     
     const handleClick = (inputValue: number, ticketName: string, ticketPrice: number) => {
         navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
@@ -58,7 +67,7 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, even
                                     onChange={(value) => handleInputChange(ticket.name, Number(value))}>
                                 </NumberInput>
                                 </center>
-                                <Button type="submit" size="md" p={"10px"} radius={"md"}
+                                <Button type="submit" size="md" p={"10px"} radius={"md"} key={ticket._id}
                                         disabled={ticket.available === 0 || inputValues[ticket.name] === 0}
                                         onClick={() => handleClick(inputValues[ticket.name], ticket.name, ticket.price)}>
                                     Purchase
