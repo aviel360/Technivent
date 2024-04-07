@@ -94,7 +94,7 @@ export async function updateEventRoute(req: Request, res: Response) {
   if (userType === UserType.User || userType === UserType.Worker) //only Manager and Admin can update event
   {
     console.log(userType);
-    return res.status(403).send("Forbidden");
+    return res.status(403).send("Forbidden: Only Manager and Admin can update event");
   }
 
   try {
