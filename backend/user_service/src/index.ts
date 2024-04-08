@@ -7,7 +7,7 @@ import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signu
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
 import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID } from "./const.js";
-import { getPayments } from "./payment_routes.js";
+import { CreatePayment, getPayments } from "./payment_routes.js";
 
 dotenv.config();
 
@@ -46,6 +46,7 @@ app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.get(USER_PATH, userRoute);
 app.get(EVENT_PATH, getEventRoute);
 app.get(PAYMENT_PATH, getPayments);
+app.post(PAYMENT_PATH, CreatePayment)
 
 
 
