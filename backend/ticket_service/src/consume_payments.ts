@@ -31,8 +31,14 @@ export const consumePaymentMessages = async () => {
     await channel.consume(queue, async (msg) => {
         try {
             // Parse the message content to JSON
-            const paymentData = JSON.parse(msg.content.toString()); 
-           
+            const paymentData = JSON.parse(msg.content.toString());
+            if (paymentData.status === true) {
+              //TODO
+            }
+            else{
+
+            }
+
           } catch (error) {
            
           }
