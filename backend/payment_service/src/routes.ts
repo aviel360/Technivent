@@ -4,6 +4,7 @@ import axios from "axios";
 import { PaymentPublisherChannel } from "./payment_publisher.js";
 import { EVENT_TICKETS } from "../../event_service/src/const.js";
 import { HAMMERHEAD_API } from "./const.js";
+import {TICKET_BY_EVENT_ID} from "../../ticket_service/src/const.js";
 
 export async function getPayments(req: Request, res: Response) {
   let dbRes;
@@ -36,14 +37,13 @@ export async function CreatePayment(req: Request, res: Response) {
   const {username, eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketName, ticketPrice, quantity } = req.body;
 
   //Check if tickets are still available in the moment of payment
-  const eventRes = await axios.get(EVENT_TICKETS + eventID, {
-    params: {
-      ticketName: ticketName,
-      quantity: quantity
-    }
-  });
-  if(eventRes.status != 200){
-    res.status(400).send("Tickets are not available anymore");
+
+  const ticketArrayRes = await axios.get(TICKET_BY_EVENT_ID + eventID);
+  const ticketArray = ticketArrayRes.data.ticketArray;
+  const ticket = ticketArray.find((ticket: any) => ticket.name == ticketName);
+  if(ticket.quantity < quantity){
+    res.status(400).send("Not enough tickets available");
+    return;
   }
   
   //check if the tickets are still locked - TODO 
