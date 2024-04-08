@@ -59,4 +59,12 @@ export class TicketManager {
       throw error;
     }
   }
+
+  async deleteLockedTickets(username: string): Promise<void> {
+    try {
+      delete this.lockedTickets[username];
+    } catch (error) {
+      throw error;
+    }
+  }
 }
