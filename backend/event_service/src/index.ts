@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { getEvents, addEvent, getEventById, getEventArrayById, updateEvent, checkTicketAvailability} from "./routes.js";
+import { getEvents, addEvent, getEventById, getEventArrayById, updateEvent} from "./routes.js";
 
 
 import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH, EVENT_TICKETS } from "./const.js";
@@ -26,7 +26,6 @@ app.get(EVENT_BY_ID_ARRAY, getEventArrayById);
 app.get(EVENT_PATH, getEvents);
 app.post(EVENT_PATH, addEvent);
 app.put(EVENT_BY_ID, updateEvent);
-app.get(EVENT_TICKETS, checkTicketAvailability);
 
 app.listen(port, () => {
   console.log(`Server running! port ${port}`);
