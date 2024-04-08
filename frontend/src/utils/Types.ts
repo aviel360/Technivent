@@ -44,7 +44,7 @@ export interface OrderHistoryData {
 export enum UserType {
   User = "User",
   Admin = "Admin",
-  Manager = "Manger",
+``  Manager = "Manager",
   Worker = "Worker"
 }
 export interface EventResponse {
