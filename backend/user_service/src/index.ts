@@ -53,5 +53,5 @@ app.post(PAYMENT_PATH, CreatePayment)
 
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`User Server running! port ${port}`);
 });

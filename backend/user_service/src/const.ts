@@ -1,4 +1,3 @@
-import { env } from "process";
 
 // User
 export const USER_PATH = "/api/user";

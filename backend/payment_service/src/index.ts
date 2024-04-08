@@ -24,5 +24,5 @@ app.get(PAYMENT_BY_USER, getPayments);
 app.post(PAYMENT_ROUTE, CreatePayment);
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`Payment Server running! port ${port}`);
 });

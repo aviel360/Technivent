@@ -27,5 +27,5 @@ app.post(TICKET_LOCK, (req, res) => lockTicket(req, res, ticketManager));
 app.get(TICKET_BY_EVENT_ID, getTicketArrayByEventId);
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`Ticket Server running! port ${port}`);
 });

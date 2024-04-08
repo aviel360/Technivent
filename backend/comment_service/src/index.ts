@@ -24,5 +24,5 @@ app.post(COMMENT_PATH, addComment);
 consumeMessages();
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`Comment Server running! port ${port}`);
 });
