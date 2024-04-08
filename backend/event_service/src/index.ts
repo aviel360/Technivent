@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { getEvents, addEvent, getEventById, getEventArrayById, updateEvent} from "./routes.js";
 
 
-import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH } from "./const.js";
+import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH, EVENT_TICKETS } from "./const.js";
 
 dotenv.config();
 

@@ -83,3 +83,27 @@ export async function updateEvent(req: Request, res: Response) {
   }
 }
 
+// export async function checkTicketAvailability(req: Request, res: Response) {
+//   const eventID = req.params.id;
+//   const ticketName = req.query.ticketName as string; 
+//   const quantity = Number(req.query.quantity);  
+
+
+//   try {
+//     const dbRes = await Event.findOne({ _id: eventID });  
+//     if (!dbRes) {
+//       return res.status(404).send("Event not found");
+//     }
+//     const ticket = dbRes.ticketArray.find((ticket) => ticket.name === ticketName);
+//     if (!ticket) {
+//       return res.status(404).send("Ticket not found");
+//     }
+//     if (ticket.available < quantity) {
+//       return res.status(400).send("Not enough tickets available");
+//     }
+//     res.status(200).send("Tickets are available");
+//   }
+//   catch (error: any) {
+//     res.status(500).send(error);
+//   }
+// }
