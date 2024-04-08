@@ -21,7 +21,7 @@ export class TicketManager {
         clearTimeout(this.lockedTickets[username].timeoutId);
         ticketAmount = lockedTickets - userTickets.lockedTickets;
       }
-
+      console.log(username, ticketId, lockedTickets, purchaseFlag)
       const gteLock = ticketAmount > 0 ? ticketAmount : 0;
       const ticket = await Ticket.findOneAndUpdate(
         { _id: ticketId, available: { $gte: gteLock } }, // Ensure available tickets are sufficient

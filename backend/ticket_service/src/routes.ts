@@ -5,8 +5,8 @@ import Ticket from "./models/ticket.js"
 export async function lockTicket(req: Request, res: Response, ticketManager: TicketManager) {
   try {
     // Extract necessary data from the request
-    const { username, ticketId, lockedTickets } = req.body;
-
+    const { username, ticketId, lockedTickets } = req.body.payload;
+    
     // Call the lockTickets method of TicketManager to lock the tickets
     await ticketManager.lockTickets(username, ticketId, lockedTickets, false);
 
@@ -18,12 +18,10 @@ export async function lockTicket(req: Request, res: Response, ticketManager: Tic
   }
 }
 
-
 export async function getTicketArrayByEventId(req: Request, res: Response) {
   try {
     const id = req.params.id
     const ticketArray = await Ticket.find({ eventID: id });
-    console.log(ticketArray)
     res.status(200).send({ eventID:id, ticketArray });
   } catch (error: any) {
     res.status(500).send(error);

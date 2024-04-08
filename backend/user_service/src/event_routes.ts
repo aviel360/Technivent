@@ -33,7 +33,6 @@ export async function getEventById_user(req: Request, res: Response, id: string)
       event: dbRes[0],
       comments: commentsResponse.data
     };
-    console.log(data);
     res.status(200).send(data);
   } catch (error: any) {
     res.status(500).send(error);
