@@ -6,6 +6,7 @@ export const LOGOUT_PATH = "/api/user/logout";
 export const SIGNUP_PATH = "/api/user/signup";
 export const SECRET_QUESTION_PATH = "/api/user/secret-question";
 export const PASSWORD_RESET = "/api/user/reset-password";
+export const PERMMISION_PATH = "/api/user/permission";
 
 // Event
 export const EVENT_SERVICE_LOCAL = "http://localhost:3001";

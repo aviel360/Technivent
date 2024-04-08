@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { User, LoginUser } from "./models/user.js";
+import { User, LoginUser, UserType } from "./models/user.js";
 import Joi from "joi";
 
 // Route for login
@@ -193,4 +193,58 @@ export async function resetPasswordRoute(req: Request, res: Response) {
 
   res.status(201).send("Your password was modified!");
 }
+
+//Route for updating user permission
+export async function updatePermissionRoute(req: Request, res: Response) {
+  const token = req.cookies.token;
+  if (!token) {
+    res.status(401).send("Not logged in");
+    return;
+  }
+
+  let tokenUserType;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    tokenUserType = (payload as JwtPayload).userType;
+  } catch (e) {
+    return res.status(401).send("Invalid token");
+  }
+  if(tokenUserType !== UserType.Admin){
+      res.status(401).send("Unauthorized Update Permission Request");
+      return;
+  }
+
+  const { username, userType } = req.body;
+  const userPermission = Joi.object({
+    username: Joi.string().min(1).required(),
+    userType: Joi.string().valid(...Object.values(UserType)).required(),
+  });
+
+  const { error } = userPermission.validate(req.body);
+
+  if (error) {
+    return res.status(400).send(error.message);
+  }
+
+  if(userType === UserType.Admin){
+    res.status(400).send("Cannot update user to admin");
+    return;
+  }
+  
+  try {
+    await User.findOne({ username });
+    if(!User){
+      res.status(400).send("User not found");
+      return;
+    }
+    await User.updateOne({ username }, { userType });
+    res.status(200).send("User permission updated successfully");
+      return;
+  }
+  catch (error: any) {
+    res.status(500).send(error);
+    return;
+  }
+}
+
 
