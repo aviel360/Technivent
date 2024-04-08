@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Payment from "./models/payment.js";
 import axios from "axios";
 import { PaymentPublisherChannel } from "./payment_publisher.js";
+import { EVENT_TICKETS } from "../../event_service/src/const.js";
+import { HAMMERHEAD_API } from "./const.js";
 
 export async function getPayments(req: Request, res: Response) {
   let dbRes;
@@ -34,14 +36,23 @@ export async function CreatePayment(req: Request, res: Response) {
   const {username, eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketName, ticketPrice, quantity } = req.body;
 
   //Check if tickets are still available in the moment of payment
-
-  //check if the tickets are still locked
+  const eventRes = await axios.get(EVENT_TICKETS + eventID, {
+    params: {
+      ticketName: ticketName,
+      quantity: quantity
+    }
+  });
+  if(eventRes.status != 200){
+    res.status(400).send("Tickets are not available anymore");
+  }
+  
+  //check if the tickets are still locked - TODO 
 
   //send CC details to payment hammerhead api
   const totalPrice = quantity * ticketPrice;
   const publisherChannel = new PaymentPublisherChannel();
 
-  const paymentResponse = await axios.post('http://localhost:3000/payment', { creditCardNum, holder, cvv, expDate, totalPrice });
+  const paymentResponse = await axios.post(HAMMERHEAD_API, { creditCardNum, holder, cvv, expDate, totalPrice });
   if(paymentResponse.status == 200){
     const transactionId = paymentResponse.data; //should we store it in db or just return it to show in suceess page?
     const paymentData = {
