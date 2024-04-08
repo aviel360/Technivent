@@ -1,28 +1,6 @@
 import Joi from "joi";
 import * as mongoose from "mongoose";
 
-export const ticketSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    available: { type: Number, required: true, min: 0 },
-    price: { type: Number, required: true, min: 0 },
-    totalTickets: { type: Number, required: true, min: 0 },
-  },
-  {
-    _id: false,
-    versionKey: false,
-  }
-);
-
-export const ticketSchemaJoi = Joi.object({
-  name: Joi.string().required(),
-  available: Joi.number().min(0).required(),
-  price: Joi.number().min(0).required(),
-  totalTickets: Joi.number().min(0).required(),
-})
-  .strict()
-  .unknown();
-
 export enum EventCategory {
   Charity = "Charity Event",
   Concert = "Concert",
@@ -60,7 +38,6 @@ const eventSchema = new mongoose.Schema({
     },
   },
   location: { type: String, required: true },
-  ticketArray: { type: [ticketSchema], required: true },
   image: { type: String },
   rating: { type: RatingSchema, default: { average: 0, total: 0 } },
 });

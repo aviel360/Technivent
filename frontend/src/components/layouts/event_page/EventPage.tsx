@@ -66,11 +66,15 @@ const EventPage: React.FC<EventPageProps> = () => {
         }
     };
 
-    const fetchEventData = async (id: string): Promise<{ event: { dbRes: EventData }, comments: CommentData[] }> => 
+    const fetchEventData = async (id: string) => 
     {
         const apiService = new Api();
         const response = await apiService.getEventById(id);
-        return response ? response.data : { event: { dbRes: {} as EventData }, comments: [] as CommentData[] };
+        if(response)
+          {
+            setEventData(response.data.event);
+            setCommentsData(response.data.comments)
+          }
     };
 
   useEffect(() => {
@@ -78,9 +82,7 @@ const EventPage: React.FC<EventPageProps> = () => {
       if (!id) {
         return;
       }
-      const data = await fetchEventData(id);
-      setEventData(data.event.dbRes);
-      setCommentsData(data.comments);
+      await fetchEventData(id);
     };
 
     fetchData();

@@ -59,7 +59,6 @@ const Checkout: React.FC<CheckoutProps> = () => {
                 direction="row"
                 wrap="wrap"
                 p={"4rem"}
-                w={"55rem"}
             >
                 <Card p={"lg"}>
                     <form onSubmit={checkoutForm.onSubmit((values) => handleCheckoutSubmit(values))}>

@@ -11,7 +11,6 @@ function OrderHistory({ fetchData }: OrderHistoryProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchEvents = async () => {
-    debugger;
     const data = await fetchData();
     setIsLoading(false);
     setOrdersData(data);

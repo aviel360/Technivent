@@ -31,9 +31,9 @@ export interface EventData {
   start_date: Date,
   end_date: Date,
   location: string,
-  ticketArray: TicketData[],
   image: string,
-  rating: Rating
+  rating: Rating,
+  ticketArray: TicketData[],
 }
 
 export interface OrderHistoryData {

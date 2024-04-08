@@ -6,8 +6,9 @@ import cors from "cors";
 import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./publisher_channel.js";
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID } from "./const.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH } from "./const.js";
 import { getPayments } from "./payment_routes.js";
+import { lockTicketRoute } from "./ticket_routes.js";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.post(SIGNUP_PATH, signupRoute);
 app.post(PASSWORD_RESET, resetPasswordRoute);
 app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 app.post(EVENT_PATH, addEventRoute);
+app.post(TICKET_LOCK_PATH, lockTicketRoute);
 app.put(EVENT_BY_ID, updateEventRoute);
 
 app.post(SECRET_QUESTION_PATH, secretQuestionRoute);

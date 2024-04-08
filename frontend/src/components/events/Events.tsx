@@ -27,11 +27,12 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
     fetchEvents();
   }, [fetchData, isBackOffice]);
 
+
   // Preprocess events data to filter and sort tickets
   const processedEvents = eventsData.map((event) => {
     const availableTickets = event.ticketArray
-      .filter((ticket) => ticket.available > 0)
-      .sort((a, b) => a.price - b.price);
+    .filter((ticket) => ticket.available > 0)
+    .sort((a, b) => a.price - b.price);
     const firstTicket = availableTickets[0];
     const totalTickets = event.ticketArray.reduce((total, ticket) => total + ticket.available, 0);
     return { ...event, firstTicket, totalTickets };
@@ -72,7 +73,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
 
             <center>
             <Badge color="rgba(22, 77, 15, 1)">
-                {event.totalTickets} ticket{event.totalTickets !== 1 ? 's' : ''} available from {event.firstTicket.price}$
+                {event.totalTickets} ticket{event.totalTickets !== 1 ? 's' : ''} available {event.totalTickets > 0 ? `from ${event.firstTicket.price}$` : ""}
               </Badge>
             </center>
 

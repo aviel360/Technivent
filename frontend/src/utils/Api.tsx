@@ -106,10 +106,21 @@ class Api {
     }
   }
 
-  async getEvents(query: string = '')
+  async getEvents()
   {
     try{
-      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`, { params: { all: query } });
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
+
+  async getAllEvents()
+  {
+    try{
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event/all`);
       return response;
     } catch (error: any) {
       window.alert(error.response.data);
@@ -149,7 +160,16 @@ class Api {
     }
   }
   
-  
+  async lockTicket(payload: { ticketId: string, lockedTickets: number})
+  {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/ticket/lock`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
 }
 
 

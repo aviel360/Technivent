@@ -5,8 +5,7 @@ import { PublisherChannel } from "./publisher_channel.js";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
 import { UserType } from "./models/user.js";
-import { userRoute } from "./user_routes.js";
-
+import { getTicketArray } from "./ticket_routes.js";
 
 export async function getEventRoute(req: Request, res: Response) {
   try {
@@ -14,8 +13,9 @@ export async function getEventRoute(req: Request, res: Response) {
     if (id) {
       return getEventById_user(req, res, id.toString());
     }
-    const response: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
-    res.status(response.status).send(response.data);
+    const eventResponse: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
+    const dbRes = await getTicketArray(eventResponse.data.dbRes);
+    res.status(eventResponse.status).send({dbRes});
   } catch (error: any) {
     res.status(500).send(error.message);
   }
@@ -28,11 +28,12 @@ export async function getEventById_user(req: Request, res: Response, id: string)
       axios.get(`${COMMENT_SERVICE}${COMMENT_PATH}?eventID=${id}`)
     ]);
 
+    const dbRes = await getTicketArray([eventResponse.data.dbRes]);
     const data = {
-      event: eventResponse.data,
+      event: dbRes[0],
       comments: commentsResponse.data
     };
-
+    console.log(data);
     res.status(200).send(data);
   } catch (error: any) {
     res.status(500).send(error);

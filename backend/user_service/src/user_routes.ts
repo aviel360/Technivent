@@ -31,7 +31,7 @@ export async function loginRoute(req: Request, res: Response) {
 
   const token = jwt.sign({ username: user.username, userType: user.userType }, process.env.JWT_SECRET, { expiresIn: "2d" });
   const secure = process.env.NODE_ENV === "production";
-  const sameSite = process.env.NODE_ENV === "production" ? "none" : false; // TODO ????
+  const sameSite = process.env.NODE_ENV === "production" ? "none" : false; 
 
   const expirationDate = new Date();
   expirationDate.setDate(expirationDate.getDate() + 2);

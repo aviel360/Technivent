@@ -17,7 +17,7 @@ const Catalog: React.FC<CatalogProps> = () => {
   const fetchData = async () => {
     const apiService = new Api();
     let data: EventData[] = [];
-    const response = isBackOffice ? await apiService.getEvents('all') : await apiService.getEvents();
+    const response = isBackOffice ? await apiService.getAllEvents() : await apiService.getEvents();
     if (response) data = response.data.dbRes;
     return data;
   };
