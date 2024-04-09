@@ -31,25 +31,39 @@ export const consumePaymentMessages = async () => {
     // `msg.content.toString()` converts the message content to a string for logging or processing.
     // `channel.ack(msg)` acknowledges the message, indicating it has been processed and can be removed from the queue.
     await channel.consume(queue, async (msg) => {
+      if(msg === null){
+        channel.ack(msg);
+        return;
+      }
         try {
+          
             // Parse the message content to JSON
             const paymentData = JSON.parse(msg.content.toString());
-            if (paymentData.status === true) {
+            
+            if (paymentData.status == true) {
               const user = paymentData.username;
               const soldResponse = await axios.post(TICKET_SOLD, {
                 user
               });
+              channel.ack(msg);
+              return;
             }
+
             else{
               //Unlocking tickets
               const user = paymentData.username;
               const unlockResponse = await axios.post(TICKET_UNLOCK, {
                 user
               });
+              channel.ack(msg);
+              return;
             }
+            
 
           } catch (error) {
-           
+            console.error('Error processing message:', error.message);
+            // Reject the message and requeue it
+            channel.ack(msg);
           }
         });
       } catch (error) {

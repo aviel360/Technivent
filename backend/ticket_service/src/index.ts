@@ -7,6 +7,7 @@ import { getTicketArrayByEventId, lockTicket, ticketSold, unlockTicket } from ".
 
 import { TICKET_BY_EVENT_ID, TICKET_LOCK, TICKET_SOLD, TICKET_UNLOCK } from "./const.js";
 import { TicketManager } from "./models/ticketManager.js";
+import { consumePaymentMessages } from "./consume_payments.js";
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.post(TICKET_LOCK, (req, res) => lockTicket(req, res, ticketManager));
 app.post(TICKET_UNLOCK, (req, res) => unlockTicket(req, res, ticketManager));
 app.get(TICKET_BY_EVENT_ID, getTicketArrayByEventId);
 app.post(TICKET_SOLD, (req, res) => ticketSold(req, res, ticketManager));
+
+consumePaymentMessages();
 
 app.listen(port, () => {
   console.log(`Ticket Server running! port ${port}`);
