@@ -80,11 +80,11 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
   return isLoading ? (
     <Loader></Loader>
   ) : (
-    <Flex justify="center" bg="rgba(0, 0, 0, .3)" direction={"column"}>
+    <Flex justify="center" bg="rgba(0, 0, 0, .1)" direction={"column"}>
       {eventsData.length > 0 && (
         <Flex align="center" columnGap={"1rem"} flex={"1"} justify={"space-between"}>
           <Button ml={"4rem"} mt={"1rem"} size="md" variant="outline" onClick={() => handleSortClick()}>
-            {sortAsc ? <SortNumericDownAlt /> : <SortNumericUpAlt />}
+            {sortAsc == 1 ? <SortNumericUpAlt /> : <SortNumericDownAlt />}
           </Button>
           <form onSubmit={form.onSubmit((values) => Filter(values))}>
             <Flex mr={"4rem"} align="center" columnGap={"1rem"} justify="center">
