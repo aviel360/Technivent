@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Image, Text, Badge, Button, Group, Flex, Loader } from "@mantine/core";
-import { EventData } from "../../utils/Types";
+import { EventData, TicketData } from "../../utils/Types";
 import { useNavigate } from "react-router-dom";
 
 interface EventsProps {
@@ -38,6 +38,12 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
     return { ...event, firstTicket, totalTickets };
   });
 
+  function shouldAppearTransparent(start_date: Date, ticketArray: TicketData[]) {
+    const isPastEvent = new Date(start_date) < new Date();
+    const hasNoAvailableTickets = !ticketArray.some(ticket => ticket.available > 0);
+    return isPastEvent || hasNoAvailableTickets ? 0.5 : 1;
+  }
+
   return ( isLoading ? <Loader></Loader> :
     <Flex
       mih={50}
@@ -56,7 +62,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
       ) : (
         processedEvents.map((event) => (
           <Card key={event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}
-          style={{ opacity: new Date(event.start_date) < new Date() ? 0.5 : 1 }}>
+          style={{opacity: shouldAppearTransparent(event.start_date, event.ticketArray)}}>
             <Card.Section>
               <Image src={event.image} height={160} alt={event.organizer} />
             </Card.Section>

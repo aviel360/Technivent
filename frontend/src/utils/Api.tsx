@@ -116,13 +116,15 @@ class Api {
       return null;
     }
   }
+  
 
-  async getAllEvents()
+  async getAllEvents(query: string = '')
   {
     try{
-      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event/all`);
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`, { params: { all: query } });
       return response;
     } catch (error: any) {
+      console.log(error.response.data);
       window.alert(error.response.data);
       return null;
     }
@@ -160,15 +162,17 @@ class Api {
     }
   }
 
-  async processPayment(payload: { eventID: string, creditCardNum: string, holder: string, cvv: string, expDate: string, ticketId: string, ticketName: string, ticketPrice: number, quantity: number }): Promise<any> {
-    try {
-      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload);
-      return response;
-    } catch (error: any) {
-      window.alert(error.response.data);
-      return null;
+    async processPayment(payload: { eventID: string, creditCardNum: string, holder: string, cvv: string, expDate: string, ticketId: string, ticketPrice: number, quantity: number }): Promise<any> {
+      try {
+        console.log(payload);
+        const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload)
+        return response;
+      } catch (error: any) {
+        console.log("test: ", error);
+        // window.alert(error);
+        return null;
+      }
     }
-  }
   
   async lockTicket(payload: { ticketId: string, lockedTickets: number})
   {
@@ -180,7 +184,10 @@ class Api {
       return null;
     }
   }
+
+  
 }
+
 
 
 

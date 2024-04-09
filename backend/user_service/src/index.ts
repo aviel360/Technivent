@@ -7,7 +7,7 @@ import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signu
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
 import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH } from "./const.js";
-import { CreatePayment, getPayments } from "./payment_routes.js";
+import { CreatePayment_User, getPayments } from "./payment_routes.js";
 import { lockTicketRoute } from "./ticket_routes.js";
 
 dotenv.config();
@@ -33,6 +33,7 @@ app.use(
   })
 );
 
+
 app.put(LOGOUT_PATH, logoutRoute);
 app.use(express.urlencoded({ extended: true }));
 
@@ -52,7 +53,9 @@ app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 app.post(TICKET_LOCK_PATH, lockTicketRoute);
 
 app.get(PAYMENT_PATH, getPayments);
-app.post(PAYMENT_PATH, CreatePayment);
+app.post(PAYMENT_PATH, CreatePayment_User);
+
+
 
 
 app.listen(port, () => {

@@ -245,6 +245,7 @@ const EventPage: React.FC<EventPageProps> = () => {
             <TicketCard
               ticketArray={eventData.ticketArray}
               isBackOffice={isBackOffice}
+              eventID={eventData._id}
               eventName={eventData.title}
             ></TicketCard>
 
