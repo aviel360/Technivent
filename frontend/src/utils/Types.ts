@@ -9,9 +9,9 @@ export enum EventCategory {
   Sports = "Sports Event"
 }
 
-export interface Rating {
-  totalRatings: number,
-  average: number
+export interface RatingType {
+  average: number,
+  total: number
 }
 
 export interface TicketData {
@@ -32,7 +32,7 @@ export interface EventData {
   end_date: Date,
   location: string,
   image: string,
-  rating: Rating,
+  rating: RatingType,
   ticketArray: TicketData[],
 }
 
