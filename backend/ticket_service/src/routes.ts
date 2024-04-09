@@ -5,15 +5,16 @@ import Ticket from "./models/ticket.js"
 export async function lockTicket(req: Request, res: Response, ticketManager: TicketManager) {
   try {
     // Extract necessary data from the request
-    const { username, ticketId, lockedTickets, purchaseFlag } = req.body.payload;
-    
+    const { username, ticketId, lockedTickets, flag } = req.body.payload;
     // Call the lockTickets method of TicketManager to lock the tickets
+    const purchaseFlag = flag === "true" ? true : false;
     await ticketManager.lockTickets(username, ticketId, lockedTickets, purchaseFlag);
 
     // Respond with a success message
     res.status(200).send("Tickets locked successfully");
   } catch (error) {
     // Handle errors
+    console.log(error.message);
     res.status(500).send(error);
   }
 }
