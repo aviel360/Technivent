@@ -7,6 +7,7 @@ import { Months } from '../../../utils/Types';
 import UserBar from '../../user_bar/UserBar';
 import { useContext } from 'react';
 import { userContext } from '../home/Home';
+import Api from '../../../utils/Api';
 
 interface CheckoutProps {
 }
@@ -18,10 +19,12 @@ const Checkout: React.FC<CheckoutProps> = () => {
     const { username } = useContext(userContext);
     
     let query = useQuery();
-    let numOfTickets = query.get("amount");
     let ticketName = query.get("ticketName");
+    let ticketIdQuery = query.get("ticketID");
     let ticketPrice = query.get("Price");
-    let eventName = query.get("event");
+    let numOfTickets = query.get("amount");
+    let  eventIDQuery = query.get("event");
+    let eventName = query.get("name");
 
     const checkoutForm = useForm({
         initialValues: { 
@@ -33,15 +36,57 @@ const Checkout: React.FC<CheckoutProps> = () => {
         },
         validate: {
             cardHolder: (value) => (value.length < 1 ? "Please enter card holder name" : null),
-            cardNumber: (value) => (value.length < 1 ? "Please enter card number" : null),
+            cardNumber: (value) => {
+                if (value.length < 1) {
+                    return "Please enter card number";
+                } else if (value.length !== 16) {
+                    return "Card number must be 16 digits";
+                }
+                return null;
+            },
             expirationMonth: (value) => (value.length < 1 ? "Please select month" : null),
             expirationYear: (value) => (value.length < 1 ? "Please select year" : null),
-            cvv: (value) => (value.length < 1 ? "Please enter cvv" : null),
+            cvv: (value) => {
+                if (value.length < 1) {
+                    return "Please enter CVV";
+                } else if (value.length !== 3) {
+                    return "CVV must be 3 digits";
+                }
+                return null;
+            },
         },
       });
 
-    const handleCheckoutSubmit = (values: any) => {
-        console.log(values);
+    const handleCheckoutSubmit = async (values: any) => {
+        const apiService = new Api();
+        if(eventIDQuery === null || ticketIdQuery === null) return;
+        
+        let month = values.expirationMonth.toString();
+        let year = values.expirationYear.getFullYear().toString().slice(-2);
+        let expDateStr = `${month}/${year}`;
+        const payload = {
+            eventID: eventIDQuery,
+            creditCardNum: values.cardNumber,
+            holder: values.cardHolder,
+            cvv: values.cvv,
+            expDate: expDateStr,
+            ticketId: ticketIdQuery,
+            ticketPrice: Number(ticketPrice),
+            quantity: Number(numOfTickets)
+        };
+        const response = await apiService.processPayment(payload);
+        if(response)
+        {
+            alert("Payment Successful");
+            console.log(response);
+            return;
+        }
+        else
+        {
+            alert("Payment Failed");
+            
+            return;
+        }
     }
       
     return (
@@ -68,6 +113,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
                         name="cardHolder"
                         size="md"
                         withAsterisk
+                        error={checkoutForm.errors.cardHolder}
                          {...checkoutForm.getInputProps("cardHolder")}
                         required
                         />
@@ -78,6 +124,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
                         name="cardNumber"
                         size="md"
                         withAsterisk
+                        error={checkoutForm.errors.cardNumber}
                          {...checkoutForm.getInputProps("cardNumber")}
                         required
                         />
@@ -88,6 +135,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
                         name="cvv"
                         size="md"
                         withAsterisk
+                        error={checkoutForm.errors.cvv}
                         {...checkoutForm.getInputProps("cvv")}
                         required
                         />
@@ -100,6 +148,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
                             size="md"
                             mt={"0.5rem"}
                             withAsterisk
+                            error={checkoutForm.errors.expirationMonth}
                             data={Object.values(Months).map((month) => ({ value: month, label: month }))}
                             {...checkoutForm.getInputProps("expirationMonth")}
                         />
@@ -110,6 +159,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
                             size="md"
                             mt={"0.5rem"}
                             withAsterisk
+                            error={checkoutForm.errors.expirationYear}
                             {...checkoutForm.getInputProps("expirationYear")}>
                             
                         </YearPickerInput>

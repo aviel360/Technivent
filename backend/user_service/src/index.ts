@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, userRoute } from "./user_routes.js";
+import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updatePermissionRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH } from "./const.js";
-import { CreatePayment, getPayments } from "./payment_routes.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH } from "./const.js";
+import { CreatePayment_User, getPayments } from "./payment_routes.js";
 import { lockTicketRoute } from "./ticket_routes.js";
 
 dotenv.config();
@@ -33,25 +33,31 @@ app.use(
   })
 );
 
+
 app.put(LOGOUT_PATH, logoutRoute);
 app.use(express.urlencoded({ extended: true }));
 
+app.get(USER_PATH, userRoute);
 app.post(LOGIN_PATH, loginRoute);
 app.post(SIGNUP_PATH, signupRoute);
 app.post(PASSWORD_RESET, resetPasswordRoute);
-app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
+app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
+app.put(PERMMISION_PATH, updatePermissionRoute);
+
+app.get(EVENT_PATH, getEventRoute);
 app.post(EVENT_PATH, addEventRoute);
-app.post(TICKET_LOCK_PATH, lockTicketRoute);
 app.put(EVENT_BY_ID, updateEventRoute);
 
-app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
-app.get(USER_PATH, userRoute);
-app.get(EVENT_PATH, getEventRoute);
+app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
+
+app.post(TICKET_LOCK_PATH, lockTicketRoute);
+
 app.get(PAYMENT_PATH, getPayments);
-app.post(PAYMENT_PATH, CreatePayment)
+app.post(PAYMENT_PATH, CreatePayment_User);
+
 
 
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`User Server running! port ${port}`);
 });

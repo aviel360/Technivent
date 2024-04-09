@@ -7,10 +7,11 @@ import Api from "../../utils/Api";
 interface TicketCardProps {
   ticketArray: TicketData[];
   isBackOffice: boolean;
+  eventID?: string;
   eventName?: string;
 }
 
-const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, eventName }) => {
+const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eventID, eventName }) => {
   const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
   const navigate = useNavigate();
 
@@ -26,7 +27,17 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice, even
     const apiService = new Api();
     const response = await apiService.lockTicket({ ticketId, lockedTickets: inputValue });
     if (response)
-      navigate(`/checkout?ticketName=${ticketName}&Price=${ticketPrice}&amount=${inputValue}&event=${eventName}`);
+      {
+        const params = new URLSearchParams({
+          ticketName: ticketName,
+          ticketID: ticketId,
+          Price: ticketPrice.toString(),
+          amount: inputValue.toString(),
+          event: eventID || '',
+          name: eventName || ''
+        });
+        navigate(`/checkout?${params.toString()}`);
+      }
     else
       navigate(-1);
   };

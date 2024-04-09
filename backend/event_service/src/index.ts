@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { getEvents, addEvent, getEventById, getEventArrayById, updateEvent} from "./routes.js";
 
 
-import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH, EVENT_TICKETS } from "./const.js";
+import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH } from "./const.js";
 
 dotenv.config();
 
@@ -28,5 +28,5 @@ app.post(EVENT_PATH, addEvent);
 app.put(EVENT_BY_ID, updateEvent);
 
 app.listen(port, () => {
-  console.log(`Server running! port ${port}`);
+  console.log(`Event Server running! port ${port}`);
 });

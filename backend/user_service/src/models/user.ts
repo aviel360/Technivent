@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 export enum UserType {
     User = "User",
     Admin = "Admin",
-    Manager = "Manger",
+    Manager = "Manager",
     Worker = "Worker"
 }
 

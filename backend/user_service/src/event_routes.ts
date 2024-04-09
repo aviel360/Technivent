@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from "./const.js";
+import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from './const.js'
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./comment_publisher.js";
 import { JwtPayload } from "jsonwebtoken";
@@ -14,7 +14,11 @@ export async function getEventRoute(req: Request, res: Response) {
       return getEventById_user(req, res, id.toString());
     }
     const eventResponse: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
-    const dbRes = await getTicketArray(eventResponse.data.dbRes);
+    let dbRes = await getTicketArray(eventResponse.data.dbRes);
+    
+    if(!req.query.all) {
+      dbRes = dbRes.filter(event => event.ticketArray.some(ticket => ticket.available > 0));
+    }
     res.status(eventResponse.status).send({dbRes});
   } catch (error: any) {
     res.status(500).send(error.message);

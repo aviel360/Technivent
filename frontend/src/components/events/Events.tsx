@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Image, Text, Badge, Button, Group, Flex, Loader, NumberInput } from "@mantine/core";
 import { SortNumericDownAlt, SortNumericUpAlt } from "react-bootstrap-icons";
-import { EventData } from "../../utils/Types";
+import { EventData, TicketData } from "../../utils/Types";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "@mantine/form";
 
@@ -27,6 +27,12 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
     },
   });
 
+  function shouldAppearTransparent(start_date: Date, ticketArray: TicketData[]) {
+    const isPastEvent = new Date(start_date) < new Date();
+    const hasNoAvailableTickets = !ticketArray.some(ticket => ticket.available > 0);
+    return isPastEvent || hasNoAvailableTickets ? 0.5 : 1;
+  }
+  
   async function Filter(values: { min: number; max: number }) {
     setMin(values.min || 0);
     setMax(values.max || Infinity);
@@ -65,6 +71,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
     (processedEvents = processedEvents.filter((event) => {
       return event.totalTickets > 0 && event.firstTicket.price >= min && event.firstTicket.price <= max;
     }));
+
 
   processedEvents = [...processedEvents].sort((eventA, eventB) => {
     return sortAsc*((eventA.totalTickets > 0 ? eventA.firstTicket.price : 0) - (eventB.totalTickets > 0 ? eventB.firstTicket.price : 0))
@@ -113,7 +120,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
               withBorder
               w={"350px"}
               h={"350px"}
-              style={{ opacity: new Date(event.start_date) < new Date() ? 0.5 : 1 }}
+              style={{opacity: shouldAppearTransparent(event.start_date, event.ticketArray)}}
             >
               <Card.Section>
                 <Image src={event.image} height={160} alt={event.organizer} />

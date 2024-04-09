@@ -3,8 +3,9 @@ import Payment from "./models/payment.js";
 import axios from "axios";
 import { PaymentPublisherChannel } from "./payment_publisher.js";
 import { EVENT_TICKETS } from "../../event_service/src/const.js";
-import { HAMMERHEAD_API } from "./const.js";
+import { HAMMERHEAD_API, TICKET_LOCK_PATH, TICKET_SERVICE } from "./const.js";
 import {TICKET_BY_EVENT_ID} from "../../ticket_service/src/const.js";
+import {TICKET_LOCK} from "../../ticket_service/src/const.js";
 
 export async function getPayments(req: Request, res: Response) {
   let dbRes;
@@ -34,19 +35,22 @@ export async function getPayments(req: Request, res: Response) {
 }
 
 export async function CreatePayment(req: Request, res: Response) {
-  const {username, eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketName, ticketPrice, quantity } = req.body;
-
-  //Check if tickets are still available in the moment of payment
-
-  const ticketArrayRes = await axios.get(TICKET_BY_EVENT_ID + eventID);
-  const ticketArray = ticketArrayRes.data.ticketArray;
-  const ticket = ticketArray.find((ticket: any) => ticket.name == ticketName);
-  if(ticket.quantity < quantity){
-    res.status(400).send("Not enough tickets available");
+  const {username, eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketPrice, quantity } = req.body;
+  //check if the tickets are available to purchease using the ticket service lockTicket 
+  try {
+    const response = await axios.post(`${TICKET_SERVICE}${TICKET_LOCK_PATH}`, {
+      username,
+      ticketId,
+      lockedTickets: quantity,
+      purchaseFlag: true
+    });
+    if(response.status != 200){
+      return res.status(500).send("Tickets are not available");
+    }
+  } catch (error: any) {
+    res.status(500).send("Tickets are not available");
     return;
   }
-  
-  //check if the tickets are still locked - TODO 
 
   //send CC details to payment hammerhead api
   const totalPrice = quantity * ticketPrice;
@@ -69,14 +73,17 @@ export async function CreatePayment(req: Request, res: Response) {
       await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId}));
 
       res.status(200).send({ transactionId });
+      return;
     } catch (error: any) {
       res.status(500).send(error); 
+      return;
     }
   }
   else{
     //send fail msg to ticket_service and user_service to unlock the tickets (msgBroker)
     await publisherChannel.sendEvent(JSON.stringify({ status: false, username, ticketId, quantity}));
     res.status(500).send("Payment failed");
+    return;
   }
 }
 

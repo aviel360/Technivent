@@ -1,4 +1,6 @@
 import * as amqp from 'amqplib';
+import axios from 'axios';
+import {TICKET_SOLD, TICKET_UNLOCK} from "./const.js";
 
 
 export const consumePaymentMessages = async () => {
@@ -33,10 +35,17 @@ export const consumePaymentMessages = async () => {
             // Parse the message content to JSON
             const paymentData = JSON.parse(msg.content.toString());
             if (paymentData.status === true) {
-              //TODO
+              const user = paymentData.username;
+              const soldResponse = await axios.post(TICKET_SOLD, {
+                user
+              });
             }
             else{
-
+              //Unlocking tickets
+              const user = paymentData.username;
+              const unlockResponse = await axios.post(TICKET_UNLOCK, {
+                user
+              });
             }
 
           } catch (error) {
