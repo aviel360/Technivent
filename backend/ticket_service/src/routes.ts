@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TicketManager } from "./models/ticketManager.js";
-import Ticket from "./models/ticket.js"
+import Ticket from "./models/ticket.js";
 
 export async function lockTicket(req: Request, res: Response, ticketManager: TicketManager) {
   try {
@@ -37,7 +37,7 @@ export async function unlockTicket(req: Request, res: Response, ticketManager: T
 
 export async function ticketSold(req: Request, res: Response, ticketManager: TicketManager) {
   try {
-    const { username} = req.body.payload;
+    const { username } = req.body.payload;
 
     // mark the tickets as sold
     await ticketManager.deleteLockedTickets(username);
@@ -47,12 +47,27 @@ export async function ticketSold(req: Request, res: Response, ticketManager: Tic
   }
 }
 
-
 export async function getTicketArrayByEventId(req: Request, res: Response) {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     const ticketArray = await Ticket.find({ eventID: id });
-    res.status(200).send({ eventID:id, ticketArray });
+    res.status(200).send({ eventID: id, ticketArray });
+  } catch (error: any) {
+    res.status(500).send(error);
+  }
+}
+
+export async function addTickets(req: Request, res: Response) {
+  console.log(req.body);
+  const ticketArray = req.body.ticketArray;
+  try {
+    const ticketPromises = ticketArray.map(async (ticket: any) => {
+      ticket.eventID = req.body.eventID;
+      const newTicket = new Ticket(ticket);
+      return newTicket.save();
+    });
+    await Promise.all(ticketPromises);
+    res.status(201).send("Success");
   } catch (error: any) {
     res.status(500).send(error);
   }

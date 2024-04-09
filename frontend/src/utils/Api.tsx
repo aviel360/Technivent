@@ -1,30 +1,33 @@
-import axios, { AxiosResponse } from 'axios';
-import { production } from './Env';
-import { TicketData } from './Types';
+import axios, { AxiosResponse } from "axios";
+import { production } from "./Env";
+import { TicketData } from "./Types";
 
 class Api {
   baseUrl: string;
   private axiosInstance;
 
   constructor() {
-    this.baseUrl = production ? 'https://technivent.onrender.com/api' : 'http://localhost:3000/api';
+    this.baseUrl = production ? "https://technivent.onrender.com/api" : "http://localhost:3000/api";
     this.axiosInstance = axios.create({
-      withCredentials: true
+      withCredentials: true,
     });
   }
 
-  async getUserData() : Promise<any> {
+  async getUserData(): Promise<any> {
     try {
-      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user`)
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user`);
       return response;
-    }
-    catch (error: any)
-    {
+    } catch (error: any) {
       return null;
     }
   }
 
-  async signUp(payload: { username: string, password: string, secretQuestion: string, secretAnswer: string }): Promise<any> {
+  async signUp(payload: {
+    username: string;
+    password: string;
+    secretQuestion: string;
+    secretAnswer: string;
+  }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/signup`, payload);
       return response;
@@ -44,7 +47,7 @@ class Api {
     }
   }
 
-  async getPassword(payload: { username: string, secretAnswer: string, newPassword: string }): Promise<any> {
+  async getPassword(payload: { username: string; secretAnswer: string; newPassword: string }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/reset-password`, payload);
       return response;
@@ -54,10 +57,13 @@ class Api {
     }
   }
 
-  async PostComment(payload: { username: string, eventId: string, comment: string }): Promise<any> {
+  async PostComment(payload: { username: string; eventId: string; comment: string }): Promise<any> {
     try {
       const currentDate = new Date().toISOString();
-      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/comment`, {...payload, date: currentDate});
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/comment`, {
+        ...payload,
+        date: currentDate,
+      });
       return response;
     } catch (error: any) {
       window.alert(error.response.data);
@@ -65,17 +71,19 @@ class Api {
     }
   }
 
-  async addEvent(payload: { 
-    title: string, 
-    category: string, 
-    description: string, 
-    organizer: string, 
-    location: string, 
-    start_date: Date, 
-    end_date: Date, 
-    image: string, 
-    ticketArray: TicketData[], 
-    rating: { average: number, total: number } 
+  async addEvent(payload: {
+    event: {
+      title: string;
+      category: string;
+      description: string;
+      organizer: string;
+      location: string;
+      start_date: Date;
+      end_date: Date;
+      image: string;
+      rating: { average: number; total: number };
+    };
+    ticketArray: TicketData[];
   }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/event`, payload);
@@ -86,7 +94,7 @@ class Api {
     }
   }
 
-  async Login(payload: { username: string, password: string }): Promise<any> {
+  async Login(payload: { username: string; password: string }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/login`, payload);
       return response;
@@ -106,9 +114,8 @@ class Api {
     }
   }
 
-  async getEvents()
-  {
-    try{
+  async getEvents() {
+    try {
       const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`);
       return response;
     } catch (error: any) {
@@ -116,11 +123,9 @@ class Api {
       return null;
     }
   }
-  
 
-  async getAllEvents(query: string = '')
-  {
-    try{
+  async getAllEvents(query: string = "") {
+    try {
       const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/event`, { params: { all: query } });
       return response;
     } catch (error: any) {
@@ -151,8 +156,7 @@ class Api {
     }
   }
 
-
-  async updateEventDates(payload: { id: string, start_date: Date, end_date: Date }): Promise<any> {
+  async updateEventDates(payload: { id: string; start_date: Date; end_date: Date }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/event/${payload.id}`, payload);
       return response;
@@ -162,18 +166,26 @@ class Api {
     }
   }
 
-    async processPayment(payload: { eventID: string, creditCardNum: string, holder: string, cvv: string, expDate: string, ticketId: string, ticketPrice: number, quantity: number }): Promise<any> {
-      try {
-        const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload);
-        return response;
-      } catch (error: any) {
-        window.alert(error.response.data);
-        return null;
-      }
+  async processPayment(payload: {
+    eventID: string;
+    creditCardNum: string;
+    holder: string;
+    cvv: string;
+    expDate: string;
+    ticketId: string;
+    ticketPrice: number;
+    quantity: number;
+  }): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
     }
-  
-  async lockTicket(payload: { ticketId: string, lockedTickets: number})
-  {
+  }
+
+  async lockTicket(payload: { ticketId: string; lockedTickets: number }) {
     try {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/ticket/lock`, payload);
       return response;
@@ -183,7 +195,7 @@ class Api {
     }
   }
 
-  async updateEventRating(payload: { eventid: string, userRating:number}): Promise<any> {
+  async updateEventRating(payload: { eventid: string; userRating: number }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/event/rating`, payload);
       return response;
@@ -194,7 +206,4 @@ class Api {
   }
 }
 
-
-
-
-export default Api
+export default Api;

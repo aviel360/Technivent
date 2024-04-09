@@ -40,6 +40,26 @@ export async function addEvent(req: Request, res: Response) {
     }
 }
 
+export async function deleteEvent(req: Request, res: Response) {
+
+  const eventId = req.params.eventID;
+
+  try {
+    // Find the event by ID and delete it
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+
+    if (!deletedEvent) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    // If the event is successfully deleted, return a success response
+    res.status(200).send('Event deleted successfully');
+  } catch (error) {
+    // If an error occurs during the deletion process, return a 500 status code
+    res.status(500).send(error);
+  }
+}
+
 export async function getEventById(req: Request, res: Response) {
   try {
     const id = req.params.id;
