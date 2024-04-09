@@ -1,11 +1,11 @@
-import { Button, Card, Flex, Select, TextInput, Text, Badge} from '@mantine/core';
+import { Button, Card, Flex, Select, TextInput, Text, Badge, Loader} from '@mantine/core';
 import { YearPickerInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Months } from '../../../utils/Types';
 import UserBar from '../../user_bar/UserBar';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { userContext } from '../home/Home';
 import Api from '../../../utils/Api';
 
@@ -17,6 +17,7 @@ function useQuery() {
   }  
 const Checkout: React.FC<CheckoutProps> = () => {
     const { username } = useContext(userContext);
+    const navigate = useNavigate();
     
     let query = useQuery();
     let ticketName = query.get("ticketName");
@@ -56,8 +57,10 @@ const Checkout: React.FC<CheckoutProps> = () => {
             },
         },
       });
+      const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleCheckoutSubmit = async (values: any) => {
+        setIsLoading(true);
         const apiService = new Api();
         if(eventIDQuery === null || ticketIdQuery === null) return;
         
@@ -72,19 +75,24 @@ const Checkout: React.FC<CheckoutProps> = () => {
             expDate: expDateStr,
             ticketId: ticketIdQuery,
             ticketPrice: Number(ticketPrice),
-            quantity: Number(numOfTickets)
+            quantity: Number(numOfTickets),
+            eventName: eventName
         };
         const response = await apiService.processPayment(payload);
-        if(response)
-        {
+        if (response) {
+            setIsLoading(false);
             alert("Payment Successful");
-            console.log(response);
+            const params = new URLSearchParams({
+                id: response.data.saved_id,
+                event: eventName || "",
+                ticket: ticketName || "",
+                price: ticketPrice || "",
+                amount: numOfTickets || ""
+            });
+            navigate(`/success?${params.toString()}`);
             return;
-        }
-        else
-        {
-            alert("Payment Failed");
-            
+        } else {
+            alert("Payment Failed, please try again.");
             return;
         }
     }
@@ -170,9 +178,16 @@ const Checkout: React.FC<CheckoutProps> = () => {
                         </Flex>
                         
                         <br />
-                        <Button type="submit" size="md" p={"10px"} radius={"md"}>
-                            Purchase
-                        </Button>
+                        <Flex direction={"row"} justify={"center"}>
+                        {isLoading ? (
+                                <Loader size={"md"}/>
+                            ) : (
+                                <Button type="submit" size="md" p={"10px"} radius={"md"}>
+                                Purchase
+                                </Button>
+                            )}  
+                        </Flex>
+                     
                         
                     </form>
                 </Card>

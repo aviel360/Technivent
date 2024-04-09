@@ -38,16 +38,18 @@ export async function CreatePayment(req: Request, res: Response) {
   const {username, eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketPrice, quantity } = req.body;
   //check if the tickets are available to purchease using the ticket service lockTicket 
   try {
+    
+    const flag = "true";
     const response = await axios.post(`${TICKET_SERVICE}${TICKET_LOCK_PATH}`, {
-      username,
-      ticketId,
-      lockedTickets: quantity,
-      purchaseFlag: true
+      payload: { username, ticketId: ticketId, lockedTickets: quantity, purchaseFlag: flag}    
     });
+  
     if(response.status != 200){
-      return res.status(500).send("Tickets are not available");
+      return res.status(400).send("Tickets are not available");
     }
+    
   } catch (error: any) {
+    console.log(error);
     res.status(500).send("Tickets are not available");
     return;
   }
@@ -55,32 +57,34 @@ export async function CreatePayment(req: Request, res: Response) {
   //send CC details to payment hammerhead api
   const totalPrice = quantity * ticketPrice;
   const publisherChannel = new PaymentPublisherChannel();
-
   const paymentResponse = await axios.post(HAMMERHEAD_API, { creditCardNum, holder, cvv, expDate, totalPrice });
   if(paymentResponse.status == 200){
     const transactionId = paymentResponse.data; //should we store it in db or just return it to show in suceess page?
     const paymentData = {
-      eventID,
-      username,
+      eventID:eventID,
+      username:username,
       date: new Date(),
-      ticketId,
-      totalPrice
+      ticketID: ticketId,
+      quantity:quantity
     };
+    
     const payment = new Payment(paymentData);
     try {
-      await payment.save();
-      //send success msg to ticket_service and user_service to unlock the tickets (msgBroker)
+      const savedPayment = await payment.save();
+      const saved_id = savedPayment._id;
+      //send success msg to ticket_service to unlock the tickets (msgBroker)
       await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId}));
-
-      res.status(200).send({ transactionId });
+      
+      res.status(200).send({ transactionId, saved_id});
       return;
     } catch (error: any) {
+      console.log(error.message);
       res.status(500).send(error); 
       return;
     }
   }
   else{
-    //send fail msg to ticket_service and user_service to unlock the tickets (msgBroker)
+    //send fail msg to ticket_service to unlock the tickets (msgBroker)
     await publisherChannel.sendEvent(JSON.stringify({ status: false, username, ticketId, quantity}));
     res.status(500).send("Payment failed");
     return;

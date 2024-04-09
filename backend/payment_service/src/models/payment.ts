@@ -5,7 +5,7 @@ const paymentSchema = new mongoose.Schema(
         eventID: { type: String, required: true, unique: false },
         username: { type: String, required: true, unique: false },
         date: { type: Date, required: true },
-        ticketName: { type: String, required: true },
+        ticketID: { type: String, required: true },
         quantity: { type: Number, required: true }
     }
 );
