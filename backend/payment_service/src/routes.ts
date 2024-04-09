@@ -65,16 +65,17 @@ export async function CreatePayment(req: Request, res: Response) {
       username:username,
       date: new Date(),
       ticketID: ticketId,
-      quantity:totalPrice
+      quantity:quantity
     };
     
     const payment = new Payment(paymentData);
     try {
-      await payment.save();
+      const savedPayment = await payment.save();
+      const saved_id = savedPayment._id;
       //send success msg to ticket_service and user_service to unlock the tickets (msgBroker)
       await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId}));
       
-      res.status(200).send({ transactionId });
+      res.status(200).send({ transactionId, saved_id});
       return;
     } catch (error: any) {
       console.log(error.message);

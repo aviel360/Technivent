@@ -77,7 +77,6 @@ export async function CreatePayment_User(req: Request, res: Response) {
       res.status(response.status).send(response.data);
     }
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send("feadzbes");
+    res.status(500).send(error.message);
   }
 }
