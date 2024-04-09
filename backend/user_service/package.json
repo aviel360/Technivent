@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/user_service/src/index.js",
-    "dev": "tsc-watch --onSuccess \"node ./dist/user_service/src/index.js\""
+    "start": "node ./dist/index.js",
+    "dev": "tsc-watch --onSuccess \"node ./dist/index.js\""
   },
   "author": "",
   "license": "ISC",

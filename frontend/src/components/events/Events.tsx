@@ -13,7 +13,7 @@ interface EventsProps {
 function Events({ fetchData, isBackOffice }: EventsProps) {
   const [eventsData, setEventsData] = useState<EventData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [sortAsc, setSortAsc] = useState<number>(1);
+  const [sortAsc, setSortAsc] = useState<number>(-1);
   const [filter, setFilter] = useState<boolean>(false);
   const [min, setMin] = useState<number>(0);
   const [max, setMax] = useState<number>(Infinity);
@@ -136,7 +136,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
                 {new Date(event.start_date).toDateString()}
               </Badge>
 
-              <Text size="sm" c="dimmed">
+              <Text h={25} size="sm" c="dimmed" truncate>
                 {event.description}
               </Text>
 
