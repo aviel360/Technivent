@@ -43,9 +43,7 @@ export async function getPayments(req: Request, res: Response) {
   }
 }
 
-export async function CreatePayment_User(req: Request, res: Response) {
-  console.log("CreatePayment");
-  
+export async function CreatePayment_User(req: Request, res: Response) { 
   try {
     const token = req.cookies.token;
     if (!token) {

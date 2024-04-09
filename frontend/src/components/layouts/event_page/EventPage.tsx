@@ -7,6 +7,7 @@ import { userContext } from '../home/Home';
 import { Badge, Button, Card, Flex,Group,Text, Modal} from '@mantine/core';
 import Comments from '../../comments/Comments';
 import TicketCard from '../../ticket_card/TicketCard';
+import StarRating from '../../star_rating/StarRating';
 import { useDisclosure } from '@mantine/hooks';
 import { DateTimePicker } from '@mantine/dates';
 
@@ -241,6 +242,8 @@ const EventPage: React.FC<EventPageProps> = () => {
                         </Card>
 
             <br />
+             
+            <StarRating eventRating={eventData.rating}></StarRating>
 
             <TicketCard
               ticketArray={eventData.ticketArray}

@@ -185,7 +185,15 @@ class Api {
     }
   }
 
-  
+  async updateEventRating(payload: { eventid: string, userRating:number}): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/event/rating`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
 }
 
 
