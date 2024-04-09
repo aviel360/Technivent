@@ -10,6 +10,7 @@ import { UserType } from "../../../utils/Types";
 import RouteAuth from "../../route_auth/RouteAuth";
 import Checkout from "../checkout/Checkout";
 import UserPage from "../user-page/UserPage";
+import OrderSuccess from "../order_success/OrderSuccess";
 
 interface HomeProps {}
 
@@ -108,6 +109,14 @@ const Home: React.FC<HomeProps> = () => {
               element={
                 <RouteAuth needAuth={true}>
                   <UserPage />
+                </RouteAuth>
+              }
+            />
+             <Route
+              path="/success/*"
+              element={
+                <RouteAuth needAuth={true}>
+                  <OrderSuccess />
                 </RouteAuth>
               }
             />

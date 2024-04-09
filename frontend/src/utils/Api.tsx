@@ -164,12 +164,10 @@ class Api {
 
     async processPayment(payload: { eventID: string, creditCardNum: string, holder: string, cvv: string, expDate: string, ticketId: string, ticketPrice: number, quantity: number }): Promise<any> {
       try {
-        console.log(payload);
-        const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload)
+        const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/payment`, payload);
         return response;
       } catch (error: any) {
-        console.log("test: ", error);
-        // window.alert(error);
+        window.alert(error.response.data);
         return null;
       }
     }

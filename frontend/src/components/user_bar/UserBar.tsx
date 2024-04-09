@@ -11,9 +11,10 @@ interface UserBarProps {
   goBack: boolean;
   isBackOffice?: boolean ;
   setIsBackOffice?: React.Dispatch<React.SetStateAction<boolean>> | null;
+  goBackToCatalog?: boolean;
 }
 
-const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice }) => {
+const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice, goBackToCatalog }) => {
   let navigate = useNavigate();
   const { userType } = useContext(userContext);
 
@@ -33,6 +34,13 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
   return (
       <Flex miw={'50rem'} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
         <Group>
+        {goBackToCatalog && (
+            <Button variant="light" leftSection={<ChevronCompactLeft />}
+            onClick={() => navigate("/")}>
+              Go To Catalog
+            </Button>
+          )}
+
           {goBack && (
             <Button variant="light" leftSection={<ChevronCompactLeft />}
             onClick={() => navigate(-1)}>
