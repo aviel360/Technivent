@@ -16,9 +16,6 @@ export async function getEventRoute(req: Request, res: Response) {
     const eventResponse: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
     let dbRes = await getTicketArray(eventResponse.data.dbRes);
     
-    if(!req.query.all) {
-      dbRes = dbRes.filter(event => event.ticketArray.some(ticket => ticket.available > 0));
-    }
     res.status(eventResponse.status).send({dbRes});
   } catch (error: any) {
     res.status(500).send(error.message);
