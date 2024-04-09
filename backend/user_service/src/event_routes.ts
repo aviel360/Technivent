@@ -36,7 +36,7 @@ export async function getEventById_user(req: Request, res: Response, id: string)
     };
     res.status(200).send(data);
   } catch (error: any) {
-    res.status(500).send(error);
+    res.status(500).send(error.message);
   }
 }
 
