@@ -2,10 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-import { getTicketArrayByEventId, lockTicket, ticketSold, unlockTicket } from "./routes.js";
+import { addTickets, getTicketArrayByEventId, lockTicket, ticketSold, unlockTicket } from "./routes.js";
 
 
-import { TICKET_BY_EVENT_ID, TICKET_LOCK, TICKET_SOLD, TICKET_UNLOCK } from "./const.js";
+import { TICKET_ADD, TICKET_BY_EVENT_ID, TICKET_LOCK, TICKET_SOLD, TICKET_UNLOCK } from "./const.js";
 import { TicketManager } from "./models/ticketManager.js";
 
 dotenv.config();
@@ -26,6 +26,7 @@ const ticketManager = new TicketManager();
 app.post(TICKET_LOCK, (req, res) => lockTicket(req, res, ticketManager));
 app.post(TICKET_UNLOCK, (req, res) => unlockTicket(req, res, ticketManager));
 app.get(TICKET_BY_EVENT_ID, getTicketArrayByEventId);
+app.post(TICKET_ADD, addTickets);
 app.post(TICKET_SOLD, (req, res) => ticketSold(req, res, ticketManager));
 
 app.listen(port, () => {

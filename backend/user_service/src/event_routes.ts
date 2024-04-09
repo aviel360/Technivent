@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE} from './const.js'
+import { COMMENT_PATH, COMMENT_SERVICE, EVENT_PATH, EVENT_SERVICE, TICKET_ADD, TICKET_SERVICE } from "./const.js";
 import axios, { AxiosResponse } from "axios";
 import { PublisherChannel } from "./comment_publisher.js";
 import { JwtPayload } from "jsonwebtoken";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { UserType } from "./models/user.js";
 import { getTicketArray } from "./ticket_routes.js";
 
@@ -15,8 +15,8 @@ export async function getEventRoute(req: Request, res: Response) {
     }
     const eventResponse: AxiosResponse = await axios.get(EVENT_SERVICE + EVENT_PATH, { params: req.query });
     let dbRes = await getTicketArray(eventResponse.data.dbRes);
-    
-    res.status(eventResponse.status).send({dbRes});
+
+    res.status(eventResponse.status).send({ dbRes });
   } catch (error: any) {
     res.status(500).send(error.message);
   }
@@ -26,13 +26,13 @@ export async function getEventById_user(req: Request, res: Response, id: string)
   try {
     const [eventResponse, commentsResponse] = await Promise.all([
       axios.get(`${EVENT_SERVICE}${EVENT_PATH}/${id}`),
-      axios.get(`${COMMENT_SERVICE}${COMMENT_PATH}?eventID=${id}`)
+      axios.get(`${COMMENT_SERVICE}${COMMENT_PATH}?eventID=${id}`),
     ]);
 
     const dbRes = await getTicketArray([eventResponse.data.dbRes]);
     const data = {
       event: dbRes[0],
-      comments: commentsResponse.data
+      comments: commentsResponse.data,
     };
     res.status(200).send(data);
   } catch (error: any) {
@@ -56,14 +56,26 @@ export async function addEventRoute(req: Request, res: Response) {
   if (userType === userType.User) {
     return res.status(403).send("Forbidden");
   }
-
   try {
-    const response: AxiosResponse = await axios.post(EVENT_SERVICE + EVENT_PATH, req.body, {
+    console.log(req.body);
+    const eventResponse = await axios.post(EVENT_SERVICE + EVENT_PATH, req.body.event, {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
-    res.status(response.status).send(response.data);
+
+    try
+    {
+      const payload = {ticketArray: req.body.ticketArray, eventID: eventResponse.data.eventID }
+      axios.post(`${TICKET_SERVICE}${TICKET_ADD}`, payload);
+    }
+    catch(error: any)
+    {
+      await axios.delete(`${EVENT_SERVICE}${EVENT_PATH}/${eventResponse.data.eventID}`);
+      throw error;
+    }
+    
+    res.status(200).send("Event created successfully");
   } catch (error: any) {
     res.status(500).send(error.message);
   }
@@ -82,16 +94,16 @@ export async function updateEventRoute(req: Request, res: Response) {
     return res.status(401).send("Invalid token");
   }
 
-  if (userType === UserType.User || userType === UserType.Worker) //only Manager and Admin can update event
-  {
+  if (userType === UserType.User || userType === UserType.Worker) {
+    //only Manager and Admin can update event
     return res.status(403).send("Forbidden: Only Manager and Admin can update event");
   }
 
   try {
-    const response: AxiosResponse = await axios.put(EVENT_SERVICE + EVENT_PATH + '/' + req.params.id, req.body, {
+    const response: AxiosResponse = await axios.put(EVENT_SERVICE + EVENT_PATH + "/" + req.params.id, req.body, {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
     res.status(response.status).send(response.data);
   } catch (error: any) {
@@ -103,7 +115,7 @@ export async function updateEventRoute(req: Request, res: Response) {
 export async function addComment(req: Request, res: Response, publisherChannel: PublisherChannel) {
   try {
     await publisherChannel.sendEvent(JSON.stringify(req.body));
-    res.status(201).send({ message: 'Comment published' });
+    res.status(201).send({ message: "Comment published" });
   } catch (error) {
     res.status(500).send(error.message);
   }

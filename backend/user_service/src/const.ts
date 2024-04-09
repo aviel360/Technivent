@@ -30,6 +30,7 @@ export const PAYMENT_SERVICE = process.env.NODE_ENV === "production" ? PAYMENT_S
 // Ticket
 export const TICKET_LOCK_PATH = "/api/ticket/lock";
 export const TICKET_GET = "/api/ticket";
+export const TICKET_ADD = "/api/ticket/add";
 export const TICKET_SERVICE_LOCAL = "http://localhost:3004";
 export const TICKET_SERVICE_PRODUCTION = "https://technivent-ticket.onrender.com";
 export const TICKET_SERVICE = process.env.NODE_ENV === "production" ? TICKET_SERVICE_PRODUCTION : TICKET_SERVICE_LOCAL;

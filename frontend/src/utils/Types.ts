@@ -16,6 +16,7 @@ export interface Rating {
 
 export interface TicketData {
   _id?: string,
+  eventID: string,
   name: string,
   totalTickets: number,
   available: number,
