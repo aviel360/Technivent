@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Request, Response } from "express";
 import { EVENT_SERVICE, EVENT_PATH, PAYMENT_SERVICE, PAYMENT_PATH } from "./const.js";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { PAYMENT_ROUTE } from "../../payment_service/src/const.js";
+
 
 export async function getPayments(req: Request, res: Response) {
   try {
@@ -43,7 +43,9 @@ export async function getPayments(req: Request, res: Response) {
   }
 }
 
-export async function CreatePayment(req: Request, res: Response) {
+export async function CreatePayment_User(req: Request, res: Response) {
+  console.log("CreatePayment");
+  
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -58,8 +60,8 @@ export async function CreatePayment(req: Request, res: Response) {
       return res.status(401).send("Invalid token");
     }
 
-    const { eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketName, ticketPrice, quantity } = req.body;
-    const response: AxiosResponse = await axios.post(PAYMENT_ROUTE, {
+    const { eventID, creditCardNum, holder, cvv, expDate, ticketId, ticketPrice, quantity } = req.body;
+    const response: AxiosResponse = await axios.post(PAYMENT_SERVICE+ PAYMENT_PATH, {
       username,
       eventID,
       creditCardNum,
@@ -67,7 +69,6 @@ export async function CreatePayment(req: Request, res: Response) {
       cvv,
       expDate,
       ticketId,
-      ticketName,
       ticketPrice,
       quantity
     });
@@ -78,7 +79,7 @@ export async function CreatePayment(req: Request, res: Response) {
       res.status(response.status).send(response.data);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Failed to process payment");
+    console.error(error.message);
+    res.status(500).send("feadzbes");
   }
 }
