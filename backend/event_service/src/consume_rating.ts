@@ -30,7 +30,6 @@ export const consumeRatingMessages = async () => {
     // `channel.ack(msg)` acknowledges the message, indicating it has been processed and can be removed from the queue.
     await channel.consume(queue, async (msg) => {
         try {
-          console.log("Consuming message");
             // Parse the message content to JSON
             const ratingData = JSON.parse(msg.content.toString()); 
             
