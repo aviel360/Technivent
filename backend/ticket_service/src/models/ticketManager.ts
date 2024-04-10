@@ -47,6 +47,7 @@ export class TicketManager {
   async unlockTickets(username: string): Promise<void> {
     try {
       const userTickets = this.lockedTickets[username];
+      if(!userTickets) return;
       await Ticket.findByIdAndUpdate(
         userTickets.ticketId,
         { $inc: { available: userTickets.lockedTickets } }, // Increment available tickets
