@@ -4,12 +4,13 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { getUserClosestEvent, loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updateEventsArray, updatePermissionRoute, userRoute } from "./user_routes.js";
-import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
+import { getEventRoute, addComment, addEventRoute, updateEventRoute, editRating } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH, USER_EVENTS_PATH } from "./const.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH, USER_EVENTS_PATH, USER_RATING_EVENT } from "./const.js";
 import { CreatePayment_User, getPayments } from "./payment_routes.js";
 import { lockTicketRoute } from "./ticket_routes.js";
 import {consumePaymentMessages} from "./consume_payments_user.js";
+import { RatingPublisherChannel } from "./rating_publisher.js";
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ const port = process.env.PORT || 3000;
 const origin = process.env.NODE_ENV === "production" ? "https://aviel360.github.io" : 'http://localhost:5173';
 const app = express();
 const publisherChannel = new PublisherChannel();
-
+const ratingChannel = new RatingPublisherChannel();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -48,10 +49,12 @@ app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.put(PERMMISION_PATH, updatePermissionRoute);
 app.put(USER_EVENTS_PATH, updateEventsArray);
 app.get(USER_EVENTS_PATH, getUserClosestEvent);
+app.post(USER_RATING_EVENT, (req, res) => editRating(req, res, ratingChannel));
 
 app.get(EVENT_PATH, getEventRoute);
 app.post(EVENT_PATH, addEventRoute);
 app.put(EVENT_BY_ID, updateEventRoute);
+
 
 app.post(COMMENT_PATH, (req, res) => addComment(req, res, publisherChannel));
 
