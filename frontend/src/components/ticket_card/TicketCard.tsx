@@ -102,7 +102,10 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eve
                     p={"10px"}
                     radius={"md"}
                     disabled={ticket.available === 0 || inputValues[ticket.name] === 0}
-                    onClick={() => handleClick(inputValues[ticket.name], ticket.name, ticket.price, ticket._id || '0')}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleClick(inputValues[ticket.name], ticket.name, ticket.price, ticket._id || '0');
+                    }}
                   >
                     Purchase
                   </Button>{" "}
