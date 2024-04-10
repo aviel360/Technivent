@@ -60,8 +60,7 @@ const Comments: React.FC<CommentsProps> = ({Comments, eventID, isBackOffice}) =>
       const [isSuccess, setIsSuccess] = useState(false);
 
       const PostComment = async (values: {commentText: string}): Promise<void> => {
-        const apiService = new Api();  
-        //TODO: Add REAL username to the comment     
+        const apiService = new Api();     
         const response = await apiService.PostComment({username: username, eventId: eventID, comment: values.commentText});
         if (response) {
           setIsSuccess(true);
