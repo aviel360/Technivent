@@ -10,7 +10,6 @@ interface TicketCardProps {
   eventID?: string;
   eventName?: string;
 }
-
 const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eventID, eventName }) => {
   const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
   const navigate = useNavigate();
@@ -38,8 +37,6 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eve
         });
         navigate(`/checkout?${params.toString()}`);
       }
-    else
-      navigate(-1);
   };
 
   const handleInputChange = (ticketName: string, value: number) => {
@@ -50,11 +47,11 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eve
     <>
       <h2>{isBackOffice ? "Ticket Categories" : "Buy Tickets:"}</h2>
       <Flex wrap={"wrap"} direction={"row"} justify={Center} align={Center}>
-        {ticketArray.map((ticket: TicketData) => (
+        {ticketArray.sort((ticketA, ticketB) => ticketA.price - ticketB.price).map((ticket: TicketData) => (
           <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
             <Card.Section>
               <center>
-                <Badge color="pink" size="xl" p={"md"} mt={"sm"}>
+                <Badge color="black" size="xl" p={"md"} mt={"sm"}>
                   {ticket.name}
                 </Badge>
               </center>

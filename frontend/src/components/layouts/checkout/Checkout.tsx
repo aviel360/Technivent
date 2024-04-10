@@ -29,7 +29,8 @@ const Checkout: React.FC<CheckoutProps> = () => {
 
     function isFutureDate(month: string, year: string) {
         const currentDate = new Date();
-        const expirationDate = new Date(parseInt(year), parseInt(month)-1);
+        const expirationYear = new Date(year).getFullYear();
+        const expirationDate = new Date(expirationYear, parseInt(month)-1);
         return expirationDate > currentDate;
     }
 

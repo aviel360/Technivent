@@ -9,17 +9,16 @@ import { userContext } from "../layouts/home/Home";
 interface UserBarProps {
   username: string;
   goBack: boolean;
-  isBackOffice?: boolean ;
+  isBackOffice?: boolean;
   setIsBackOffice?: React.Dispatch<React.SetStateAction<boolean>> | null;
   refreshKey?: number;
 }
 
-const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice,  refreshKey}) => {
+const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIsBackOffice, refreshKey }) => {
   let navigate = useNavigate();
   const { userType } = useContext(userContext);
   const [userClosestEvent, setUserClosestEvent] = useState(null);
   const [closestEventDate, setClosestEventDate] = useState<string | null>(null);
- 
 
   const logoutClick = async (): Promise<void> => {
     const apiService = new Api();
@@ -36,62 +35,68 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
   const fetchUserClosestEvent = async () => {
     const apiService = new Api();
     const response = await apiService.getUserClosestEvent();
-    if(response.data.length == 0){
+    if (response.data.length == 0) {
       setUserClosestEvent(null);
       setClosestEventDate(null);
       return;
     }
-   
 
     const eventDate = new Date(response.data.eventStartDate);
-    const formattedDate = `${eventDate.getDate().toString().padStart(2, '0')}/${(eventDate.getMonth() + 1).toString().padStart(2, '0')}/${eventDate.getFullYear()}`;
+    const formattedDate = `${eventDate.getDate().toString().padStart(2, "0")}/${(eventDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${eventDate.getFullYear()}`;
     setUserClosestEvent(response.data.eventName);
     setClosestEventDate(formattedDate);
-    
+
     return;
   };
 
   useEffect(() => {
     fetchUserClosestEvent();
-  }, [userClosestEvent, closestEventDate,refreshKey]);
+  }, [userClosestEvent, closestEventDate, refreshKey]);
 
   return (
-      <Flex miw={'50rem'} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
-        <Group>
-    
-          {goBack && (
-            <Button variant="light" leftSection={<ChevronCompactLeft />}
-            onClick={() => navigate(-1)}>
-              Go back
-            </Button>
-          )}
+    <Flex miw={"50rem"} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
+      <Group>
+        {goBack && (
+          <Button variant="light" leftSection={<ChevronCompactLeft />} onClick={() => navigate(-1)}>
+            Go back
+          </Button>
+        )}
 
-          { userType != "User" && setIsBackOffice &&(
-             <Button variant="light" onClick={() => { 
-              setIsBackOffice(prevState => {
+        {userType != "User" && setIsBackOffice && (
+          <Button
+            variant="light"
+            onClick={() => {
+              setIsBackOffice((prevState) => {
                 const newValue = !prevState;
                 return newValue;
-              });             
-            }}>
-              {isBackOffice ? "Catalog" : "Back Office"}
-            </Button>
-          )}
-        </Group>
+              });
+            }}
+          >
+            {isBackOffice ? "Catalog" : "Back Office"}
+          </Button>
+        )}
+      </Group>
 
-        <Group>
-        { userType != "User" && isBackOffice &&(
-             <Button variant="light" onClick={() => navigate('/newevent')}>
-              Add New Event
-            </Button>
-          )}
-          {!username ? (
-              <Link to="/login">Login</Link>
-          ) : (
-            <>
-            
+      <Group>
+        {userType != "User" && isBackOffice && (
+          <Button variant="light" onClick={() => navigate("/newevent")}>
+            Add New Event
+          </Button>
+        )}
+        {!username ? (
+          <Link to="/login">Login</Link>
+        ) : (
+          <>
             {userClosestEvent && (
-              <Badge bg={"rgba(90, 185, 90, 1)"} p={"md"} radius={"sm"} style={{ textTransform: 'none', fontSize: '0.8rem'  }} >
-               {`Closest Event: ${userClosestEvent} (${closestEventDate})`}
+              <Badge
+                bg={"rgba(90, 185, 90, 1)"}
+                p={"md"}
+                radius={"sm"}
+                style={{ textTransform: "none", fontSize: "0.8rem" }}
+              >
+                {`Closest Event: ${userClosestEvent} (${closestEventDate})`}
               </Badge>
             )}
             <Menu withArrow>
@@ -107,11 +112,11 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
                 <Menu.Item onClick={logoutClick}>Logout</Menu.Item>
               </Menu.Dropdown>
             </Menu>
-            </>
-          )}
-          <ColorScheme />
-        </Group>
-      </Flex>
+          </>
+        )}
+        <ColorScheme />
+      </Group>
+    </Flex>
   );
 };
 
