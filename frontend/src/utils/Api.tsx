@@ -204,6 +204,16 @@ class Api {
       return null;
     }
   }
+
+  async getUserClosestEvent(): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user/events`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
 }
 
 export default Api;

@@ -1,6 +1,6 @@
 import * as amqp from 'amqplib';
 import axios from 'axios';
-import { EVENT_PATH, EVENT_SERVICE, USER_EVENTS_PATH, USER_SERVICE } from './const.js';
+import { EVENT_BY_ID, EVENT_PATH, EVENT_SERVICE, USER_EVENTS_PATH, USER_SERVICE } from './const.js';
 
 
 export const consumePaymentMessages = async () => {
@@ -31,20 +31,17 @@ export const consumePaymentMessages = async () => {
     // `msg.content.toString()` converts the message content to a string for logging or processing.
     // `channel.ack(msg)` acknowledges the message, indicating it has been processed and can be removed from the queue.
     await channel.consume(queue, async (msg) => {
-      // if(msg === null){
-      //   channel.ack(msg);
-      //   return;
-      // }
         try {
           // Parse the message content to JSON
           const paymentData = JSON.parse(msg.content.toString());
 
           if(paymentData.status == true){
             const eventid = paymentData.eventID.toString();
-            const event = await axios.get(`${EVENT_SERVICE}${EVENT_PATH}?id=${eventid}`); 
             
-            const eventName = event.data.dbRes[0].title;
-            const eventStartDate = event.data.dbRes[0].start_date;
+            const event = await axios.get(`${EVENT_SERVICE}${EVENT_PATH}/${eventid}`); 
+           
+            const eventName = event.data.dbRes.title;
+            const eventStartDate = event.data.dbRes.start_date;
             const user = paymentData.username;
             
             const data = { eventid, eventName, eventStartDate, user };
@@ -52,7 +49,7 @@ export const consumePaymentMessages = async () => {
             
             if(res.status == 200){
               channel.ack(msg);
-              console.log("Event added to user's event array successfully");
+              console.log(`Event ${eventName}added to user's event array successfully`);
               return;
             }
             else{

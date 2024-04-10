@@ -27,6 +27,12 @@ const Checkout: React.FC<CheckoutProps> = () => {
     let  eventIDQuery = query.get("event");
     let eventName = query.get("name");
 
+    function isFutureDate(month: string, year: string) {
+        const currentDate = new Date();
+        const expirationDate = new Date(parseInt(year), parseInt(month)-1);
+        return expirationDate > currentDate;
+    }
+
     const checkoutForm = useForm({
         initialValues: { 
             cardHolder: "",
@@ -40,17 +46,31 @@ const Checkout: React.FC<CheckoutProps> = () => {
             cardNumber: (value) => {
                 if (value.length < 1) {
                     return "Please enter card number";
-                } else if (value.length !== 16) {
+                } else if (!/^\d{16}$/.test(value)) {
                     return "Card number must be 16 digits";
                 }
                 return null;
             },
-            expirationMonth: (value) => (value.length < 1 ? "Please select month" : null),
-            expirationYear: (value) => (value.length < 1 ? "Please select year" : null),
+            expirationMonth: (value, values) => {
+                if (value.length < 1) {
+                    return "Please select month";
+                } else if (!isFutureDate(value, values.expirationYear)) {
+                    return "Expiration date must be in the future";
+                }
+                return null;
+            },
+            expirationYear: (value, values) => {
+                if (value.length < 1) {
+                    return "Please select year";
+                } else if (!isFutureDate(values.expirationMonth, value)) {
+                    return "Expiration date must be in the future";
+                }
+                return null;
+            },
             cvv: (value) => {
                 if (value.length < 1) {
                     return "Please enter CVV";
-                } else if (value.length !== 3) {
+                } else if (!/^\d{3}$/.test(value)) {
                     return "CVV must be 3 digits";
                 }
                 return null;
@@ -60,6 +80,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
       const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleCheckoutSubmit = async (values: any) => {
+        checkoutForm.setErrors({});
         setIsLoading(true);
         const apiService = new Api();
         if(eventIDQuery === null || ticketIdQuery === null) return;

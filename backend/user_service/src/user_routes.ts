@@ -268,3 +268,37 @@ export async function updateEventsArray(req: Request, res: Response){
     return;
   }
 }
+
+
+export async function getUserClosestEvent(req: Request, res: Response){
+  const token = req.cookies.token;
+  if (!token) {
+    res.status(401).send("Not logged in");
+    return;
+  }
+  let username;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    username = (payload as JwtPayload).username;
+  } catch (e) {
+    return res.status(401).send("Invalid token");
+  }
+
+  const user = await User.findOne({ username: username });
+
+  if (!user) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const eventArray = user.eventArray;
+  if (eventArray.length === 0) {
+    res.status(200).send([]);
+    return;
+  }
+  
+  // Sort the eventArray by eventStartDate
+  const sortedEventArray = eventArray.sort((a, b) => new Date(a.eventStartDate).getTime() - new Date(b.eventStartDate).getTime());
+  const closestEvent = sortedEventArray[0];
+  res.status(200).send(closestEvent);
+}

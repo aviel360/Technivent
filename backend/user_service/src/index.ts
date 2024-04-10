@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updateEventsArray, updatePermissionRoute, userRoute } from "./user_routes.js";
+import { getUserClosestEvent, loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updateEventsArray, updatePermissionRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute, updateEventRoute } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
 import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH, USER_EVENTS_PATH } from "./const.js";
@@ -47,6 +47,7 @@ app.post(PASSWORD_RESET, resetPasswordRoute);
 app.post(SECRET_QUESTION_PATH, secretQuestionRoute);
 app.put(PERMMISION_PATH, updatePermissionRoute);
 app.put(USER_EVENTS_PATH, updateEventsArray);
+app.get(USER_EVENTS_PATH, getUserClosestEvent);
 
 app.get(EVENT_PATH, getEventRoute);
 app.post(EVENT_PATH, addEventRoute);
