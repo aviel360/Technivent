@@ -1,9 +1,9 @@
 import * as amqp from 'amqplib';
 import axios from 'axios';
 import {TICKET_SOLD, TICKET_UNLOCK} from "./const.js";
+import {TICKET_SERVICE} from "../../user_service/src/const.js";
 
-
-export const consumePaymentMessages = async () => {
+export const consumePaymentTicket = async () => {
   try {
     // connect to RabbitMQ
     const conn = await amqp.connect(
@@ -19,7 +19,7 @@ export const consumePaymentMessages = async () => {
 
     // Declare a queue with a name 'order_queue'. If it doesn't exist, it will be created.
     // `{ durable: false }` here means messages in the queue are stored in memory only, not on disk.
-    const queue = 'payment_queue';
+    const queue = 'payment_queue_tickets';
     await channel.assertQueue(queue, { durable: false });
 
     // Bind the declared queue to the exchange. This creates a relationship between the exchange and the queue.
@@ -31,42 +31,29 @@ export const consumePaymentMessages = async () => {
     // `msg.content.toString()` converts the message content to a string for logging or processing.
     // `channel.ack(msg)` acknowledges the message, indicating it has been processed and can be removed from the queue.
     await channel.consume(queue, async (msg) => {
-      if(msg === null){
+
+      // Parse the message content to JSON
+      const paymentData = JSON.parse(msg.content);
+      
+      if (paymentData.status == true) {
+        const user = paymentData.username;
+        const soldResponse = await axios.post(TICKET_SERVICE + TICKET_SOLD, {payload: {username: user}});
         channel.ack(msg);
+        console.log("Tickets sold successfully");
         return;
       }
-        try {
-          
-            // Parse the message content to JSON
-            const paymentData = JSON.parse(msg.content.toString());
-            
-            if (paymentData.status == true) {
-              const user = paymentData.username;
-              const soldResponse = await axios.post(TICKET_SOLD, {
-                user
-              });
-              channel.ack(msg);
-              return;
-            }
 
-            else{
-              //Unlocking tickets
-              const user = paymentData.username;
-              const unlockResponse = await axios.post(TICKET_UNLOCK, {
-                user
-              });
-              channel.ack(msg);
-              return;
-            }
-            
-
-          } catch (error) {
-            console.error('Error processing message:', error.message);
-            // Reject the message and requeue it
-            channel.ack(msg);
-          }
-        });
+      else{
+        //Unlocking tickets
+        const user = paymentData.username;
+        const unlockResponse = await axios.post(TICKET_SERVICE + TICKET_UNLOCK, {payload: {username: user}});
+        channel.ack(msg);
+        console.log("Tickets unlocked successfully");
+        return;
+      }
+   });
       } catch (error) {
-        console.error(error);
+        console.error(error.message);
       }
     };
+
