@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { getUserClosestEvent, loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updateEventsArray, updatePermissionRoute, userRoute } from "./user_routes.js";
+import { getRatings, getUserClosestEvent, loginRoute, logoutRoute, resetPasswordRoute, secretQuestionRoute, signupRoute, updateEventsArray, updatePermissionRoute, userRoute } from "./user_routes.js";
 import { getEventRoute, addComment, addEventRoute, updateEventRoute, editRating } from "./event_routes.js";
 import { PublisherChannel } from "./comment_publisher.js";
-import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH, USER_EVENTS_PATH, USER_RATING_EVENT } from "./const.js";
+import { LOGIN_PATH, LOGOUT_PATH, SIGNUP_PATH, EVENT_PATH, SECRET_QUESTION_PATH, PASSWORD_RESET, USER_PATH, COMMENT_PATH, PAYMENT_PATH, EVENT_BY_ID, TICKET_LOCK_PATH, PERMMISION_PATH, USER_EVENTS_PATH, USER_RATING_EVENT, USER_RATINGS } from "./const.js";
 import { CreatePayment_User, getPayments } from "./payment_routes.js";
 import { lockTicketRoute } from "./ticket_routes.js";
 import {consumePaymentMessages} from "./consume_payments_user.js";
@@ -62,6 +62,8 @@ app.post(TICKET_LOCK_PATH, lockTicketRoute);
 
 app.get(PAYMENT_PATH, getPayments);
 app.post(PAYMENT_PATH, CreatePayment_User);
+
+app.get(USER_RATINGS, getRatings);
 
 
 app.listen(port, () => {
