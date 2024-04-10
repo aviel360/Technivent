@@ -150,6 +150,10 @@ export async function editRating(req: Request, res: Response, publisherChannel: 
   const existingRating = user.NumOfRatings.find(rating => rating.eventID === eventId);
   if (existingRating) {
     oldRating = existingRating.rating;
+    await User.updateOne(
+      { "username": username, "NumOfRatings.eventID": eventId },
+      { $set: { "NumOfRatings.$.rating": newRating } }
+    );
   }
 
   if (!user.NumOfRatings.some(rating => rating.eventID === eventId)) {
@@ -158,7 +162,7 @@ export async function editRating(req: Request, res: Response, publisherChannel: 
 
   try {
     const payload = { eventId, oldRating, newRating };
-
+    console.log(payload);
     await publisherChannel.sendEvent(JSON.stringify(payload));
     res.status(201).send({ message: "Rating published" });
   } catch (error: any) {

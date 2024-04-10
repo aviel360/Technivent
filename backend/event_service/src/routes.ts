@@ -108,7 +108,7 @@ export async function updateRating(message) {
   const id = message.eventId;
   const oldRating = Number(message.oldRating);
   const newRating = Number(message.newRating);
-  console.log("old: ", oldRating);
+ 
   try {
     const dbRes = await Event.findOne
     ({ _id: id });
@@ -125,7 +125,6 @@ export async function updateRating(message) {
       ? (dbRes.rating.average * totalRaters + newRating) / (totalRaters + 1)
       : (dbRes.rating.average * totalRaters - oldRating + newRating) / totalRaters;
 
-    console.log(`New average: ${newAverage}`);
           // Update rating
     await Event.updateOne(
       { _id: id },
@@ -134,9 +133,8 @@ export async function updateRating(message) {
         $set: { "rating.average": newAverage }
       }
     );
-    
 
-    console.log(`Rating updated for event ${id}. New average: ${newAverage}`);
+    console.log(`Rating event ${id}. New average: ${newAverage}`);
   } catch (error) {
     console.error('Error updating rating:', error);
   }
