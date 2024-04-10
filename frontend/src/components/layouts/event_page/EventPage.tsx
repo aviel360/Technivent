@@ -243,7 +243,7 @@ const EventPage: React.FC<EventPageProps> = () => {
 
             <br />
              
-            <StarRating eventRating={eventData.rating}></StarRating>
+            <StarRating eventRating={eventData.rating} eventID={eventData._id}></StarRating>
 
             <TicketCard
               ticketArray={eventData.ticketArray}
