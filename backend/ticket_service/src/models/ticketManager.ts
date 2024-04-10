@@ -19,7 +19,17 @@ export class TicketManager {
       let ticketAmount = lockedTickets;
       if (userTickets) {
         clearTimeout(this.lockedTickets[username].timeoutId);
-        ticketAmount = lockedTickets - userTickets.lockedTickets;
+        if(userTickets.ticketId === ticketId)
+        {
+          ticketAmount = lockedTickets - userTickets.lockedTickets;
+        }
+        else
+        {
+          await Ticket.findOneAndUpdate(
+            { _id: userTickets.ticketId}, // Ensure available tickets are sufficient
+            { $inc: { available: userTickets.lockedTickets } }, // Increment available tickets
+          );
+        }
       }
       const gteLock = ticketAmount > 0 ? ticketAmount : 0;
       const ticket = await Ticket.findOneAndUpdate(
