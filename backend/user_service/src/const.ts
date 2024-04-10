@@ -7,6 +7,11 @@ export const SIGNUP_PATH = "/api/user/signup";
 export const SECRET_QUESTION_PATH = "/api/user/secret-question";
 export const PASSWORD_RESET = "/api/user/reset-password";
 export const PERMMISION_PATH = "/api/user/permission";
+export const USER_EVENTS_PATH = "/api/user/events";
+
+export const USER_SERVICE_LOCAL = "http://localhost:3000";
+export const USER_SERVICE_PRODUCTION = "https://technivent.onrender.com";
+export const USER_SERVICE =  process.env.NODE_ENV === "production" ? USER_SERVICE_LOCAL : USER_SERVICE_PRODUCTION;
 
 // Event
 export const EVENT_SERVICE_LOCAL = "http://localhost:3001";
