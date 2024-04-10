@@ -149,12 +149,12 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
                   </Badge>
                 ) : (
                   <>
-                    <br />
-                    <Badge color="rgba(140, 0, 0, 1)">SOLD OUT</Badge>
+                    
+                    <Badge mt={"sm"} color="rgba(140, 0, 0, 1)">SOLD OUT</Badge>
                   </>
                 )}
 
-                {event.totalTickets > 0 && (
+                {(event.totalTickets > 0 || isBackOffice) && (
                   <Button
                     color="blue"
                     fullWidth
@@ -162,7 +162,7 @@ function Events({ fetchData, isBackOffice }: EventsProps) {
                     radius="md"
                     onClick={() => handlePurchaseClick(event._id, isBackOffice)}
                   >
-                    Purchase now
+                     {isBackOffice ? 'Event Details' : 'Purchase now'}
                   </Button>
                 )}
               </center>

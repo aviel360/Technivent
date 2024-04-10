@@ -48,7 +48,7 @@ const OrderSuccess: React.FC<OrderSuccessProps> = () => {
                     <br />
                     <br />
 
-                    <Text mt={"lg"} size={"1.5rem"} fw={"500"} tt={"capitalize"} c={"cyan"}> {event}</Text>
+                    <Text mt={"lg"} size={"1.5rem"} fw={"500"} tt={"capitalize"} c="rgba(145, 236, 172, 0.8)"> {event}</Text>
                     <Text mt={"lg"} size={"1.2rem"} fw={"400"} > {amount} x {ticket}</Text>
                     <Text mt={"lg"} size={"1.2rem"} fw={"400"} > Total: {totalPrice} $</Text>
                 </Card>

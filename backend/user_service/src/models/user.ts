@@ -8,13 +8,25 @@ export enum UserType {
     Worker = "Worker"
 }
 
+export const userEventsSchema = new mongoose.Schema(
+    {
+        eventID: { type: String, required: true },
+        eventName: { type: String, required: true },
+        eventStartDate: { type: Date, required: true }
+    },
+    {
+        _id: false,
+        versionKey: false
+    }
+);
+
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true }, 
     userType: { type: String, enum: Object.values(UserType), default: UserType.User },
     secretQuestion: { type: String, required: true },
     secretAnswer: { type: String, required: true },
-    eventArray: { type: Array, default: []}, //TODO: decide what to keep in this array (eventID, all event...)
+    eventArray: { type: [userEventsSchema], default: []}, 
     NumOfRatings: { type: Number, default: 0},
 }, {id: true , versionKey: false});
 

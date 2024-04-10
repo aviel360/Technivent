@@ -73,7 +73,7 @@ export async function CreatePayment(req: Request, res: Response) {
       const savedPayment = await payment.save();
       const saved_id = savedPayment._id;
       //send success msg to ticket_service to unlock the tickets (msgBroker)
-      await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId}));
+      await publisherChannel.sendEvent(JSON.stringify({ status: true, username, ticketId, quantity, transactionId, eventID}));
       
       res.status(200).send({ transactionId, saved_id});
       return;
@@ -85,7 +85,7 @@ export async function CreatePayment(req: Request, res: Response) {
   }
   else{
     //send fail msg to ticket_service to unlock the tickets (msgBroker)
-    await publisherChannel.sendEvent(JSON.stringify({ status: false, username, ticketId, quantity}));
+    await publisherChannel.sendEvent(JSON.stringify({ status: false, username, ticketId, quantity, eventID}));
     res.status(500).send("Payment failed");
     return;
   }

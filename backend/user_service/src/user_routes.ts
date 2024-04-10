@@ -248,3 +248,23 @@ export async function updatePermissionRoute(req: Request, res: Response) {
 }
 
 
+export async function updateEventsArray(req: Request, res: Response){
+  const { eventid, eventName, eventStartDate, user } = req.body;
+
+  try {
+    const userDocument = await User.findOne({ username: user });
+    if(!userDocument){
+      res.status(400).send("User not found");
+      return;
+    }
+    
+    const newEvent = { eventID: eventid, eventName, eventStartDate };
+    await User.updateOne({ username: user }, { $push: { eventArray: newEvent } });
+    res.status(200).send("Event added to user's event array successfully");
+    return;
+  }
+  catch (error: any) {
+    res.status(500).send(error);
+    return;
+  }
+}
