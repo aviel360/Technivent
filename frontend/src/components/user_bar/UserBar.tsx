@@ -1,9 +1,9 @@
 import { ChevronCompactDown, ChevronCompactLeft } from "react-bootstrap-icons";
-import { Group, Menu, Button, Flex } from "@mantine/core";
+import { Group, Menu, Button, Flex, Badge } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
 import Api from "../../utils/Api";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { userContext } from "../layouts/home/Home";
 
 interface UserBarProps {
@@ -11,13 +11,15 @@ interface UserBarProps {
   goBack: boolean;
   isBackOffice?: boolean ;
   setIsBackOffice?: React.Dispatch<React.SetStateAction<boolean>> | null;
-  goBackToCatalog?: boolean;
+  refreshKey?: number;
 }
 
-const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice, goBackToCatalog }) => {
+const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsBackOffice,  refreshKey}) => {
   let navigate = useNavigate();
   const { userType } = useContext(userContext);
-
+  const [userClosestEvent, setUserClosestEvent] = useState(null);
+  const [closestEventDate, setClosestEventDate] = useState<string | null>(null);
+ 
 
   const logoutClick = async (): Promise<void> => {
     const apiService = new Api();
@@ -31,16 +33,32 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
     }
   };
 
+  const fetchUserClosestEvent = async () => {
+    const apiService = new Api();
+    const response = await apiService.getUserClosestEvent();
+    if(response.data.length == 0){
+      setUserClosestEvent(null);
+      setClosestEventDate(null);
+      return;
+    }
+   
+
+    const eventDate = new Date(response.data.eventStartDate);
+    const formattedDate = `${eventDate.getDate().toString().padStart(2, '0')}/${(eventDate.getMonth() + 1).toString().padStart(2, '0')}/${eventDate.getFullYear()}`;
+    setUserClosestEvent(response.data.eventName);
+    setClosestEventDate(formattedDate);
+    
+    return;
+  };
+
+  useEffect(() => {
+    fetchUserClosestEvent();
+  }, [userClosestEvent, closestEventDate,refreshKey]);
+
   return (
       <Flex miw={'50rem'} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
         <Group>
-        {goBackToCatalog && (
-            <Button variant="light" leftSection={<ChevronCompactLeft />}
-            onClick={() => navigate("/")}>
-              Go To Catalog
-            </Button>
-          )}
-
+    
           {goBack && (
             <Button variant="light" leftSection={<ChevronCompactLeft />}
             onClick={() => navigate(-1)}>
@@ -69,6 +87,13 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
           {!username ? (
               <Link to="/login">Login</Link>
           ) : (
+            <>
+            
+            {userClosestEvent && (
+              <Badge bg={"rgba(90, 185, 90, 1)"} p={"md"} radius={"sm"} style={{ textTransform: 'none', fontSize: '0.8rem'  }} >
+               {`Closest Event: ${userClosestEvent} (${closestEventDate})`}
+              </Badge>
+            )}
             <Menu withArrow>
               <Menu.Target>
                 <Button variant="light" rightSection={<ChevronCompactDown size="1rem" />}>
@@ -82,6 +107,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack,isBackOffice, setIsB
                 <Menu.Item onClick={logoutClick}>Logout</Menu.Item>
               </Menu.Dropdown>
             </Menu>
+            </>
           )}
           <ColorScheme />
         </Group>

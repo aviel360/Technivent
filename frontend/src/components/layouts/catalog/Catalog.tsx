@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import UserBar from "../../user_bar/UserBar";
 import Events from "../../events/Events";
 import Api from "../../../utils/Api";
@@ -12,7 +12,7 @@ interface CatalogProps {
 const Catalog: React.FC<CatalogProps> = () => {
   const { username } = useContext(userContext);
   const [isBackOffice, setIsBackOffice] = React.useState<boolean>(false);
-
+  const [refreshKey] = useState(0);
 
   const fetchData = async () => {
     const apiService = new Api();
@@ -25,7 +25,7 @@ const Catalog: React.FC<CatalogProps> = () => {
   return (
     <>
       <h1>{isBackOffice ? "Back Office" : "Catalog"}</h1>
-      <UserBar username={username} goBack={false} isBackOffice={isBackOffice} setIsBackOffice={setIsBackOffice}></UserBar>
+      <UserBar username={username} goBack={false} isBackOffice={isBackOffice} setIsBackOffice={setIsBackOffice} refreshKey={refreshKey}></UserBar>
       <Events fetchData={fetchData} isBackOffice={isBackOffice}/>
     </>
   );

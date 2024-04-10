@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import UserBar from '../../user_bar/UserBar';
 import { userContext } from '../home/Home';
-import { Card, Flex, Text } from '@mantine/core';
+import { Button, Card, Flex, Text } from '@mantine/core';
 
 interface OrderSuccessProps {
    
@@ -21,24 +21,29 @@ const OrderSuccess: React.FC<OrderSuccessProps> = () => {
     let price = query.get("price");
     let amount = query.get("amount");
 
+    let navigate = useNavigate();
+    const handleGoBackToCatalog = () => {
+        navigate('/', { state: { refreshKey: Date.now() } });
+      };
     const totalPrice = Number(price) * Number(amount);
     
     return (
         
         <div>
-            <h1>Order success</h1>
-            <UserBar username={username} goBack={false} goBackToCatalog={true}></UserBar>
+            <h1 >Order success</h1>
+            <UserBar username={username} goBack={false} ></UserBar>
             <Flex
                 mih={50}
                 bg="rgba(0, 0, 0, .3)"
                 gap="md"
-                justify={"space-around"}
+                justify={"center"}
                 rowGap={"1rem"}
                 columnGap={"1rem"}
-                align="stretch"
-                direction="row"
+                align="center"
+                direction="column"
                 wrap="wrap"
                 p={"4rem"}
+                
             >
                 <Card w={"500px"} h={"400px"}>
                     <Text mt={"xl"} size={"2.5rem"} fw={"700"} tt={"capitalize"} c={"green"}>congratulations!</Text>
@@ -52,6 +57,10 @@ const OrderSuccess: React.FC<OrderSuccessProps> = () => {
                     <Text mt={"lg"} size={"1.2rem"} fw={"400"} > {amount} x {ticket}</Text>
                     <Text mt={"lg"} size={"1.2rem"} fw={"400"} > Total: {totalPrice} $</Text>
                 </Card>
+
+                <Button  onClick={handleGoBackToCatalog} justify='center' w={"500px"}>
+                    Go Back To Catalog
+                </Button>
             </Flex>
             
         </div>
