@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RatingType } from '../../utils/Types';
 import { Flex, Rating, Text } from '@mantine/core';
 import { ThemeIcon } from '@mantine/core';
@@ -24,8 +24,8 @@ const StarRating: React.FC<StarRatingProps> = ({ eventRating, eventID }) => {
     const sendRating = async (newRating: number) => {
         setRatingVal(newRating);
         const apiService = new Api();    
-        const response = await apiService.EditEventRating({id:eventID, rating: newRating});
-        return;
+        await apiService.EditEventRating({id:eventID, rating: newRating});
+        return ;
     };
 
     return (

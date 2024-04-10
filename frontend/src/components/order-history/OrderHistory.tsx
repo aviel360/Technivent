@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Text, Badge, Group, Flex, Loader, Center } from "@mantine/core";
+import { Card, Text, Badge, Group, Flex, Loader } from "@mantine/core";
 import { OrderHistoryData } from "../../utils/Types";
 
 interface OrderHistoryProps {

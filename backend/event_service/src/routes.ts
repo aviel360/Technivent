@@ -134,7 +134,7 @@ export async function updateRating(message) {
       }
     );
 
-    console.log(`Rating event ${id}. New average: ${newAverage}`);
+    
   } catch (error) {
     console.error('Error updating rating:', error);
   }
