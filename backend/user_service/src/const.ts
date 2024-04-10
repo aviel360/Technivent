@@ -8,6 +8,8 @@ export const SECRET_QUESTION_PATH = "/api/user/secret-question";
 export const PASSWORD_RESET = "/api/user/reset-password";
 export const PERMMISION_PATH = "/api/user/permission";
 export const USER_EVENTS_PATH = "/api/user/events";
+export const USER_RATING_EVENT = "/api/user/rating-event";
+export const USER_RATINGS = "/api/user/rating"
 
 export const USER_SERVICE_LOCAL = "http://localhost:3000";
 export const USER_SERVICE_PRODUCTION = "https://technivent.onrender.com";
@@ -18,6 +20,7 @@ export const EVENT_SERVICE_LOCAL = "http://localhost:3001";
 export const EVENT_SERVICE_PRODUCTION = "https://technivent-jq4c.onrender.com";
 export const EVENT_PATH = "/api/event";
 export const EVENT_BY_ID = "/api/event/:id";
+export const EVENT_RATING = "/api/event/rating";
 export const EVENT_SERVICE = process.env.NODE_ENV === "production" ? EVENT_SERVICE_PRODUCTION : EVENT_SERVICE_LOCAL;
 
 // Comment

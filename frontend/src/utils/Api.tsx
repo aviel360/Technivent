@@ -71,6 +71,16 @@ class Api {
     }
   }
 
+  async EditEventRating(payload: { id: string; rating: number }): Promise<any> {
+    try {
+      const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/rating-event`, payload);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
+
   async addEvent(payload: {
     event: {
       title: string;
@@ -149,6 +159,16 @@ class Api {
   async getPayments() {
     try {
       const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/payment`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
+
+  async getUserRatings(){
+    try {
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user/rating`);
       return response;
     } catch (error: any) {
       window.alert(error.response.data);

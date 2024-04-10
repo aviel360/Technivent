@@ -302,3 +302,33 @@ export async function getUserClosestEvent(req: Request, res: Response){
   const closestEvent = sortedEventArray[0];
   res.status(200).send(closestEvent);
 }
+
+
+export async function getRatings(req: Request, res: Response) {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).send("Not logged in");
+    }
+
+    let username;
+    try {
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      username = (payload as JwtPayload).username;
+    } catch (e) {
+      return res.status(401).send("Invalid token");
+    }
+    const user = await User.findOne({ username });
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+    const numOfRatings = user.NumOfRatings.length;
+    res.status(200).send({ numOfRatings });
+    
+  }
+  catch (error: any) {
+    res.status(500).send(error.message);
+  }
+
+}

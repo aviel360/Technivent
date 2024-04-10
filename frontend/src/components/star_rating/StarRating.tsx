@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RatingType } from '../../utils/Types';
 import { Flex, Rating, Text } from '@mantine/core';
 import { ThemeIcon } from '@mantine/core';
 import { IconStar } from '@tabler/icons-react';
+import Api from '../../utils/Api';
 
 
 interface StarRatingProps {
     eventRating: RatingType ; 
+    eventID: string;
 }
 
 
-const StarRating: React.FC<StarRatingProps> = (eventRating) => {
-    const avg = parseFloat(eventRating.eventRating.average.toFixed(1));
-    const numOfRaters = eventRating.eventRating.total as number;
+const StarRating: React.FC<StarRatingProps> = ({ eventRating, eventID }) => {
+    const avg = parseFloat(eventRating.average.toFixed(1));
+    const numOfRaters = eventRating.total as number;
+    
 
     const [ratingVal, setRatingVal] = useState(0);
+    
+    
+
+    const sendRating = async (newRating: number) => {
+        setRatingVal(newRating);
+        const apiService = new Api();    
+        const response = await apiService.EditEventRating({id:eventID, rating: newRating});
+        return;
+    };
 
     return (
         <div>
@@ -26,7 +38,7 @@ const StarRating: React.FC<StarRatingProps> = (eventRating) => {
                 </ThemeIcon>
                 <Text p={"10px"} fw={500} size={"lg"}> {avg.toFixed(1)}  ({numOfRaters})</Text>
                 
-                <Rating ml={"lg"} value={ratingVal} onChange={setRatingVal} size={"lg"}/>
+                <Rating ml={"lg"} value={ratingVal} onChange={sendRating} size={"lg"}/>
             </Flex>
         </div>
     );

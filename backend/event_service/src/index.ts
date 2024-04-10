@@ -6,6 +6,7 @@ import { getEvents, addEvent, getEventById, getEventArrayById, updateEvent, dele
 
 
 import { EVENT_BY_ID, EVENT_BY_ID_ARRAY, EVENT_PATH } from "./const.js";
+import { consumeRatingMessages } from "./consume_rating.js";
 
 dotenv.config();
 
@@ -15,7 +16,6 @@ dbUri = `mongodb+srv://edenh:${process.env.DBPASS}@cluster0.cuoqmgf.mongodb.net/
 await mongoose.connect(dbUri);
 
 const port = process.env.PORT || 8081;
-
 
 const app = express();
 app.use(express.json());
@@ -27,6 +27,8 @@ app.get(EVENT_PATH, getEvents);
 app.post(EVENT_PATH, addEvent);
 app.delete(EVENT_BY_ID, deleteEvent);
 app.put(EVENT_BY_ID, updateEvent);
+
+consumeRatingMessages();
 
 app.listen(port, () => {
   console.log(`Event Server running! port ${port}`);

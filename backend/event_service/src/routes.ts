@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import Event from "./models/event.js";
 
 export async function getEvents(req: Request, res: Response) {
@@ -103,27 +103,39 @@ export async function updateEvent(req: Request, res: Response) {
   }
 }
 
-// export async function checkTicketAvailability(req: Request, res: Response) {
-//   const eventID = req.params.id;
-//   const ticketName = req.query.ticketName as string; 
-//   const quantity = Number(req.query.quantity);  
 
+export async function updateRating(message) {
+  const id = message.eventId;
+  const oldRating = Number(message.oldRating);
+  const newRating = Number(message.newRating);
+ 
+  try {
+    const dbRes = await Event.findOne
+    ({ _id: id });
+    if (!dbRes) {
+      console.error(`Event ${id} not found`);
+      return;
+    }
 
-//   try {
-//     const dbRes = await Event.findOne({ _id: eventID });  
-//     if (!dbRes) {
-//       return res.status(404).send("Event not found");
-//     }
-//     const ticket = dbRes.ticketArray.find((ticket) => ticket.name === ticketName);
-//     if (!ticket) {
-//       return res.status(404).send("Ticket not found");
-//     }
-//     if (ticket.available < quantity) {
-//       return res.status(400).send("Not enough tickets available");
-//     }
-//     res.status(200).send("Tickets are available");
-//   }
-//   catch (error: any) {
-//     res.status(500).send(error);
-//   }
-// }
+    // Calculate new average rating
+    
+    let totalRaters = dbRes.rating.total;
+  
+    const newAverage = oldRating === 0 
+      ? (dbRes.rating.average * totalRaters + newRating) / (totalRaters + 1)
+      : (dbRes.rating.average * totalRaters - oldRating + newRating) / totalRaters;
+
+          // Update rating
+    await Event.updateOne(
+      { _id: id },
+      {
+        $inc: { "rating.total": oldRating === 0 ? 1 : 0 },
+        $set: { "rating.average": newAverage }
+      }
+    );
+
+    console.log(`Rating event ${id}. New average: ${newAverage}`);
+  } catch (error) {
+    console.error('Error updating rating:', error);
+  }
+}

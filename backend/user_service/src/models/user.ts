@@ -20,6 +20,17 @@ export const userEventsSchema = new mongoose.Schema(
     }
 );
 
+export const userRatingsSchema = new mongoose.Schema(
+    {
+        eventID: { type: String, required: true },
+        rating: { type: Number, required: true }
+    },
+    {
+        _id: false,
+        versionKey: false
+    }
+);
+
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true }, 
@@ -27,7 +38,7 @@ const userSchema = new mongoose.Schema({
     secretQuestion: { type: String, required: true },
     secretAnswer: { type: String, required: true },
     eventArray: { type: [userEventsSchema], default: []}, 
-    NumOfRatings: { type: Number, default: 0},
+    NumOfRatings: { type: [userRatingsSchema], default: [] },
 }, {id: true , versionKey: false});
 
 export const loginSchema = new mongoose.Schema({
