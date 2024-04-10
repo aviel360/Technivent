@@ -19,11 +19,18 @@ const UserPage: React.FC<UserPageProps> = () => {
     if (response) data = response.data;
     return data;
   };
+
+  const fetchUserRatings = async () => {
+    const apiService = new Api();
+    const response = await apiService.getUserRatings();
+    if(response) return response?.data?.numOfRatings;
+  };
+
   return (
     <>
       <h1>Personal Space</h1>
       <UserBar goBack={true} username={username}></UserBar>
-      <OrderHistory fetchData={fetchData}></OrderHistory>
+      <OrderHistory fetchData={fetchData} fetchUserRatings={fetchUserRatings} name={username}></OrderHistory>
     </>
   );
 };

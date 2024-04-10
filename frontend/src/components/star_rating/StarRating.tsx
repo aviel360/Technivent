@@ -23,10 +23,8 @@ const StarRating: React.FC<StarRatingProps> = ({ eventRating, eventID }) => {
 
     const sendRating = async (newRating: number) => {
         setRatingVal(newRating);
-        const apiService = new Api();  
-        console.log(eventID, newRating);   
+        const apiService = new Api();    
         const response = await apiService.EditEventRating({id:eventID, rating: newRating});
-        console.log(response);
         return;
     };
 
