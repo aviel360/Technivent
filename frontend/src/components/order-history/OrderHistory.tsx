@@ -1,24 +1,29 @@
 import { useEffect, useState } from "react";
-import { Card, Text, Badge, Group, Flex, Loader } from "@mantine/core";
+import { Card, Text, Badge, Group, Flex, Loader, Center } from "@mantine/core";
 import { OrderHistoryData } from "../../utils/Types";
 
 interface OrderHistoryProps {
   fetchData: () => Promise<OrderHistoryData[]>;
+  fetchUserRatings: () => Promise<number>;
+  name: string;
 }
 
-function OrderHistory({ fetchData }: OrderHistoryProps) {
+function OrderHistory({ fetchData,fetchUserRatings, name }: OrderHistoryProps) {
   const [ordersData, setOrdersData] = useState<OrderHistoryData[]>([]);
+  const [userRatings, setUserRatings] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchEvents = async () => {
     const data = await fetchData();
+    const ratings = await fetchUserRatings();
     setIsLoading(false);
     setOrdersData(data);
+    setUserRatings(ratings);
   };
 
   useEffect(() => {
     fetchEvents();
-  }, [fetchData]);
+  }, [fetchData, fetchUserRatings]);
 
   // Preprocess events data to filter and sort tickets
   const processedOrders = ordersData.sort((paymentEvent1, paymentEvent2) => {
@@ -42,6 +47,16 @@ function OrderHistory({ fetchData }: OrderHistoryProps) {
       wrap="wrap"
       p={"1rem"}
     >
+      <h2>User Details: </h2>
+      <Card shadow="sm" padding="lg" radius="md" withBorder w={"350px"} mt={"-20px"}>
+      <Flex direction={"column"}  align={"center"} >
+        <Flex direction={"row"} justify={"center"} mb={"sm"}>
+          <Text size={"lg"} fw={700} mr={"sm"}>Name: </Text>
+          <Text size={"lg"} fw={450}> {name}</Text>
+        </Flex>
+        <Badge size={"lg"} color={"cyan"} style={{ textTransform: 'capitalize', fontSize:"15px" }}> Total Ratings: {userRatings}</Badge>
+      </Flex>
+      </Card>
       <h2>Purchase History:</h2>
       {ordersData.length == 0 ? (
         <h2>No orders available</h2>
