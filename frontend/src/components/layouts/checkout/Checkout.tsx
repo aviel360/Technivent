@@ -93,6 +93,7 @@ const Checkout: React.FC<CheckoutProps> = () => {
             return;
         } else {
             alert("Payment Failed, please try again.");
+            setIsLoading(false);
             return;
         }
     }
