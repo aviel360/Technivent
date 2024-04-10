@@ -166,6 +166,16 @@ class Api {
     }
   }
 
+  async getUserRatings(){
+    try {
+      const response: AxiosResponse = await this.axiosInstance.get(`${this.baseUrl}/user/rating`);
+      return response;
+    } catch (error: any) {
+      window.alert(error.response.data);
+      return null;
+    }
+  }
+
   async updateEventDates(payload: { id: string; start_date: Date; end_date: Date }): Promise<any> {
     try {
       const response: AxiosResponse = await this.axiosInstance.put(`${this.baseUrl}/event/${payload.id}`, payload);
