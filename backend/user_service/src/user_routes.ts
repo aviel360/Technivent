@@ -3,6 +3,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { User, LoginUser, UserType } from "./models/user.js";
 import Joi from "joi";
+import axios from "axios";
+import { EVENT_DATE, EVENT_SERVICE } from "./const.js";
 
 // Route for login
 export async function loginRoute(req: Request, res: Response) {
@@ -296,11 +298,27 @@ export async function getUserClosestEvent(req: Request, res: Response){
     res.status(200).send([]);
     return;
   }
-  
-  // Sort the eventArray by eventStartDate
-  const sortedEventArray = eventArray.sort((a, b) => new Date(a.eventStartDate).getTime() - new Date(b.eventStartDate).getTime());
-  const closestEvent = sortedEventArray[0];
-  res.status(200).send(closestEvent);
+
+  try {
+    //Update events dates
+    const promises = eventArray.map(async event => {
+      const eventResponse = await axios.get(`${EVENT_SERVICE}${EVENT_DATE}/${event.eventID}`);
+      // event.eventStartDate = eventResponse.data.eventStartDate;
+      event.eventStartDate = eventResponse.data.start_date; 
+
+      return event;
+    });
+
+    const updatedEvents = await Promise.all(promises);
+    // Sort the updatedEvents array by eventStartDate
+    const sortedEventArray = updatedEvents.sort((a, b) => new Date(a.eventStartDate).getTime() - new Date(b.eventStartDate).getTime());
+    const closestEvent = sortedEventArray[0];
+
+    // Send the closestEvent back in the response
+    res.status(200).send(closestEvent);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 }
 
 

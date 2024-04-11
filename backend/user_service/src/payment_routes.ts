@@ -74,10 +74,12 @@ export async function CreatePayment_User(req: Request, res: Response) {
 
     if (response.status === 200) {
       res.status(200).send(response.data);
+      return;
     } else {
       res.status(response.status).send(response.data);
+      return;
     }
   } catch (error) {
-    res.status(500).send(error.message);
+    return res.status(500).send(error.message);
   }
 }

@@ -21,6 +21,7 @@ export const EVENT_SERVICE_PRODUCTION = "https://technivent-jq4c.onrender.com";
 export const EVENT_PATH = "/api/event";
 export const EVENT_BY_ID = "/api/event/:id";
 export const EVENT_RATING = "/api/event/rating";
+export const EVENT_DATE = "/api/event/date";
 export const EVENT_SERVICE = process.env.NODE_ENV === "production" ? EVENT_SERVICE_PRODUCTION : EVENT_SERVICE_LOCAL;
 
 // Comment
