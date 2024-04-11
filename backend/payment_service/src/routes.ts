@@ -59,7 +59,7 @@ export async function CreatePayment(req: Request, res: Response) {
   const publisherChannel = new PaymentPublisherChannel();
   const paymentResponse = await axios.post(HAMMERHEAD_API, { creditCardNum, holder, cvv, expDate, totalPrice });
   if(paymentResponse.status == 200){
-    const transactionId = paymentResponse.data; //should we store it in db or just return it to show in suceess page?
+    const transactionId = paymentResponse.data;
     const paymentData = {
       eventID:eventID,
       username:username,

@@ -51,7 +51,10 @@ const TicketCard: React.FC<TicketCardProps> = ({ ticketArray, isBackOffice,  eve
           <Card key={`${ticket._id}-${ticket.name}`} shadow="sm" radius="md" withBorder w={"15rem"} m={"10px"}>
             <Card.Section>
               <center>
-                <Badge color="black" size="xl" p={"md"} mt={"sm"}>
+              {/* rgba(26, 161, 161, 1) */}
+                <Badge variant={"gradient"} 
+                gradient={{ from: 'indigo', to: 'cyan', deg: 160 }} 
+                size="xl" p={"md"} mt={"sm"} >
                   {ticket.name}
                 </Badge>
               </center>

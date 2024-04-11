@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
 import Api from "../../utils/Api";
 import { useContext, useEffect, useState } from "react";
-import { userContext } from "../layouts/home/Home";
+import { authContext, userContext } from "../layouts/home/Home";
 
 interface UserBarProps {
   username: string;
@@ -19,6 +19,8 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
   const { userType } = useContext(userContext);
   const [userClosestEvent, setUserClosestEvent] = useState(null);
   const [closestEventDate, setClosestEventDate] = useState<string | null>(null);
+  const [loadingEvent, setLoadingEvent] = useState<boolean>(true);
+  const { setIsAuthenticated } = useContext(authContext);
 
   const logoutClick = async (): Promise<void> => {
     const apiService = new Api();
@@ -26,7 +28,9 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
 
     if (response) {
       window.alert(response.data);
-      if (response.status == 200) {
+      if (response.status == 200) { 
+        
+        setIsAuthenticated(false);
         navigate("/login");
       }
     }
@@ -35,25 +39,28 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
   const fetchUserClosestEvent = async () => {
     const apiService = new Api();
     const response = await apiService.getUserClosestEvent();
-    if (response.data.length == 0) {
-      setUserClosestEvent(null);
-      setClosestEventDate(null);
-      return;
+    if (!response.data) {
+      await setUserClosestEvent(null);
+      await setClosestEventDate(null);
+    } else {
+      const eventDate = new Date(response.data.eventStartDate);
+      const formattedDate = `${eventDate.getDate().toString().padStart(2, "0")}/${(eventDate.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${eventDate.getFullYear()}`;
+      await setUserClosestEvent(response.data.eventName);
+      await setClosestEventDate(formattedDate);
     }
-
-    const eventDate = new Date(response.data.eventStartDate);
-    const formattedDate = `${eventDate.getDate().toString().padStart(2, "0")}/${(eventDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}/${eventDate.getFullYear()}`;
-    setUserClosestEvent(response.data.eventName);
-    setClosestEventDate(formattedDate);
-
-    return;
   };
 
   useEffect(() => {
     fetchUserClosestEvent();
   }, [userClosestEvent, closestEventDate, refreshKey]);
+  
+  useEffect(() => {
+    if (userClosestEvent !== null && closestEventDate !== null) {
+      setLoadingEvent(false);
+    }
+  }, [userClosestEvent, closestEventDate]);
 
   return (
     <Flex miw={"50rem"} mih={50} align="center" direction="row" justify={"space-between"} wrap="wrap" columnGap={"sm"}>
@@ -89,16 +96,14 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
           <Link to="/login">Login</Link>
         ) : (
           <>
-            {userClosestEvent && (
-              <Badge
-                bg={"rgba(90, 185, 90, 1)"}
-                p={"md"}
-                radius={"sm"}
-                style={{ textTransform: "none", fontSize: "0.8rem" }}
-              >
-                {`Closest Event: ${userClosestEvent} (${closestEventDate})`}
-              </Badge>
-            )}
+            <Badge
+              bg={"rgba(90, 185, 90, 1)"}
+              p={"md"}
+              radius={"sm"}
+              style={{ textTransform: "none", fontSize: "0.8rem" }}
+            >
+              {loadingEvent ? "Loading..." : `Closest Event: ${userClosestEvent} (${closestEventDate})`}
+            </Badge>
             <Menu withArrow>
               <Menu.Target>
                 <Button variant="light" rightSection={<ChevronCompactDown size="1rem" />}>

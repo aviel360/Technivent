@@ -114,7 +114,7 @@ const EventPage: React.FC<EventPageProps> = () => {
 
   return (
     <div>
-      <Card bg="rgba(0, 0, 0, .3)"><h1>{eventData? eventData.title : ""}</h1></Card>
+      {/* <Card bg="rgba(0, 0, 0, .3)"><h1>Event Page</h1></Card> */}
       <UserBar username={username} goBack={true}></UserBar>
       <Flex
         mih={50}
@@ -132,6 +132,7 @@ const EventPage: React.FC<EventPageProps> = () => {
           <h2>Loading Event...</h2>
         ) : (
           <div>
+            <h1>{eventData.title}</h1>
             <Flex justify={"space-evenly"} mt="xs" mb="xs">
               <Card bg={"none"} shadow="sm" radius="sm" w={"250px"} h={"10rem"} m={"1rem"}>
                 <Text size="xl" fw={500} mb={"md"}>
