@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ColorScheme from "../color_scheme/ColorScheme";
 import Api from "../../utils/Api";
 import { useContext, useEffect, useState } from "react";
-import { userContext } from "../layouts/home/Home";
+import { authContext, userContext } from "../layouts/home/Home";
 
 interface UserBarProps {
   username: string;
@@ -20,6 +20,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
   const [userClosestEvent, setUserClosestEvent] = useState(null);
   const [closestEventDate, setClosestEventDate] = useState<string | null>(null);
   const [loadingEvent, setLoadingEvent] = useState<boolean>(true);
+  const { setIsAuthenticated } = useContext(authContext);
 
   const logoutClick = async (): Promise<void> => {
     const apiService = new Api();
@@ -27,7 +28,9 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
 
     if (response) {
       window.alert(response.data);
-      if (response.status == 200) {
+      if (response.status == 200) { 
+        
+        setIsAuthenticated(false);
         navigate("/login");
       }
     }
