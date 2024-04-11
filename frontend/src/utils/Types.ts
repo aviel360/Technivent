@@ -57,8 +57,9 @@ export interface PaymentData {
   eventID: string,
   username: string,
   date: Date,
-  ticketName: string,
-  quantity: number
+  ticketID: string,
+  quantity: number,
+  price: number,
 }
 
 export interface CommentData {

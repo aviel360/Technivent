@@ -8,14 +8,13 @@ interface OrderHistoryProps {
   name: string;
 }
 
-function OrderHistory({ fetchData,fetchUserRatings, name }: OrderHistoryProps) {
+function OrderHistory({ fetchData, fetchUserRatings, name }: OrderHistoryProps) {
   const [ordersData, setOrdersData] = useState<OrderHistoryData[]>([]);
   const [userRatings, setUserRatings] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchEvents = async () => {
-    const data = await fetchData();
-    const ratings = await fetchUserRatings();
+    const [data, ratings] = await Promise.all([fetchData(), fetchUserRatings()]);
     setIsLoading(false);
     setOrdersData(data);
     setUserRatings(ratings);
@@ -39,56 +38,69 @@ function OrderHistory({ fetchData,fetchUserRatings, name }: OrderHistoryProps) {
       mih={50}
       bg="rgba(0, 0, 0, .3)"
       gap="md"
-      justify="center"
+      justify="space-between"
       rowGap={"1rem"}
-      columnGap={"1rem"}
-      align="center"
-      direction="column"
+      direction="row-reverse"
       wrap="wrap"
-      p={"1rem"}
+      p={"5rem"}
     >
-      <h2>User Details: </h2>
-      <Card shadow="sm" padding="lg" radius="md" withBorder w={"350px"} mt={"-20px"}>
-      <Flex direction={"column"}  align={"center"} >
-        <Flex direction={"row"} justify={"center"} mb={"sm"}>
-          <Text size={"lg"} fw={700} mr={"sm"}>Name: </Text>
-          <Text size={"lg"} fw={450}> {name}</Text>
-        </Flex>
-        <Badge size={"lg"} color={"cyan"} style={{ textTransform: 'capitalize', fontSize:"15px" }}> Total Ratings: {userRatings}</Badge>
-      </Flex>
-      </Card>
-      <h2>Purchase History:</h2>
-      {ordersData.length == 0 ? (
-        <h2>No orders available</h2>
-      ) : (
-        processedOrders.map((order) => (
-          <Card key={order.event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}>
-            <Text size="xl" fw={700}>
-              {order.event.title}
-            </Text>
-            <Group justify="space-between" mt="xs" mb="xs">
-              <Badge color="pink">{order.event.category + " event"}</Badge>
-              <Text mb="xs" c="teal" fw={500}>
-                {new Date(order.event.start_date).toDateString()}
+      <Flex direction="column">
+        <h2>User Details: </h2>
+        <Card shadow="sm" padding="lg" radius="md" withBorder w={"350px"}>
+          <Flex direction={"column"} align={"center"}>
+            <Flex direction={"row"} justify={"center"} mb={"sm"}>
+              <Text size={"lg"} fw={700} mr={"sm"}>
+                Name:{" "}
               </Text>
-              <Text size="sm" c="dimmed">
-                {order.event.description}
+              <Text size={"lg"} fw={450}>
+                {" "}
+                {name}
               </Text>
-            </Group>
-
-            <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" align="center" direction="row" wrap="wrap" p={"0.5rem"}>
-              {order.transactions.map((payment) => (
-                <Card key={payment._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350"}>
-                  <Text size="md" fw={500}>
-                    {payment.quantity} {payment.ticketName} Tickets
-                  </Text>
-                  <Text>Purchased at {new Date(payment.date).toDateString()}</Text>
-                </Card>
-              ))}
             </Flex>
-          </Card>
-        ))
-      )}
+            <Badge size={"lg"} color={"cyan"} style={{ textTransform: "capitalize", fontSize: "15px" }}>
+              {" "}
+              Total Ratings: {userRatings}
+            </Badge>
+          </Flex>
+        </Card>
+      </Flex>
+      <Flex direction="column">
+        <h2>Purchase History:</h2>
+        {ordersData.length == 0 ? (
+          <h2>No orders available</h2>
+        ) : (
+          processedOrders.map((order) => (
+            <>
+              <Card key={order.event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}>
+                <Text size="xl" fw={700}>
+                  {order.event.title}
+                </Text>
+                <Group justify="space-between" mt="xs" mb="xs">
+                  <Badge color="pink">{order.event.category + " event"}</Badge>
+                  <Text mb="xs" c="teal" fw={500}>
+                    {new Date(order.event.start_date).toDateString()}
+                  </Text>
+                  <Text size="sm" c="dimmed" truncate>
+                    {order.event.description}
+                  </Text>
+                </Group>
+
+                <Flex mih={50} bg="rgba(0, 0, 0, .3)" gap="md" align="center" direction="row" wrap="wrap" p={"0.5rem"}>
+                  {order.transactions.map((payment) => (
+                    <Card key={payment._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350"}>
+                      <Text size="md" fw={500}>
+                        {payment.quantity} Ticket{payment.quantity > 1 ? "s" : null} for {payment.price}$
+                      </Text>
+                      <Text>Purchased at {new Date(payment.date).toDateString()}</Text>
+                    </Card>
+                  ))}
+                </Flex>
+              </Card>
+              <br />
+            </>
+          ))
+        )}
+      </Flex>
     </Flex>
   );
 }

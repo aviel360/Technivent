@@ -6,7 +6,8 @@ const paymentSchema = new mongoose.Schema(
         username: { type: String, required: true, unique: false },
         date: { type: Date, required: true },
         ticketID: { type: String, required: true },
-        quantity: { type: Number, required: true }
+        quantity: { type: Number, required: true },
+        price: {type: Number, required: true}
     }
 );
 

@@ -65,7 +65,8 @@ export async function CreatePayment(req: Request, res: Response) {
       username:username,
       date: new Date(),
       ticketID: ticketId,
-      quantity:quantity
+      quantity:quantity,
+      price:totalPrice,
     };
     
     const payment = new Payment(paymentData);
