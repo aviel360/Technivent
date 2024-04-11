@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Text, Badge, Group, Flex, Loader } from "@mantine/core";
+import { Card, Text, Badge, Group, Flex, Loader, Pagination, Center } from "@mantine/core";
 import { OrderHistoryData } from "../../utils/Types";
 
 interface OrderHistoryProps {
@@ -12,6 +12,8 @@ function OrderHistory({ fetchData, fetchUserRatings, name }: OrderHistoryProps) 
   const [ordersData, setOrdersData] = useState<OrderHistoryData[]>([]);
   const [userRatings, setUserRatings] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 2;
 
   const fetchEvents = async () => {
     const [data, ratings] = await Promise.all([fetchData(), fetchUserRatings()]);
@@ -30,6 +32,13 @@ function OrderHistory({ fetchData, fetchUserRatings, name }: OrderHistoryProps) 
     const date2 = new Date(paymentEvent2.event.start_date);
     return date2.getTime() - date1.getTime();
   });
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = processedOrders.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return isLoading ? (
     <Loader></Loader>
@@ -69,7 +78,7 @@ function OrderHistory({ fetchData, fetchUserRatings, name }: OrderHistoryProps) 
         {ordersData.length == 0 ? (
           <h2>No orders available</h2>
         ) : (
-          processedOrders.map((order) => (
+          currentItems.map((order) => (
             <>
               <Card key={order.event._id} shadow="sm" padding="lg" radius="sm" withBorder w={"350px"}>
                 <Text size="xl" fw={700}>
@@ -100,6 +109,9 @@ function OrderHistory({ fetchData, fetchUserRatings, name }: OrderHistoryProps) 
             </>
           ))
         )}
+        <Center>
+          <Pagination total={Math.ceil(processedOrders.length) / itemsPerPage} onChange={paginate} />
+        </Center>
       </Flex>
     </Flex>
   );
