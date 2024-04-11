@@ -5,6 +5,7 @@ import ColorScheme from "../color_scheme/ColorScheme";
 import Api from "../../utils/Api";
 import { useContext, useEffect, useState } from "react";
 import { authContext, userContext } from "../layouts/home/Home";
+import { UserType } from "../../utils/Types";
 
 interface UserBarProps {
   username: string;
@@ -87,7 +88,7 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
       </Group>
 
       <Group>
-        {userType != "User" && isBackOffice && (
+      {userType != UserType.User && userType != UserType.Worker && isBackOffice && (
           <Button variant="light" onClick={() => navigate("/newevent")}>
             Add New Event
           </Button>
@@ -96,14 +97,16 @@ const UserBar: React.FC<UserBarProps> = ({ username, goBack, isBackOffice, setIs
           <Link to="/login">Login</Link>
         ) : (
           <>
-            <Badge
-              bg={"rgba(90, 185, 90, 1)"}
-              p={"md"}
-              radius={"sm"}
-              style={{ textTransform: "none", fontSize: "0.8rem" }}
-            >
-              {loadingEvent ? "Loading..." : `Closest Event: ${userClosestEvent} (${closestEventDate})`}
-            </Badge>
+            {userClosestEvent && (
+              <Badge
+                bg={"rgba(90, 185, 90, 1)"}
+                p={"md"}
+                radius={"sm"}
+                style={{ textTransform: "none", fontSize: "0.8rem" }}
+              >
+                {loadingEvent ? "Loading..." : `Closest Event: ${userClosestEvent} (${closestEventDate})`}
+              </Badge>
+            )}
             <Menu withArrow>
               <Menu.Target>
                 <Button variant="light" rightSection={<ChevronCompactDown size="1rem" />}>

@@ -109,7 +109,7 @@ class Api {
       const response: AxiosResponse = await this.axiosInstance.post(`${this.baseUrl}/user/login`, payload);
       return response;
     } catch (error: any) {
-      window.alert(error.response.data);
+      window.alert("Invalid username or password");
       return null;
     }
   }
