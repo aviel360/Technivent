@@ -139,3 +139,15 @@ export async function updateRating(message) {
     console.error('Error updating rating:', error);
   }
 }
+
+export async function getEventStartDate(req: Request, res: Response) {
+  const id = req.params.id;
+  try {
+    const dbRes = await Event.findOne({ _id: id });
+    res.status(200).send({ start_date: dbRes.start_date });
+    return;
+  }
+  catch (error: any) {
+    res.status(500).send(error);
+  }
+}
